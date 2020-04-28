@@ -21,35 +21,33 @@
 [![License](https://img.shields.io/npm/l/shipengine-cli.svg)](https://github.com/ShipEngine/shipengine-cli/blob/master/package.json)
 
 <!-- toc -->
-
-- [Usage](#usage)
-- [Commands](#commands)
+* [shipengine-cli](#shipengine-cli)
+* [🚧 UNDER CONSTRUCTION 🚧](#-under-construction-)
+* [Usage](#usage)
+* [Commands](#commands)
 <!-- tocstop -->
 
 # Usage
 
 <!-- usage -->
-
 ```sh-session
-$ npm install -g shipengine-cli
+$ npm install -g @shipengine/cli
 $ shipengine COMMAND
 running command...
 $ shipengine (-v|--version|version)
-shipengine-cli/0.0.1 darwin-x64 node-v12.16.2
+@shipengine/cli/0.0.1 darwin-x64 node-v12.16.2
 $ shipengine --help [COMMAND]
 USAGE
   $ shipengine COMMAND
 ...
 ```
-
 <!-- usagestop -->
 
 # Commands
 
 <!-- commands -->
-
-- [`shipengine hello [FILE]`](#shipengine-hello-file)
-- [`shipengine help [COMMAND]`](#shipengine-help-command)
+* [`shipengine hello [FILE]`](#shipengine-hello-file)
+* [`shipengine help [COMMAND]`](#shipengine-help-command)
 
 ## `shipengine hello [FILE]`
 
@@ -87,5 +85,4 @@ OPTIONS
 ```
 
 _See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v2.2.3/src/commands/help.ts)_
-
 <!-- commandsstop -->
