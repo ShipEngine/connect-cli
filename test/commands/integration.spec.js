@@ -1,4 +1,6 @@
-import { expect, test } from "@oclif/test"
+"use strict";
+
+const { expect, test } = require("@oclif/test");
 
 describe("integration", () => {
   test
@@ -7,7 +9,7 @@ describe("integration", () => {
     .exit(0)
     .it("runs integration info message", ctx => {
       expect(ctx.stdout).to.contain("integration:new");
-    })
+    });
 });
 
 

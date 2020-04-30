@@ -5,7 +5,6 @@
 
 require: 
   - source-map-support/register
-  - ts-node/register
 
 bail: true
 recusive: true
@@ -14,9 +13,7 @@ spec:
   # Test fixtures
   - test/fixtures/**/*.js
   
-  - test/**/*.test.ts
   - test/**/*.spec.js
 
 extensions:
-  - ts
   - js

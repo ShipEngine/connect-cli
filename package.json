@@ -48,7 +48,7 @@
     "lint": "eslint . --ext .ts --config .eslintrc.js",
     "build": "tsc && shx cp -R src/shipengine-core/template/ lib/shipengine-core/template",
     "watch": "tsc --watch",
-    "test": "nyc --extension .ts mocha --forbid-only \"test/**/*.test.ts\" && npm run lint",
+    "test": "nyc --extension .ts mocha --forbid-only && npm run lint",
     "mocha": "mocha",
     "coverage": "nyc npm run test",
     "upgrade": "npm-check -u && npm audit fix",
