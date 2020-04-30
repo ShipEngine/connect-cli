@@ -1,25 +1,20 @@
-import { Config, OrderPayload } from "@shipengine/ipaas-types";
 
 /**
  * This is the base IPaaS config object that is required for your IPaaS integration.
  */
-export const config: Config = {
+export const config = {
 
   type: "order-source",
 
-  getOrders(params) {
+  getOrders() {
 
-    const orderPayload: OrderPayload = {
+    const orderPayload = {
       page: 1,
       pages: 1,
       orders: []
     }
 
     return orderPayload;
-  },
-
-  updateOrder() {
-
   },
 
   services: [],

@@ -6,7 +6,6 @@ describe("integration", () => {
     .command(["integration"])
     .exit(0)
     .it("runs integration info message", ctx => {
-      console.log("hello world");
       expect(ctx.stdout).to.contain("integration:new");
     })
 });
