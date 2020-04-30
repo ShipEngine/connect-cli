@@ -35,12 +35,10 @@ export async function createTemplate(cwd?: string): Promise<void> {
   const templatePath = path.join(__dirname, "template");
   const newProjectPath = path.join(createCwd, projectName);
 
-
   const projectExists = await fileExists(newProjectPath);
 
   if (!projectExists) {
     await fs.promises.mkdir(newProjectPath);
-    // await fs.promises.copyFile(templatePath, newProjectPath);
     await fsExtra.copy(templatePath, newProjectPath);
 
     const data = await fs.promises.readFile(path.join(newProjectPath, "package.json"), "utf-8");
@@ -49,7 +47,6 @@ export async function createTemplate(cwd?: string): Promise<void> {
 
     // TODO: uncomment this once the package is publicly available, there's some weird linking issues.
     // execSync("npm install", { cwd: newProjectPath });
-
   }
   else {
     throw new Error(`A project with the name ${projectName} already exists`);
