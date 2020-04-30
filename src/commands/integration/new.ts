@@ -8,17 +8,11 @@ export default class New extends Command {
     help: flags.help({char: "h"}),
   }
 
-  // static args = [
-  //   {name: "new"}
-  // ]
-
-
   static examples = [
-    "integration new",
+    "integration:new",
   ]
 
   async run() {
-    // const {args, flags} = this.parse(New)
     createTemplate()
   }
 }
