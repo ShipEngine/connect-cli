@@ -10,12 +10,14 @@ const tmpPath = path.join(process.cwd(), "tmp");
 const { createTemplate } = require("../../lib/shipengine-core/create-template");
 const cliPrompt = require("../../lib/shipengine-core/utils/cli-prompt");
 
-
 describe("create template", () => {
 
   beforeEach(async () => {
     await fs.promises.mkdir(tmpPath);
-    sinon.stub(cliPrompt, "cliPrompt").resolves({ "project-name": "shipengine-integration" });
+    sinon.stub(cliPrompt, "cliPrompt").resolves({
+      "project-name": "shipengine-integration",
+      "project-type": "carrier"
+    });
   });
 
   it("should create a project template with the default name", async () => {

@@ -12,27 +12,37 @@ export async function createTemplate(cwd?: string): Promise<void> {
   const createCwd = cwd ? cwd : process.cwd();
 
   const answers = await cliPrompt(
-    {
-      type: "input",
-      name: "project-name",
-      message: "What would you like to name your project?",
-      default: "shipengine-integration",
-      validate: (value: string) => {
-        const re = /^(?:@[a-z0-9-*~][a-z0-9-*._~]*\/)?[a-z0-9-~][a-z0-9-._~]*$/;
-        const pass = value.match(re);
+    [
+      {
+        type: "input",
+        name: "project-name",
+        message: "What would you like to name your project?",
+        default: "shipengine-integration",
+        validate: (value: string) => {
+          const re = /^(?:@[a-z0-9-*~][a-z0-9-*._~]*\/)?[a-z0-9-~][a-z0-9-._~]*$/;
+          const pass = value.match(re);
 
-        if (pass) {
-          return true;
+          if (pass) {
+            return true;
+          }
+
+          return "Please enter a valid npm package name (ex: shipengine-integration)";
         }
-
-        return "Please enter a valid npm package name (ex: shipengine-integration)";
+      },
+      {
+        type: "list",
+        name: "project-type",
+        message: "What project type would you like to build?",
+        choices: ["carrier", "order-source"],
+        default: "carrier"
       }
-    }
+    ]
   );
-  // TODO: What type of integration would you like to build?
-  const projectName = answers["project-name"] as string;
 
-  const templatePath = path.join(__dirname, "template");
+  const projectName = answers["project-name"] as string;
+  const projectType = answers["project-type"] as string;
+
+  const templatePath = path.join(__dirname, "templates", projectType);
   const newProjectPath = path.join(createCwd, projectName);
 
   const projectExists = await fileExists(newProjectPath);

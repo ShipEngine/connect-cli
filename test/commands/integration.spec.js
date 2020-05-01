@@ -11,5 +11,3 @@ describe("integration", () => {
       expect(ctx.stdout).to.contain("integration:new");
     });
 });
-
-

@@ -46,7 +46,7 @@
     "prepack": "shx rm -rf lib && tsc -b && oclif-dev manifest && oclif-dev readme",
     "clean": "shx rm -rf .nyc_output coverage lib",
     "lint": "eslint . --ext .ts --config .eslintrc.js",
-    "build": "tsc && shx cp -R src/shipengine-core/template/ lib/shipengine-core/template",
+    "build": "tsc && shx cp -R src/shipengine-core/templates/ lib/shipengine-core/templates/",
     "watch": "tsc --watch",
     "test": "nyc --extension .ts mocha --forbid-only && npm run lint",
     "mocha": "mocha",
