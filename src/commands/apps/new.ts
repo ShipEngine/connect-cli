@@ -1,4 +1,4 @@
-import Command from "../command";
+import Command from "../../command";
 import { flags } from "@oclif/command";
 import { createTemplate } from "../../shipengine-core/create-template";
 
