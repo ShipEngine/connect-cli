@@ -1,17 +1,12 @@
 import Command from "../../command";
-import { flags } from "@oclif/command";
+// import { flags } from "@oclif/command";
 
 export default class AppsIndex extends Command {
-  static description =
-    "create a new project to develop a custom ShipEngine integration";
+  static description = "list your apps";
 
-  static flags = {
-    help: flags.help({ char: "h" }),
-  };
-
-  static examples = ["apps:new"];
+  static examples = ["$ shipengine apps"];
 
   async run() {
-    this._help();
+    this.log("foo, bar, baz");
   }
 }
