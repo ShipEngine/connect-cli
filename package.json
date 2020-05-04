@@ -38,7 +38,15 @@
     "plugins": [
       "@oclif/plugin-help",
       "@oclif/plugin-not-found"
-    ]
+    ],
+    "topics": {
+      "apps": {
+        "description": "manage favorite apps"
+      },
+      "auth": {
+        "description": "manage heroku config variables"
+      }
+    }
   },
   "scripts": {
     "postpack": "shx rm -rf oclif.manifest.json",

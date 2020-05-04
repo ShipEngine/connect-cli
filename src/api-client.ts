@@ -1,4 +1,4 @@
-// import ShipengineAPIClient from "../shipengine-api-client";
+// import ShipengineAPIClient from "./shipengine-api-client";
 
 export default class APIClient {
   /**
