@@ -4,7 +4,11 @@ import { flags } from "@oclif/command";
 export default class AppsIndex extends Command {
   static description = "list your apps";
 
-  static examples = ["$ shipengine apps"];
+  static examples = [
+    `$ shipengine apps
+ups-carrier-app
+fedex-carrier-app`,
+  ];
 
   static flags = {
     help: flags.help({ char: "h" }),
@@ -14,6 +18,6 @@ export default class AppsIndex extends Command {
     // When the help flag is present this will hault execution
     this.parse(AppsIndex);
 
-    this.log("foo, bar, baz");
+    this.log("ups-carrier-app\nfedex-carrier-app");
   }
 }

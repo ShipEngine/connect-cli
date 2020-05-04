@@ -41,10 +41,10 @@
     ],
     "topics": {
       "apps": {
-        "description": "manage favorite apps"
+        "description": "manage apps"
       },
       "auth": {
-        "description": "manage heroku config variables"
+        "description": "manage API access"
       }
     }
   },
