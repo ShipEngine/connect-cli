@@ -15,7 +15,7 @@ fedex-carrier-app`,
   };
 
   async run() {
-    // When the help flag is present this will hault execution
+    // When the -h flag is present the following line haults execution
     this.parse(AppsIndex);
 
     this.log("ups-carrier-app\nfedex-carrier-app");

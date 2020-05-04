@@ -11,7 +11,7 @@ export default class VersionsIndex extends Command {
   };
 
   async run() {
-    // When the help flag is present this will hault execution
+    // When the -h flag is present the following line haults execution
     this.parse(VersionsIndex);
 
     this.log("versions 1, 2, 3");
