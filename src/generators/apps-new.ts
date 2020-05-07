@@ -455,25 +455,9 @@ class AppsNew extends Generator {
   }
 
   private writeCarrierApp() {
-    // if (!fs.existsSync("src")) {
-    //   this.fs.copyTpl(
-    //     this.templatePath(`carrier/src/index.${this._ext}`),
-    //     this.destinationPath(`src/index.${this._ext}`),
-    //     this,
-    //   );
-    // }
-
-    // if (this.mocha && !fs.existsSync("test")) {
-    //   this.fs.copyTpl(
-    //     this.templatePath(`carrier/test/index.test.${this._ext}`),
-    //     this.destinationPath(`test/index.test.${this._ext}`),
-    //     this,
-    //   );
-    // }
-
     if (!fs.existsSync("src")) {
       this.fs.copyTpl(
-        this.templatePath(`base/src/index.${this._ext}`),
+        this.templatePath(`carrier/src/index.${this._ext}`),
         this.destinationPath(`src/index.${this._ext}`),
         this,
       );
@@ -481,7 +465,7 @@ class AppsNew extends Generator {
 
     if (this.mocha && !fs.existsSync("test")) {
       this.fs.copyTpl(
-        this.templatePath(`base/test/index.test.${this._ext}`),
+        this.templatePath(`carrier/test/index.test.${this._ext}`),
         this.destinationPath(`test/index.test.${this._ext}`),
         this,
       );
@@ -489,7 +473,21 @@ class AppsNew extends Generator {
   }
 
   private writeOrderSourceApp() {
-    // TODO
+    if (!fs.existsSync("src")) {
+      this.fs.copyTpl(
+        this.templatePath(`order-source/src/index.${this._ext}`),
+        this.destinationPath(`src/index.${this._ext}`),
+        this,
+      );
+    }
+
+    if (this.mocha && !fs.existsSync("test")) {
+      this.fs.copyTpl(
+        this.templatePath(`order-source/test/index.test.${this._ext}`),
+        this.destinationPath(`test/index.test.${this._ext}`),
+        this,
+      );
+    }
   }
 }
 
