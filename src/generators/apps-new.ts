@@ -32,6 +32,7 @@ class AppsNew extends Generator {
 
   answers!: {
     name: string;
+    type: "carrier" | "order source";
     description: string;
     version: string;
     github: { repo: string; user: string };
@@ -92,6 +93,7 @@ class AppsNew extends Generator {
 
     const defaults = {
       name: this.determineAppname().replace(/ /g, "-"),
+      type: "carrier",
       version: "0.0.0",
       license: "ISC",
       author: this.githubUser
@@ -113,120 +115,108 @@ class AppsNew extends Generator {
       this.repository = (this.repository as any).url;
     }
 
-    if (this.options.defaults) {
-      this.answers = defaults;
-    } else {
-      this.answers = (await this.prompt([
-        {
-          type: "input",
-          name: "name",
-          message: "npm package name",
-          default: defaults.name,
-          when: !this.pjson.name,
-        },
-        {
-          type: "list",
-          name: "type",
-          message: "what type of app",
-          choices: [
-            { name: "carrier", value: "carrier" },
-            // { name: "order source", value: "order source" },
-          ],
-          default: "carrier",
-        },
-        {
-          type: "input",
-          name: "description",
-          message: "description",
-          default: defaults.description,
-          when: !this.pjson.description,
-        },
-        {
-          type: "input",
-          name: "author",
-          message: "author",
-          default: defaults.author,
-          when: !this.pjson.author,
-        },
-        {
-          type: "input",
-          name: "version",
-          message: "version",
-          default: defaults.version,
-          when: !this.pjson.version,
-        },
-        {
-          type: "input",
-          name: "license",
-          message: "license",
-          default: defaults.license,
-          when: !this.pjson.license,
-        },
-        {
-          type: "input",
-          name: "github.user",
-          message:
-            "Who is the GitHub owner of repository (https://github.com/OWNER/repo)",
-          default: repository.split("/").slice(0, -1).pop(),
-          when: !this.pjson.repository,
-        },
-        {
-          type: "input",
-          name: "github.repo",
-          message:
-            "What is the GitHub name of repository (https://github.com/owner/REPO)",
-          default: (answers: any) =>
-            (this.pjson.repository || answers.name || this.pjson.name)
-              .split("/")
-              .pop(),
-          when: !this.pjson.repository,
-        },
-        {
-          type: "list",
-          name: "pkg",
-          message: "Select a package manager",
-          choices: [
-            { name: "npm", value: "npm" },
-            { name: "yarn", value: "yarn" },
-          ],
-          default: () => (this.options.yarn || hasYarn ? 1 : 0),
-        },
-        {
-          type: "confirm",
-          name: "typescript",
-          message: "TypeScript",
-          default: () => true,
-        },
-        {
-          type: "confirm",
-          name: "eslint",
-          message: "Use eslint (linter for JavaScript and Typescript)",
-          default: () => true,
-        },
-        {
-          type: "confirm",
-          name: "mocha",
-          message: "Use mocha for testing (recommended)",
-          default: () => true,
-        },
-      ])) as any;
-    }
+    this.answers = (await this.prompt([
+      {
+        type: "input",
+        name: "name",
+        message: "npm package name",
+        default: defaults.name,
+        when: !this.pjson.name,
+      },
+      {
+        type: "list",
+        name: "type",
+        message: "what type of app",
+        choices: [
+          { name: "carrier", value: "carrier" },
+          // { name: "order source", value: "order source" },
+        ],
+        default: defaults.type,
+      },
+      {
+        type: "input",
+        name: "description",
+        message: "description",
+        default: defaults.description,
+        when: !this.pjson.description,
+      },
+      {
+        type: "input",
+        name: "author",
+        message: "author",
+        default: defaults.author,
+        when: !this.pjson.author,
+      },
+      {
+        type: "input",
+        name: "version",
+        message: "version",
+        default: defaults.version,
+        when: !this.pjson.version,
+      },
+      {
+        type: "input",
+        name: "license",
+        message: "license",
+        default: defaults.license,
+        when: !this.pjson.license,
+      },
+      {
+        type: "input",
+        name: "github.user",
+        message:
+          "Who is the GitHub owner of repository (https://github.com/OWNER/repo)",
+        default: repository.split("/").slice(0, -1).pop(),
+        when: !this.pjson.repository,
+      },
+      {
+        type: "input",
+        name: "github.repo",
+        message:
+          "What is the GitHub name of repository (https://github.com/owner/REPO)",
+        default: (answers: any) =>
+          (this.pjson.repository || answers.name || this.pjson.name)
+            .split("/")
+            .pop(),
+        when: !this.pjson.repository,
+      },
+      {
+        type: "list",
+        name: "pkg",
+        message: "Select a package manager",
+        choices: [
+          { name: "npm", value: "npm" },
+          { name: "yarn", value: "yarn" },
+        ],
+        default: () => (this.options.yarn || hasYarn ? 1 : 0),
+      },
+      {
+        type: "confirm",
+        name: "typescript",
+        message: "TypeScript",
+        default: () => true,
+      },
+      {
+        type: "confirm",
+        name: "eslint",
+        message: "Use eslint (linter for JavaScript and Typescript)",
+        default: () => true,
+      },
+      {
+        type: "confirm",
+        name: "mocha",
+        message: "Use mocha for testing (recommended)",
+        default: () => true,
+      },
+    ])) as any;
 
     debug(this.answers);
 
-    if (!this.options.defaults) {
-      this.options = {
-        mocha: this.answers.mocha,
-        eslint: this.answers.eslint,
-        typescript: this.answers.typescript,
-        yarn: this.answers.pkg === "yarn",
-      };
-    }
-
-    this.ts = this.options.typescript;
-    this.yarn = this.options.yarn;
-    this.mocha = this.options.mocha;
-    this.eslint = this.options.eslint;
+    this.type = this.answers.type;
+    this.ts = this.answers.typescript;
+    this.yarn = this.answers.pkg === "yarn";
+    this.mocha = this.answers.mocha;
+    this.eslint = this.answers.eslint;
 
     this.pjson.name = this.answers.name || defaults.name;
     this.pjson.description = this.answers.description || defaults.description;
@@ -371,14 +361,14 @@ class AppsNew extends Generator {
 
     this.fs.write(this.destinationPath(".gitignore"), this._gitignore());
 
-    // switch (this.type) {
-    //   case "carrier":
-    //     this.writeCarrierApp();
-    //     break;
-    //   case "order source":
-    //     this.writeOrderSourceApp();
-    //     break;
-    // }
+    switch (this.type) {
+      case "carrier":
+        this.writeCarrierApp();
+        break;
+      case "order source":
+        this.writeOrderSourceApp();
+        break;
+    }
   }
 
   // install() {
@@ -464,41 +454,43 @@ class AppsNew extends Generator {
     );
   }
 
-  // private writeCarrierApp() {
-  //   // if (!fs.existsSync("src")) {
-  //   //   this.fs.copyTpl(
-  //   //     this.templatePath(`carrier/src/index.${this._ext}`),
-  //   //     this.destinationPath(`src/index.${this._ext}`),
-  //   //     this,
-  //   //   );
-  //   // }
+  private writeCarrierApp() {
+    // if (!fs.existsSync("src")) {
+    //   this.fs.copyTpl(
+    //     this.templatePath(`carrier/src/index.${this._ext}`),
+    //     this.destinationPath(`src/index.${this._ext}`),
+    //     this,
+    //   );
+    // }
 
-  //   // if (this.mocha && !fs.existsSync("test")) {
-  //   //   this.fs.copyTpl(
-  //   //     this.templatePath(`carrier/test/index.test.${this._ext}`),
-  //   //     this.destinationPath(`test/index.test.${this._ext}`),
-  //   //     this,
-  //   //   );
-  //   // }
-  //   if (!fs.existsSync("src")) {
-  //     this.fs.copyTpl(
-  //       this.templatePath(`base/src/index.${this._ext}`),
-  //       this.destinationPath(`src/index.${this._ext}`),
-  //       this,
-  //     );
-  //   }
-  //   if (this.mocha && !fs.existsSync("test")) {
-  //     this.fs.copyTpl(
-  //       this.templatePath(`base/test/index.test.${this._ext}`),
-  //       this.destinationPath(`test/index.test.${this._ext}`),
-  //       this,
-  //     );
-  //   }
-  // }
+    // if (this.mocha && !fs.existsSync("test")) {
+    //   this.fs.copyTpl(
+    //     this.templatePath(`carrier/test/index.test.${this._ext}`),
+    //     this.destinationPath(`test/index.test.${this._ext}`),
+    //     this,
+    //   );
+    // }
 
-  // private writeOrderSourceApp() {
-  //   throw new Error("implement writeOrderSourceApp");
-  // }
+    if (!fs.existsSync("src")) {
+      this.fs.copyTpl(
+        this.templatePath(`base/src/index.${this._ext}`),
+        this.destinationPath(`src/index.${this._ext}`),
+        this,
+      );
+    }
+
+    if (this.mocha && !fs.existsSync("test")) {
+      this.fs.copyTpl(
+        this.templatePath(`base/test/index.test.${this._ext}`),
+        this.destinationPath(`test/index.test.${this._ext}`),
+        this,
+      );
+    }
+  }
+
+  private writeOrderSourceApp() {
+    // TODO
+  }
 }
 
 export = AppsNew;
