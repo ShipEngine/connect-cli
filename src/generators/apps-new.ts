@@ -1,4 +1,4 @@
-import * as _ from "lodash";
+import _ from "lodash";
 import * as fs from "fs";
 import * as path from "path";
 import Generator = require("yeoman-generator");
@@ -73,6 +73,7 @@ class AppsNew extends Generator {
 
     this.type = opts.type;
     this.path = opts.path;
+
     this.options = {
       defaults: opts.defaults,
       mocha: opts.options.includes("mocha"),
@@ -280,35 +281,12 @@ class AppsNew extends Generator {
       }
     }
 
-    // if (["plugin", "multi"].includes(this.type)) {
-    //   this.pjson.scripts.prepack = nps.series(
-    //     this.pjson.scripts.prepack,
-    //     "oclif-dev manifest",
-    //     "oclif-dev readme",
-    //   );
-    //   this.pjson.scripts.version = nps.series(
-    //     "oclif-dev readme",
-    //     "git add README.md",
-    //   );
-    // } else if (this.type === "carrier") {
-    //   this.pjson.scripts.prepack = nps.series(
-    //     this.pjson.scripts.prepack,
-    //     "oclif-dev readme",
-    //   );
-    //   this.pjson.scripts.version = nps.series(
-    //     "oclif-dev readme",
-    //     "git add README.md",
-    //   );
-    // }
+    if (hasYarn) {
+      // add yarn.lock file to package so we can lock plugin dependencies
+      this.pjson.files.push("/yarn.lock");
+    }
 
-    // if (this.type === "plugin" && hasYarn) {
-    //   // for plugins, add yarn.lock file to package so we can lock plugin dependencies
-    //   this.pjson.files.push("/yarn.lock");
-    // }
-
-    // this.pjson.keywords = defaults.keywords || [
-    //   this.type === "plugin" ? "oclif-plugin" : "oclif",
-    // ];
+    this.pjson.keywords = defaults.keywords || ["ShipEngine", this.type];
 
     this.pjson.homepage =
       defaults.homepage || `https://github.com/${this.pjson.repository}`;
@@ -316,47 +294,17 @@ class AppsNew extends Generator {
     this.pjson.bugs =
       defaults.bugs || `https://github.com/${this.pjson.repository}/issues`;
 
-    // if (["single", "multi"].includes(this.type)) {
-    //   this.pjson.bin = this.pjson.bin || {};
-    //   this.pjson.bin[this.pjson.oclif.bin] = "./bin/run";
-    //   this.pjson.files.push("/bin");
-    // } else if (this.type === "plugin") {
-    //   this.pjson.oclif.bin = "oclif-example";
-    // }
-    // if (this.type !== "plugin") {
-    //   this.pjson.main =
-    //     defaults.main || (this.ts ? "lib/index.js" : "src/index.js");
-    //   if (this.ts) {
-    //     this.pjson.types = defaults.types || "lib/index.d.ts";
-    //   }
-    // }
+    this.pjson.main =
+      defaults.main || (this.ts ? "lib/index.js" : "src/index.js");
+
+    if (this.ts) {
+      this.pjson.types = defaults.types || "lib/index.d.ts";
+    }
   }
 
   // eslint-disable-next-line complexity
   writing() {
     this.sourceRoot(path.join(__dirname, "../templates"));
-
-    // switch (this.type) {
-    //   case "multi":
-    //   case "plugin":
-    //     this.pjson.oclif = {
-    //       commands: `./${this.ts ? "lib" : "src"}/commands`,
-    //       // hooks: {init: `./${this.ts ? 'lib' : 'src'}/hooks/init`},
-    //       ...this.pjson.oclif,
-    //     };
-    //     break;
-    //   default:
-    // }
-    // if (this.type === "plugin" && !this.pjson.oclif.devPlugins) {
-    //   this.pjson.oclif.devPlugins = ["@oclif/plugin-help"];
-    // }
-    // if (this.type === "multi" && !this.pjson.oclif.plugins) {
-    //   this.pjson.oclif.plugins = ["@oclif/plugin-help"];
-    // }
-
-    if (this.pjson.oclif && Array.isArray(this.pjson.oclif.plugins)) {
-      this.pjson.oclif.plugins.sort();
-    }
 
     if (this.ts) {
       this.fs.copyTpl(
@@ -373,6 +321,7 @@ class AppsNew extends Generator {
         );
       }
     }
+
     if (this.eslint) {
       const eslintignore = this._eslintignore();
 
@@ -397,6 +346,7 @@ class AppsNew extends Generator {
         );
       }
     }
+
     if (this.mocha) {
       this.fs.copyTpl(
         this.templatePath("test/mocha.opts"),
@@ -404,18 +354,13 @@ class AppsNew extends Generator {
         this,
       );
     }
+
     if (this.fs.exists(this.destinationPath("./package.json"))) {
       fixpack(
         this.destinationPath("./package.json"),
         require("@oclif/fixpack/config.json"),
       );
     }
-
-    if (_.isEmpty(this.pjson.oclif)) {
-      delete this.pjson.oclif;
-    }
-
-    this.pjson.files = _.uniq((this.pjson.files || []).sort());
 
     this.fs.writeJSON(
       this.destinationPath("./package.json"),
@@ -433,33 +378,27 @@ class AppsNew extends Generator {
       this.destinationPath("README.md"),
       this,
     );
-    if (
-      this.pjson.license === "MIT" &&
-      (this.pjson.repository.startsWith("oclif") ||
-        this.pjson.repository.startsWith("heroku"))
-    ) {
+
+    if (this.pjson.license === "ISC") {
       this.fs.copyTpl(
-        this.templatePath("LICENSE.mit"),
+        this.templatePath("LICENSE"),
         this.destinationPath("LICENSE"),
         this,
       );
     }
 
-    // this.fs.write(this.destinationPath(".gitignore"), this._gitignore());
+    this.fs.write(this.destinationPath(".gitignore"), this._gitignore());
 
-    // switch (this.type) {
-    //   case "single":
-    //     this._writeSingle();
-    //     break;
-    //   case "plugin":
-    //     this._writePlugin();
-    //     break;
-    //   case "multi":
-    //     this._writeMulti();
-    //     break;
-    //   default:
-    //     this._writeBase();
-    // }
+    switch (this.type) {
+      case "carrier":
+        this._writeCarrierApp();
+        break;
+      case "order-source":
+        break;
+      default:
+        // this._writeBase();
+        throw "no type";
+    }
   }
 
   // install() {
@@ -572,22 +511,23 @@ class AppsNew extends Generator {
     );
   }
 
-  // private _writeBase() {
-  //   if (!fs.existsSync("src")) {
-  //     this.fs.copyTpl(
-  //       this.templatePath(`base/src/index.${this._ext}`),
-  //       this.destinationPath(`src/index.${this._ext}`),
-  //       this,
-  //     );
-  //   }
-  //   if (this.mocha && !fs.existsSync("test")) {
-  //     this.fs.copyTpl(
-  //       this.templatePath(`base/test/index.test.${this._ext}`),
-  //       this.destinationPath(`test/index.test.${this._ext}`),
-  //       this,
-  //     );
-  //   }
-  // }
+  private _writeCarrierApp() {
+    if (!fs.existsSync("src")) {
+      this.fs.copyTpl(
+        this.templatePath(`base/src/index.${this._ext}`),
+        this.destinationPath(`src/index.${this._ext}`),
+        this,
+      );
+    }
+
+    if (this.mocha && !fs.existsSync("test")) {
+      this.fs.copyTpl(
+        this.templatePath(`base/test/index.test.${this._ext}`),
+        this.destinationPath(`test/index.test.${this._ext}`),
+        this,
+      );
+    }
+  }
 
   // private _writePlugin() {
   //   const cmd = `${bin} hello`;
