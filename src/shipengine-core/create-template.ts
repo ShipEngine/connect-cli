@@ -108,7 +108,7 @@ export async function createTemplate(cwd?: string): Promise<void> {
 
     let updatedPjson: string;
 
-    updatedPjson = templatePjson.replace(/<Package_NAME>/g, packageName);
+    updatedPjson = templatePjson.replace(/<PACKAGE_NAME>/g, packageName);
     updatedPjson = updatedPjson.replace(
       /<PACKAGE_DESCRIPTION>/g,
       packageDescription,
