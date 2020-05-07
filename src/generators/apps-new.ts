@@ -371,47 +371,47 @@ class AppsNew extends Generator {
     }
   }
 
-  // install() {
-  //   const dependencies: string[] = [];
-  //   const devDependencies: string[] = [];
+  install() {
+    const dependencies: string[] = [];
+    const devDependencies: string[] = [];
 
-  //   devDependencies.push("@shipengine/integration-platform-sdk^0.0.5");
+    devDependencies.push("@shipengine/integration-platform-sdk@^0.0.5");
 
-  //   if (this.mocha) {
-  //     devDependencies.push("mocha@^5", "nyc@^14", "chai@^4");
-  //   }
+    if (this.mocha) {
+      devDependencies.push("mocha@^5", "nyc@^14", "chai@^4");
+    }
 
-  //   if (this.ts) {
-  //     dependencies.push("tslib@^1");
-  //     devDependencies.push("@types/node@^10", "typescript@^3.3", "ts-node@^8");
-  //     if (this.mocha) {
-  //       devDependencies.push("@types/chai@^4", "@types/mocha@^5");
-  //     }
-  //   }
+    if (this.ts) {
+      dependencies.push("tslib@^1");
+      devDependencies.push("@types/node@^10", "typescript@^3.3", "ts-node@^8");
+      if (this.mocha) {
+        devDependencies.push("@types/chai@^4", "@types/mocha@^5");
+      }
+    }
 
-  //   if (this.eslint) {
-  //     devDependencies.push("eslint@^5.13", "eslint-config-oclif@^3.1");
+    if (this.eslint) {
+      devDependencies.push("eslint@^5.13", "eslint-config-oclif@^3.1");
 
-  //     if (this.ts) {
-  //       devDependencies.push("eslint-config-oclif-typescript@^0.1");
-  //     }
-  //   }
+      if (this.ts) {
+        devDependencies.push("eslint-config-oclif-typescript@^0.1");
+      }
+    }
 
-  //   if (isWindows) devDependencies.push("rimraf");
+    if (isWindows) devDependencies.push("rimraf");
 
-  //   const yarnOpts = {} as any;
+    const yarnOpts = {} as any;
 
-  //   if (process.env.YARN_MUTEX) yarnOpts.mutex = process.env.YARN_MUTEX;
-  //   const install = (deps: string[], opts: object) =>
-  //     this.yarn ? this.yarnInstall(deps, opts) : this.npmInstall(deps, opts);
-  //   const dev = this.yarn ? { dev: true } : { "save-dev": true };
-  //   const save = this.yarn ? {} : { save: true };
+    if (process.env.YARN_MUTEX) yarnOpts.mutex = process.env.YARN_MUTEX;
+    const install = (deps: string[], opts: object) =>
+      this.yarn ? this.yarnInstall(deps, opts) : this.npmInstall(deps, opts);
+    const dev = this.yarn ? { dev: true } : { "save-dev": true };
+    const save = this.yarn ? {} : { save: true };
 
-  //   return Promise.all([
-  //     install(devDependencies, { ...yarnOpts, ...dev, ignoreScripts: true }),
-  //     install(dependencies, { ...yarnOpts, ...save }),
-  //   ]).then(() => {});
-  // }
+    return Promise.all([
+      install(devDependencies, { ...yarnOpts, ...dev, ignoreScripts: true }),
+      install(dependencies, { ...yarnOpts, ...save }),
+    ]).then(() => {});
+  }
 
   end() {
     this.log(`\nCreated ${this.pjson.name} in ${this.destinationRoot()}`);
