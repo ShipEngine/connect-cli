@@ -1,14 +1,13 @@
 {
-  "name": "<PROJECT_NAME>",
+  "name": "<PACKAGE_NAME>",
   "version": "1.0.0",
-  "description": "",
+  "description": "<PACKAGE_DESCRIPTION>",
   "main": "index.js",
-  "author": "",
+  "author": "<PACKAGE_AUTHOR>",
   "license": "ISC",
   "devDependencies": {
     "eslint": "^6.8.0",
-    "@shipengine/ipaas-types": "0.0.1",
-    "@shipengine/shipengine-cli": "0.0.1",
+    "@shipengine/integration-platform-sdk": "0.0.5",
     "typescript": "^3.8.3",
     "typescript-tslint-plugin": "^0.5.5"
   }

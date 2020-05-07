@@ -42,9 +42,6 @@
     "topics": {
       "apps": {
         "description": "manage apps"
-      },
-      "auth": {
-        "description": "manage API access"
       }
     }
   },
