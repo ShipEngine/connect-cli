@@ -106,7 +106,10 @@ class AppsNew extends Generator {
         node: ">=8.0.0",
         ...this.pjson.engines,
       },
-      options: this.options,
+      pkg: "yarn",
+      typescript: true,
+      eslint: true,
+      mocha: true,
     };
 
     this.repository = defaults.repository;
@@ -115,100 +118,104 @@ class AppsNew extends Generator {
       this.repository = (this.repository as any).url;
     }
 
-    this.answers = (await this.prompt([
-      {
-        type: "input",
-        name: "name",
-        message: "npm package name",
-        default: defaults.name,
-        when: !this.pjson.name,
-      },
-      {
-        type: "list",
-        name: "type",
-        message: "what type of app",
-        choices: [
-          { name: "carrier", value: "carrier" },
-          // { name: "order source", value: "order source" },
-        ],
-        default: defaults.type,
-      },
-      {
-        type: "input",
-        name: "description",
-        message: "description",
-        default: defaults.description,
-        when: !this.pjson.description,
-      },
-      {
-        type: "input",
-        name: "author",
-        message: "author",
-        default: defaults.author,
-        when: !this.pjson.author,
-      },
-      {
-        type: "input",
-        name: "version",
-        message: "version",
-        default: defaults.version,
-        when: !this.pjson.version,
-      },
-      {
-        type: "input",
-        name: "license",
-        message: "license",
-        default: defaults.license,
-        when: !this.pjson.license,
-      },
-      {
-        type: "input",
-        name: "github.user",
-        message:
-          "Who is the GitHub owner of repository (https://github.com/OWNER/repo)",
-        default: repository.split("/").slice(0, -1).pop(),
-        when: !this.pjson.repository,
-      },
-      {
-        type: "input",
-        name: "github.repo",
-        message:
-          "What is the GitHub name of repository (https://github.com/owner/REPO)",
-        default: (answers: any) =>
-          (this.pjson.repository || answers.name || this.pjson.name)
-            .split("/")
-            .pop(),
-        when: !this.pjson.repository,
-      },
-      {
-        type: "list",
-        name: "pkg",
-        message: "Select a package manager",
-        choices: [
-          { name: "npm", value: "npm" },
-          { name: "yarn", value: "yarn" },
-        ],
-        default: () => (this.options.yarn || hasYarn ? 1 : 0),
-      },
-      {
-        type: "confirm",
-        name: "typescript",
-        message: "TypeScript",
-        default: () => true,
-      },
-      {
-        type: "confirm",
-        name: "eslint",
-        message: "Use eslint (linter for JavaScript and Typescript)",
-        default: () => true,
-      },
-      {
-        type: "confirm",
-        name: "mocha",
-        message: "Use mocha for testing (recommended)",
-        default: () => true,
-      },
-    ])) as any;
+    if (this.options.skipQuestions) {
+      this.answers = defaults;
+    } else {
+      this.answers = (await this.prompt([
+        {
+          type: "input",
+          name: "name",
+          message: "npm package name",
+          default: defaults.name,
+          when: !this.pjson.name,
+        },
+        {
+          type: "list",
+          name: "type",
+          message: "what type of app",
+          choices: [
+            { name: "carrier", value: "carrier" },
+            // { name: "order source", value: "order source" },
+          ],
+          default: defaults.type,
+        },
+        {
+          type: "input",
+          name: "description",
+          message: "description",
+          default: defaults.description,
+          when: !this.pjson.description,
+        },
+        {
+          type: "input",
+          name: "author",
+          message: "author",
+          default: defaults.author,
+          when: !this.pjson.author,
+        },
+        {
+          type: "input",
+          name: "version",
+          message: "version",
+          default: defaults.version,
+          when: !this.pjson.version,
+        },
+        {
+          type: "input",
+          name: "license",
+          message: "license",
+          default: defaults.license,
+          when: !this.pjson.license,
+        },
+        {
+          type: "input",
+          name: "github.user",
+          message:
+            "Who is the GitHub owner of repository (https://github.com/OWNER/repo)",
+          default: repository.split("/").slice(0, -1).pop(),
+          when: !this.pjson.repository,
+        },
+        {
+          type: "input",
+          name: "github.repo",
+          message:
+            "What is the GitHub name of repository (https://github.com/owner/REPO)",
+          default: (answers: any) =>
+            (this.pjson.repository || answers.name || this.pjson.name)
+              .split("/")
+              .pop(),
+          when: !this.pjson.repository,
+        },
+        {
+          type: "list",
+          name: "pkg",
+          message: "Select a package manager",
+          choices: [
+            { name: "npm", value: "npm" },
+            { name: "yarn", value: "yarn" },
+          ],
+          default: () => (this.options.yarn || hasYarn ? 1 : 0),
+        },
+        {
+          type: "confirm",
+          name: "typescript",
+          message: "TypeScript",
+          default: () => true,
+        },
+        {
+          type: "confirm",
+          name: "eslint",
+          message: "Use eslint (linter for JavaScript and Typescript)",
+          default: () => true,
+        },
+        {
+          type: "confirm",
+          name: "mocha",
+          message: "Use mocha for testing (recommended)",
+          default: () => true,
+        },
+      ])) as any;
+    }
 
     debug(this.answers);
 

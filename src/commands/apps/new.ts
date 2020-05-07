@@ -1,7 +1,6 @@
 import BaseCommand from "../../base-command";
 import { flags } from "@oclif/command";
 import { createEnv } from "yeoman-environment";
-// import { createTemplate } from "../../shipengine-core/create-template";
 
 export default class New extends BaseCommand {
   static description =
@@ -18,6 +17,12 @@ export default class New extends BaseCommand {
   static flags = {
     force: flags.boolean({
       description: "overwrite existing files",
+      char: "f",
+    }),
+    yes: flags.boolean({
+      description:
+        "skips the questions and uses the defaults (carrier|yarn|TypeScript|eslint|mocha)",
+      char: "y",
     }),
     help: flags.help({ char: "h" }),
   };
@@ -31,6 +36,7 @@ export default class New extends BaseCommand {
 
     const generatorOptions = {
       path: args.path,
+      skipQuestions: flags.yes,
       force: flags.force,
     };
 
