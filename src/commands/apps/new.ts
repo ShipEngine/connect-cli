@@ -6,14 +6,6 @@ export default class New extends BaseCommand {
   static description =
     "create a new package to develop a custom ShipEngine app";
 
-  static args = [
-    {
-      name: "path",
-      required: false,
-      description: "path to package (defaults to current directory)",
-    },
-  ];
-
   static flags = {
     force: flags.boolean({
       description: "overwrite existing files",
@@ -26,6 +18,14 @@ export default class New extends BaseCommand {
     }),
     help: flags.help({ char: "h" }),
   };
+
+  static args = [
+    {
+      name: "path",
+      required: false,
+      description: "path to new package (defaults to current directory)",
+    },
+  ];
 
   static examples = ["$ shipengine apps:new"];
 
