@@ -7,7 +7,18 @@ export default class New extends BaseCommand {
   static description =
     "create a new project to develop a custom ShipEngine app";
 
+  type = "carrier";
+
   static flags = {
+    defaults: flags.boolean({
+      description: "use defaults for every setting",
+    }),
+    options: flags.string({
+      description: "(yarn|typescript|eslint|mocha)",
+    }),
+    force: flags.boolean({
+      description: "overwrite existing files",
+    }),
     help: flags.help({ char: "h" }),
   };
 
@@ -15,14 +26,14 @@ export default class New extends BaseCommand {
 
   async run() {
     const { flags, args } = this.parse(New);
-    // const options = flags.options ? flags.options.split(",") : [];
+    const options = flags.options ? flags.options.split(",") : [];
 
     await this.generate({
-      // type: this.type,
-      // path: args.path,
-      // options,
-      // defaults: flags.defaults,
-      // force: flags.force,
+      type: this.type,
+      path: args.path,
+      options,
+      defaults: flags.defaults,
+      force: flags.force,
     });
   }
 
