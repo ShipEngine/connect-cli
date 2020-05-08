@@ -4,7 +4,6 @@ import * as path from "path";
 import { execSync } from "child_process";
 import Generator = require("yeoman-generator");
 
-const debug = require("debug")("apps-new");
 const fixpack = require("@oclif/fixpack");
 const nps = require("nps-utils");
 const sortPjson = require("sort-pjson");
@@ -73,7 +72,13 @@ class AppsNew extends Generator {
       process.chdir(this.destinationRoot());
     }
 
-    this.githubUser = await this.user.github.username().catch(debug);
+    try {
+      this.githubUser = await this.user.github.username();
+    } catch {
+      this.githubUser = undefined;
+    }
+
+    // this.githubUser = await this.user.github.username();
 
     this.pjson = {
       scripts: {},
@@ -214,8 +219,6 @@ class AppsNew extends Generator {
         },
       ])) as any;
     }
-
-    debug(this.answers);
 
     this.type = this.answers.type;
     this.ts = this.answers.typescript;

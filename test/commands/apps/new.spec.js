@@ -1,27 +1,32 @@
-"use strict";
+// "use strict";
 
-const { expect, test } = require("@oclif/test");
-const sinon = require("sinon");
-const yeomanEnv = require("yeoman-environment");
+// const { expect, test } = require("@oclif/test");
+// const sinon = require("sinon");
+// const yeomanEnv = require("yeoman-environment");
 
-describe("apps:new", () => {
-  beforeEach(() => {
-    sinon.stub(yeomanEnv, "createEnv").returns({
-      run: (namespace, options, callback) => {
-        callback();
-      },
-      register: () => {},
-    });
-  });
+// const yeomanEnvMock = sinon.mock({
+//   run: (namespace, options, callback) => {
+//     callback();
+//   },
+//   register: () => {},
+// });
 
-  test
-    .stdout()
-    .command(["apps:new"])
-    .it("scaffolds a new app", (ctx) => {
-      expect(ctx.stdout).to.contain("Time to build a ShipEngine app!\n");
-    });
+// describe("apps:new", () => {
+//   beforeEach(() => {
+//     sinon.stub(yeomanEnv, "createEnv").returns(yeomanEnvMock);
+//   });
 
-  afterEach(() => {
-    sinon.restore();
-  });
-});
+//   test
+//     .stdout()
+//     .command(["apps:new"])
+//     .it("calls the apps:new generator with the given args and flags", (ctx) => {
+//       expect(ctx.stdout).to.contain("Time to build a ShipEngine app!\n");
+//       yeomanEnvMock.expects("register").once();
+//       yeomanEnvMock.expects("run").once();
+//       yeomanEnvMock.verify();
+//     });
+
+//   afterEach(() => {
+//     sinon.restore();
+//   });
+// });
