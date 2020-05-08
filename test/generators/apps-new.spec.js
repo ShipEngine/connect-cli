@@ -20,8 +20,8 @@ describe("generator apps:new", function () {
           assert.file([
             "src/index.ts",
             "test/index.test.ts",
-            "mocha.opts",
-            "tsconfig.json",
+            "test/mocha.opts",
+            "test/tsconfig.json",
             ".editorconfig",
             ".eslintignore",
             ".eslintrc",
@@ -34,4 +34,37 @@ describe("generator apps:new", function () {
         });
     });
   });
+
+  // describe("when configured without test", function () {
+  //   it("generates a new app", function () {
+  //     // The object returned acts like a promise, so return it to wait until the process is done
+  //     return helpers
+  //       .run(AppsNew, {
+  //         resolved: path.join(__dirname, "../../lib/generators/apps-new"),
+  //         namespace: "apps:new",
+  //       })
+  //       .withPrompts({ coffee: false })
+  //       .withPrompts({ coffee: false })
+  //       .withPrompts({ coffee: false })
+  //       .withPrompts({ coffee: false })
+  //       .withArguments(["test-app"]) // Mock the arguments
+  //       .then(function () {
+  //         assert.file([
+  //           "src/index.ts",
+  //           "test/index.test.ts",
+  //           "test/mocha.opts",
+  //           "test/tsconfig.json",
+  //           ".editorconfig",
+  //           ".eslintignore",
+  //           ".eslintrc",
+  //           "LICENSE",
+  //           "README.md",
+  //           "README.md",
+  //           "package.json",
+  //           "tsconfig.json",
+  //         ]);
+  //         assert.noFile(["test/index.test.ts", "mocha.opts"]);
+  //       });
+  //   });
+  // });
 });
