@@ -1,6 +1,7 @@
 import BaseCommand from "../../base-command";
 import { flags } from "@oclif/command";
 import { createEnv } from "yeoman-environment";
+import chalk from "chalk";
 
 export default class New extends BaseCommand {
   static description =
@@ -40,11 +41,34 @@ export default class New extends BaseCommand {
       force: flags.force,
     };
 
+    this.log(this.banner());
+    this.log("Time to build a ShipEngine app!");
+
     await new Promise((resolve, reject) => {
       env.run("apps:new", generatorOptions, (err: Error | null) => {
         if (err) reject(err);
         else resolve("done");
       });
     });
+  }
+
+  private banner() {
+    return chalk.blueBright(`
+         .;i1:                      .iii,
+        1GLtt;                      ,ttfGL.
+       :8t             .,..             ;81
+       ;8i         ,,  iiii. .,.        ,0t
+       ;81       ,i1i;;iiii;;i1i:       ,8t
+       :81       .;iii1iiii1iiii.       :8t
+      .18i     .::;iii:.  .:iiii,,.     ,GL.
+     .L8f      :111iii      ;iii11;      i0G,
+      .10;     .,,;iii:.  .:iiii::,     ,GC,
+       :81       .;iii1iiii1iii;.       :8f
+       ;81       ,i1i;;iiii;;i1i:       :0f
+       ;8i         ,.  ;1ii. .,.        ,0f
+       :8t             .,,.             ;8f
+        tGf11:                      ,t1fGL,
+         .;i1:                      .1ii:
+`);
   }
 }

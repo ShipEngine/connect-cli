@@ -1,7 +1,7 @@
 import _ from "lodash";
 import * as fs from "fs";
 import * as path from "path";
-import chalk from "chalk";
+
 import Generator = require("yeoman-generator");
 import { execSync } from "child_process";
 
@@ -69,9 +69,6 @@ class AppsNew extends Generator {
 
   // eslint-disable-next-line complexity
   async prompting() {
-    this.log(this.banner());
-    this.log("Time to build a ShipEngine app!");
-
     if (this.path) {
       this.destinationRoot(path.resolve(this.path));
       process.chdir(this.destinationRoot());
@@ -408,7 +405,7 @@ class AppsNew extends Generator {
     }
   }
 
-  install() {
+  async install() {
     const dependencies: string[] = [];
     const devDependencies: string[] = [];
 
@@ -444,10 +441,16 @@ class AppsNew extends Generator {
     const dev = this.yarn ? { dev: true } : { "save-dev": true };
     const save = this.yarn ? {} : { save: true };
 
-    return Promise.all([
-      install(devDependencies, { ...yarnOpts, ...dev, ignoreScripts: true }),
-      install(dependencies, { ...yarnOpts, ...save }),
-    ]).then(() => {});
+    try {
+      await install(devDependencies, {
+        ...yarnOpts,
+        ...dev,
+        ignoreScripts: true,
+      });
+      await install(dependencies, { ...yarnOpts, ...save });
+    } catch (error) {
+      throw error;
+    }
   }
 
   end() {
@@ -489,26 +492,6 @@ class AppsNew extends Generator {
         .sort()
         .join("\n") + "\n"
     );
-  }
-
-  private banner() {
-    return chalk.blueBright(`
-         .;i1:                      .iii,
-        1GLtt;                      ,ttfGL.
-       :8t             .,..             ;81
-       ;8i         ,,  iiii. .,.        ,0t
-       ;81       ,i1i;;iiii;;i1i:       ,8t
-       :81       .;iii1iiii1iiii.       :8t
-      .18i     .::;iii:.  .:iiii,,.     ,GL.
-     .L8f      :111iii      ;iii11;      i0G,
-      .10;     .,,;iii:.  .:iiii::,     ,GC,
-       :81       .;iii1iiii1iii;.       :8f
-       ;81       ,i1i;;iiii;;i1i:       :0f
-       ;8i         ,.  ;1ii. .,.        ,0f
-       :8t             .,,.             ;8f
-        tGf11:                      ,t1fGL,
-         .;i1:                      .1ii:
-`);
   }
 }
 
