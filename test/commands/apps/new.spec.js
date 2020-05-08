@@ -6,8 +6,7 @@ describe("apps:new", () => {
   test
     .stdout()
     .command(["apps:new"])
-    .exit(0)
-    .it("runs app info message", (ctx) => {
+    .it("scaffolds a new app", (ctx) => {
       expect(ctx.stdout).to.contain("apps:new");
     });
 });

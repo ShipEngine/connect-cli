@@ -1,6 +1,6 @@
 {
   "name": "@shipengine/cli",
-  "description": "Command-line tool for working with your ShipEngine account",
+  "description": "A CLI tool for working with your ShipEngine account.",
   "version": "0.0.1",
   "author": {
     "name": "ShipEngine",
@@ -66,7 +66,8 @@
     "/bin",
     "/lib",
     "/npm-shrinkwrap.json",
-    "/oclif.manifest.json"
+    "/oclif.manifest.json",
+    "/templates"
   ],
   "homepage": "https://www.shipengine.com/docs/",
   "keywords": [
@@ -96,7 +97,7 @@
     "url": "https://github.com/ShipEngine/shipengine-cli.git"
   },
   "scripts": {
-    "build": "tsc && shx cp -R src/shipengine-core/templates/ lib/shipengine-core/templates/",
+    "build": "tsc",
     "bump": "bump --tag --push --all",
     "clean": "shx rm -rf .nyc_output coverage lib",
     "coverage": "nyc npm run test",

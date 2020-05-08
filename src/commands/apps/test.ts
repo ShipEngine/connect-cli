@@ -7,6 +7,6 @@ export default class Test extends BaseCommand {
   static examples = ["$ shipengine apps:test"];
 
   async run() {
-    this.log("testing 1, 2, 3");
+    this.log("testint 1, 2, 3");
   }
 }
