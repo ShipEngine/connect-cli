@@ -5,7 +5,7 @@ const sinon = require("sinon");
 const yeomanEnv = require("yeoman-environment");
 
 describe("apps:new", () => {
-  before(() => {
+  beforeEach(() => {
     sinon.stub(yeomanEnv, "createEnv").returns({
       run: (namespace, options, callback) => {
         callback();
@@ -21,7 +21,7 @@ describe("apps:new", () => {
       expect(ctx.stdout).to.contain("Time to build a ShipEngine app!\n");
     });
 
-  after(() => {
+  afterEach(() => {
     sinon.restore();
   });
 });
