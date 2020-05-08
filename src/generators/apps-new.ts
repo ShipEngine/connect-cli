@@ -70,7 +70,7 @@ class AppsNew extends Generator {
   // eslint-disable-next-line complexity
   async prompting() {
     this.log(this.banner());
-    this.log(`Time to build a ShipEngine app!`);
+    this.log("Time to build a ShipEngine app!");
 
     if (this.path) {
       this.destinationRoot(path.resolve(this.path));
