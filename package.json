@@ -1,6 +1,6 @@
 {
   "name": "@shipengine/cli",
-  "description": "Command-line tool for working with your ShipEngine account",
+  "description": "A CLI tool for working with your ShipEngine account.",
   "version": "0.0.1",
   "author": {
     "name": "ShipEngine",
@@ -66,7 +66,8 @@
     "/bin",
     "/lib",
     "/npm-shrinkwrap.json",
-    "/oclif.manifest.json"
+    "/oclif.manifest.json",
+    "/templates"
   ],
   "homepage": "https://www.shipengine.com/docs/",
   "keywords": [
@@ -96,7 +97,6 @@
     "url": "https://github.com/ShipEngine/shipengine-cli.git"
   },
   "scripts": {
-    "build": "tsc && shx cp -R src/shipengine-core/templates/ lib/shipengine-core/templates/",
     "bump": "bump --tag --push --all",
     "clean": "shx rm -rf .nyc_output coverage lib",
     "coverage": "nyc npm run test",
@@ -106,7 +106,7 @@
     "posttest": "eslint . --ext .ts --config .eslintrc.js",
     "prepack": "shx rm -rf lib && tsc -b && oclif-dev manifest && oclif-dev readme",
     "release": "npm run upgrade && npm run clean && npm run build && npm test && npm run bump",
-    "test": "nyc --extension .ts mocha --forbid-only && npm run lint",
+    "test": "nyc --extension .ts mocha --forbid-only \"test/**/*.test.ts\" && npm run lint",
     "upgrade": "npm-check -u && npm audit fix",
     "version": "oclif-dev readme && git add README.md",
     "watch": "tsc --watch"
