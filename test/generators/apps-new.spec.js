@@ -6,7 +6,7 @@ const path = require("path");
 const AppsNew = require("../../lib/generators/apps-new");
 
 describe("generator apps:new", function () {
-  describe("when given skipQuestions", function () {
+  describe("defaults", function () {
     it("generates a new app", function () {
       // The object returned acts like a promise, so return it to wait until the process is done
       return helpers
@@ -14,8 +14,16 @@ describe("generator apps:new", function () {
           resolved: path.join(__dirname, "../../lib/generators/apps-new"),
           namespace: "apps:new",
         })
-        .withOptions({ skipQuestions: true }) // Mock options passed in
         .withArguments(["test-app"]) // Mock the arguments
+        .withPrompts({ type: "carrier" })
+        .withPrompts({ author: "test" })
+        .withPrompts({ version: "0.0.0" })
+        .withPrompts({ "github.user": "test" })
+        .withPrompts({ "github.repo": "https://github.com/test/test" })
+        .withPrompts({ eslint: true })
+        .withPrompts({ mocha: true })
+        .withPrompts({ pkg: true })
+        .withPrompts({ typescript: true })
         .then(function () {
           assert.file([
             "src/index.ts",
@@ -45,6 +53,11 @@ describe("generator apps:new", function () {
           resolved: path.join(__dirname, "../../lib/generators/apps-new"),
           namespace: "apps:new",
         })
+        .withPrompts({ type: "carrier" })
+        .withPrompts({ author: "test" })
+        .withPrompts({ version: "0.0.0" })
+        .withPrompts({ "github.user": "test" })
+        .withPrompts({ "github.repo": "https://github.com/test/test" })
         .withPrompts({ eslint: true })
         .withPrompts({ mocha: false })
         .withPrompts({ pkg: true })
@@ -81,6 +94,11 @@ describe("generator apps:new", function () {
           resolved: path.join(__dirname, "../../lib/generators/apps-new"),
           namespace: "apps:new",
         })
+        .withPrompts({ type: "carrier" })
+        .withPrompts({ author: "test" })
+        .withPrompts({ version: "0.0.0" })
+        .withPrompts({ "github.user": "test" })
+        .withPrompts({ "github.repo": "https://github.com/test/test" })
         .withPrompts({ eslint: false })
         .withPrompts({ mocha: true })
         .withPrompts({ pkg: true })
@@ -113,6 +131,11 @@ describe("generator apps:new", function () {
           resolved: path.join(__dirname, "../../lib/generators/apps-new"),
           namespace: "apps:new",
         })
+        .withPrompts({ type: "carrier" })
+        .withPrompts({ author: "test" })
+        .withPrompts({ version: "0.0.0" })
+        .withPrompts({ "github.user": "test" })
+        .withPrompts({ "github.repo": "https://github.com/test/test" })
         .withPrompts({ eslint: true })
         .withPrompts({ mocha: true })
         .withPrompts({ pkg: true })
