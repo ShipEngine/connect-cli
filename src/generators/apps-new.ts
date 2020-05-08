@@ -1,9 +1,8 @@
 import _ from "lodash";
 import * as fs from "fs";
 import * as path from "path";
-
-import Generator = require("yeoman-generator");
 import { execSync } from "child_process";
+import Generator = require("yeoman-generator");
 
 const debug = require("debug")("apps-new");
 const fixpack = require("@oclif/fixpack");

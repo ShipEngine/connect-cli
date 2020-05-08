@@ -18,7 +18,7 @@ describe("generator apps:new", function () {
         .withPrompts({ type: "carrier" })
         .withPrompts({ author: "test" })
         .withPrompts({ version: "0.0.0" })
-        .withPrompts({ "github.user": "test" })
+        .withPrompts({ "github.user": "@test" })
         .withPrompts({ "github.repo": "https://github.com/test/test" })
         .withPrompts({ eslint: true })
         .withPrompts({ mocha: true })
@@ -41,6 +41,7 @@ describe("generator apps:new", function () {
           ]);
 
           assert.jsonFileContent("package.json", { main: "lib/index.js" });
+          assert.jsonFileContent("package.json", { author: "test" });
         });
     });
   });
@@ -56,7 +57,7 @@ describe("generator apps:new", function () {
         .withPrompts({ type: "carrier" })
         .withPrompts({ author: "test" })
         .withPrompts({ version: "0.0.0" })
-        .withPrompts({ "github.user": "test" })
+        .withPrompts({ "github.user": "@test" })
         .withPrompts({ "github.repo": "https://github.com/test/test" })
         .withPrompts({ eslint: true })
         .withPrompts({ mocha: false })
@@ -97,7 +98,7 @@ describe("generator apps:new", function () {
         .withPrompts({ type: "carrier" })
         .withPrompts({ author: "test" })
         .withPrompts({ version: "0.0.0" })
-        .withPrompts({ "github.user": "test" })
+        .withPrompts({ "github.user": "@test" })
         .withPrompts({ "github.repo": "https://github.com/test/test" })
         .withPrompts({ eslint: false })
         .withPrompts({ mocha: true })
@@ -134,7 +135,7 @@ describe("generator apps:new", function () {
         .withPrompts({ type: "carrier" })
         .withPrompts({ author: "test" })
         .withPrompts({ version: "0.0.0" })
-        .withPrompts({ "github.user": "test" })
+        .withPrompts({ "github.user": "@test" })
         .withPrompts({ "github.repo": "https://github.com/test/test" })
         .withPrompts({ eslint: true })
         .withPrompts({ mocha: true })
