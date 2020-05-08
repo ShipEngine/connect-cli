@@ -283,7 +283,7 @@ class AppsNew extends Generator {
 
   // eslint-disable-next-line complexity
   writing() {
-    this.sourceRoot(path.join(__dirname, "./templates"));
+    this.sourceRoot(path.join(__dirname, "../../templates"));
 
     if (this.ts) {
       this.fs.copyTpl(
@@ -370,10 +370,38 @@ class AppsNew extends Generator {
 
     switch (this.type) {
       case "carrier":
-        this.writeCarrierApp();
+        if (!fs.existsSync("src")) {
+          this.fs.copyTpl(
+            this.templatePath(`carrier/src/index.${this._ext}`),
+            this.destinationPath(`src/index.${this._ext}`),
+            this,
+          );
+        }
+
+        if (this.mocha && !fs.existsSync("test")) {
+          this.fs.copyTpl(
+            this.templatePath(`carrier/test/index.test.${this._ext}`),
+            this.destinationPath(`test/index.test.${this._ext}`),
+            this,
+          );
+        }
         break;
       case "order source":
-        this.writeOrderSourceApp();
+        if (!fs.existsSync("src")) {
+          this.fs.copyTpl(
+            this.templatePath(`order-source/src/index.${this._ext}`),
+            this.destinationPath(`src/index.${this._ext}`),
+            this,
+          );
+        }
+
+        if (this.mocha && !fs.existsSync("test")) {
+          this.fs.copyTpl(
+            this.templatePath(`order-source/test/index.test.${this._ext}`),
+            this.destinationPath(`test/index.test.${this._ext}`),
+            this,
+          );
+        }
         break;
     }
   }
@@ -459,42 +487,6 @@ class AppsNew extends Generator {
         .sort()
         .join("\n") + "\n"
     );
-  }
-
-  private writeCarrierApp() {
-    if (!fs.existsSync("src")) {
-      this.fs.copyTpl(
-        this.templatePath(`carrier/src/index.${this._ext}`),
-        this.destinationPath(`src/index.${this._ext}`),
-        this,
-      );
-    }
-
-    if (this.mocha && !fs.existsSync("test")) {
-      this.fs.copyTpl(
-        this.templatePath(`carrier/test/index.test.${this._ext}`),
-        this.destinationPath(`test/index.test.${this._ext}`),
-        this,
-      );
-    }
-  }
-
-  private writeOrderSourceApp() {
-    if (!fs.existsSync("src")) {
-      this.fs.copyTpl(
-        this.templatePath(`order-source/src/index.${this._ext}`),
-        this.destinationPath(`src/index.${this._ext}`),
-        this,
-      );
-    }
-
-    if (this.mocha && !fs.existsSync("test")) {
-      this.fs.copyTpl(
-        this.templatePath(`order-source/test/index.test.${this._ext}`),
-        this.destinationPath(`test/index.test.${this._ext}`),
-        this,
-      );
-    }
   }
 }
 
