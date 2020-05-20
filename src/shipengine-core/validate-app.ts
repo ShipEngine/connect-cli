@@ -55,6 +55,7 @@ export async function validateApp(pathToApp: string): Promise<App> {
 
 export async function validateTestSuite(app: App, argv: string[]): Promise<void> {
 
+  // TODO: no longer need environment variables
   if (argv[0]) {
     process.env["TEST-SUITE"] = argv[0];
   }
