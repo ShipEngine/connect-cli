@@ -1,15 +1,9 @@
 import { loadApp, App } from "@shipengine/integration-platform-loader";
-import Mocha from "mocha";
 import * as path from "path";
 import readdir from "recursive-readdir";
+import { runTest } from './test-harness/run-test';
 
 export const testSuites = ["create-shipment", "rate-shipment", "schedule-pickup"];
-
-function addMochaFile(mocha: Mocha, file: string) {
-  if(!mocha.files.includes(file)) {
-    mocha.addFile(file);
-  }
-}
 
 export class InvalidAppError extends Error {
   errors: string[];
@@ -98,43 +92,34 @@ export async function validateTestSuite(app: App, argv: string[]): Promise<void>
     "connect": "connect"
   }
 
-  const mocha = new Mocha({
-    delay: true,
-    timeout: 20000
-  });
-  const testDir = path.join(__dirname, "test-harness");
+  const testDir = path.join(__dirname, "test-harness", "tests");
 
-  // Add each .js file to the mocha instance
+  // Add each .ts file to the test instance
   const files = await readdir(testDir);
 
-  // Files to always include in the test-harness suites
-  const ignoreFiles = ["mocha-hooks"];
-
-  files
+  const filteredFiles = files
     .filter((file) => {
-      // Only keep the .js files
-      return file.substr(-3) === '.js';
+      // Only keep the .ts files
+      return file.substr(-3) === '.ts';
     })
-    .forEach((file) => {
+    .filter((file) => {
 
+      // If the user specified a test suite then only return that sub-directory
       if (argv[0]) {
-        if (file.includes(argv[0]) || ignoreFiles.some(ignoreFile => file.includes(ignoreFile))) {
-          addMochaFile(mocha, file);
+        if (file.includes(argv[0])) {
+          return file;
         }
       }
       else {
         // Only add method test suites that are defined in the Integration App that is being tested.
         for (let appMethod of appMethods) {
-          if (file.includes(testSuiteMap[appMethod]) || ignoreFiles.some(ignoreFile => file.includes(ignoreFile))) {
+          if (file.includes(testSuiteMap[appMethod])) {
             // Checke to make sure 
-            addMochaFile(mocha, file);
+            return file;
           }
         }
       }
     });
 
-  mocha.run((failures) => {
-    process.exitCode = failures ? 1 : 0;
-  });
+    await runTest(app, filteredFiles);
 }
-
