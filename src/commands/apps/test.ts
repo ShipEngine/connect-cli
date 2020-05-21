@@ -8,7 +8,7 @@ import {
 import chalk from "chalk";
 import { App } from "@shipengine/integration-platform-loader";
 import { flags } from "@oclif/command";
-import { testSuites } from "../../shipengine-core/validate-app"
+import { testSuites } from "../../shipengine-core/validate-app";
 let app: App;
 
 export default class Test extends BaseCommand {
@@ -17,41 +17,43 @@ export default class Test extends BaseCommand {
   static examples = ["$ shipengine apps:test"];
 
   static flags = {
-    help: flags.help({char: "h"}),
+    help: flags.help({ char: "h" }),
     debug: flags.boolean({
       char: "d",
-      description: "Provides additional logs to test output"
-    })
-  }
+      description: "Provides additional logs to test output",
+    }),
+  };
 
   static args = [
     {
       name: "test suite",
       required: false,
       description: "Name of test suite to only run",
-      options: testSuites
+      options: testSuites,
     },
     {
       name: "test number",
       required: false,
-      description: "Number within the test suite to run"
-    }
-  ]
+      description: "Number within the test suite to run",
+    },
+  ];
 
   async run() {
     const pathToApp = `${process.cwd()}`;
 
     const { argv, flags } = this.parse(Test);
 
-    if(flags.debug) {
+    if (flags.debug) {
       process.env["TEST_DEBUG"] = "true";
     }
 
     try {
       app = await validateApp(pathToApp);
       this.log("✅ App structure is valid");
+
+      await validateTestSuite(app, argv);
     } catch (error) {
-      if (error instanceof InvalidAppError) {
+      if (error.code === "INVALID_APP") {
         const errorsCount = error.errors.length;
         const errorsWithInflection = errorsCount > 1 ? "errors" : "error";
 
@@ -67,18 +69,6 @@ export default class Test extends BaseCommand {
       } else {
         this.error(error);
       }
-    }
-
-    // Check for real world correctness
-    //  ›   All UUIDs are unique
-    //  ›
-
-    // Run test suite
-
-    try {
-      await validateTestSuite(app, argv);
-    } catch (error) {
-      throw error;
     }
   }
 }
