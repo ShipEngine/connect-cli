@@ -53,7 +53,7 @@ export default class Test extends BaseCommand {
 
       await validateTestSuite(app, argv);
     } catch (error) {
-      if (error.code === "INVALID_APP") {
+      if (error.code && error.code === "INVALID_APP") {
         const errorsCount = error.errors.length;
         const errorsWithInflection = errorsCount > 1 ? "errors" : "error";
 
