@@ -3,41 +3,35 @@ import { generateAddress } from "../../utils/address";
 import { v4 } from "uuid";
 
 import { generateCarrierTests, CarrierTest } from "../../utils/generate-tests";
-import { CarrierApp, NewShipmentPOJO, NewPackagePOJO, WeightUnit, TransactionPOJO } from '@shipengine/integration-platform-sdk';
+import {
+  CarrierApp,
+  NewShipmentPOJO,
+  NewPackagePOJO,
+  WeightUnit,
+  TransactionPOJO,
+} from "@shipengine/integration-platform-sdk";
 
 let tests;
 
-
-export function test(app: CarrierApp) {
-
-  let description = "The create Shipment method";
-
-  tests = generateTestData(app);
-  generateCarrierTests(tests, "createShipment", app, description);
-};
-
 function generateTestData(app: CarrierApp): CarrierTest[] {
-
   let generatedTests: CarrierTest[] = [];
 
   let testCounter = 0;
+
   for (let deliveryService of app.carrier.deliveryServices) {
     // TODO: randomize weight values
     // TODO: Add support for calling from different countries
-    // TODO: Test different date time 
+    // TODO: Test different date time
     for (let labelFormat of deliveryService.labelFormats) {
-
       for (let labelSize of deliveryService.labelSizes) {
-
         for (let deliveryConfirmation of deliveryService.deliveryConfirmations) {
-
           let transactionPOJO: TransactionPOJO = {
             id: v4(),
             isRetry: false,
             useSandbox: false,
             session: {
-              id: v4()
-            }
+              id: v4(),
+            },
           };
 
           const packagePOJO: NewPackagePOJO = {
@@ -45,12 +39,12 @@ function generateTestData(app: CarrierApp): CarrierTest[] {
             packaging: { id: deliveryService.packaging[0].id },
             label: {
               size: labelSize,
-              format: labelFormat
+              format: labelFormat,
             },
             weight: {
               value: 1.0,
-              unit: WeightUnit.Grams
-            }
+              unit: WeightUnit.Grams,
+            },
           };
 
           let newShipmentPOJO: NewShipmentPOJO = {
@@ -62,7 +56,7 @@ function generateTestData(app: CarrierApp): CarrierTest[] {
             // insuranceProvider: undefined,
             // returns?: "",
             // billing: undefined,
-            packages: [packagePOJO]
+            packages: [packagePOJO],
           };
 
           // newShipmentPOJO.packages = [];
@@ -81,7 +75,7 @@ function generateTestData(app: CarrierApp): CarrierTest[] {
             `Label Format: ${labelFormat}`,
             `Label Size: ${labelSize}`,
             `Delivery Confirmation: ${deliveryConfirmation.name}`,
-            `${debugString ? debugString : ""}`
+            `${debugString ? debugString : ""}`,
           ];
 
           generatedTests.push([transactionPOJO, newShipmentPOJO, message]);
@@ -92,11 +86,16 @@ function generateTestData(app: CarrierApp): CarrierTest[] {
           //     }
           //   }
         }
-
       }
     }
-
   }
 
   return generatedTests;
+}
+
+export function test(app: CarrierApp) {
+  let description = "test .createShipment()";
+
+  tests = generateTestData(app);
+  generateCarrierTests(tests, "createShipment", app, description);
 }

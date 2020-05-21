@@ -3,7 +3,6 @@ import BaseCommand from "../../base-command";
 import {
   validateApp,
   validateTestSuite,
-  InvalidAppError,
 } from "../../shipengine-core/validate-app";
 import chalk from "chalk";
 import { App } from "@shipengine/integration-platform-loader";

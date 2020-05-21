@@ -66,6 +66,7 @@ export async function validateTestSuite(
     "schedulePickup",
     "cancelPickup",
   ];
+
   const appMethods: string[] = [];
 
   if (app.type === "carrier") {
@@ -73,10 +74,6 @@ export async function validateTestSuite(
       if (Reflect.get(app.carrier, carrierMethod)) {
         appMethods.push(carrierMethod);
       }
-    }
-  } else if (app.type === "connection") {
-    if (Reflect.get(app.connection, "connect")) {
-      appMethods.push("connect");
     }
   }
 
