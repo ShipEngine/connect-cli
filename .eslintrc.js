@@ -10,9 +10,8 @@ module.exports = {
     "prettier",
     "prettier/@typescript-eslint",
   ],
-  globals: {
-    app: "readOnly",
-    expect: "readOnly",
-    before: "readOnly"
+  rules: {
+    "no-console": 0,
+    "@typescript-eslint/no-use-before-define": 0
   }
 };

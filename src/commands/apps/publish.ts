@@ -1,5 +1,7 @@
 import BaseCommand from "../../base-command";
-// import { flags } from "@oclif/command";
+import { verifyRCFile } from '../../shipengine-core/publish/verify-rc-file';
+import { packageApp } from '../../shipengine-core/publish/package-app';
+import { deployApp } from '../../shipengine-core/publish/deploy-app';
 
 export default class Publish extends BaseCommand {
   static description = "publish your app";
@@ -10,6 +12,8 @@ export default class Publish extends BaseCommand {
   static hidden = true;
 
   async run() {
-    this.log("doing all the things");
+    await verifyRCFile();
+    const tarballName = await packageApp();
+    await deployApp(tarballName);
   }
 }
