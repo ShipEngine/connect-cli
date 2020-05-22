@@ -2,6 +2,11 @@ import * as fs from "fs";
 import * as path from "path";
 import { execSync } from "child_process";
 
+import { exec } from "child_process";
+import util from "util";
+
+const asyncExec = util.promisify(exec);
+
 export async function packageApp(): Promise<string> {
 
   const packagePath = path.join(process.cwd(), "package.json");
@@ -19,16 +24,19 @@ export async function packageApp(): Promise<string> {
 
   await fs.promises.writeFile(packagePath, JSON.stringify(pjson, undefined, 2));
 
-  let packResults;
+  const { stdout, stderr } = await asyncExec("npm pack");
 
-  try {
-    //TODO: make this asynchronous?
-    packResults = execSync("npm pack");
-  }
-  catch(error) {
-    let err = error as Error;
-    throw new Error(`There was an error packaging your app ${err.message}`);
-  }
 
-  return packResults.toString("utf-8").trim();
+  // let packResults;
+
+  // try {
+  //   //TODO: make this asynchronous?
+  //   packResults = execSync("npm pack");
+  // }
+  // catch(error) {
+  //   let err = error as Error;
+  //   throw new Error(`There was an error packaging your app ${err.message}`);
+  // }
+
+  return stdout.trim();
 }
