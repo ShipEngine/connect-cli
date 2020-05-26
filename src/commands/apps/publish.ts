@@ -14,20 +14,36 @@ export default class Publish extends BaseCommand {
 
   async run() {
 
-    // prompt for API Key?? Check for the apiCLient? and see if its been initialized yet
+    // Check that user is logged in
+    const apiClient = this.client;
+    if(!apiClient.isLoggedIn) {
+      await apiClient.login();
+    }
 
-    // Run test harness
-
-    // send the name, type, and carrier id to the deploy app command inline with the changes that bill requested.
-
+    // TODO: Run test harness here once it's done.
+    
     cli.action.start("Packing App");
     const tarballName = await packageApp();
     cli.action.stop(`${logSymbols.success}\n`);
 
     cli.action.start("Deploying App");
-    const deploymentID = await deployApp(tarballName);
+
+    let deploymentID;
+    try {
+      deploymentID = await deployApp(tarballName, apiClient);
+    }
+    catch(error) {
+      let err = error as Error;
+      const errorMessage = `Unable to deploy npm package to integration platform: ${err.message}`;
+      this.error(errorMessage);
+    }
+
     cli.action.stop(`${logSymbols.success}\n`);
 
-    console.log(`Deployment ID: ${deploymentID}\n`);
+    this.log(`Deployment ID: ${deploymentID}\n`);
+
+    // Show command for tracking the status of the user's deployment.
+    this.log("To track the status of the deployment, please run the following command:");
+    this.log(`shipengine apps:info ${deploymentID}`);
   }
 }
