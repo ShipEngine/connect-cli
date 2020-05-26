@@ -1,7 +1,8 @@
-import { loadApp, App } from "@shipengine/integration-platform-loader";
+import { loadApp } from "@shipengine/integration-platform-loader";
 import Mocha from "mocha";
 import * as path from "path";
 import readdir from "recursive-readdir";
+import { CarrierApp, OrderApp, AppType } from '@shipengine/integration-platform-sdk';
 
 export const testSuites = ["create-shipment", "rate-shipment", "schedule-pickup"];
 
@@ -41,10 +42,15 @@ function isError(error: string): boolean {
 // Make sure there is a local installation of the SDK
 //  ›   Error: Looks like you're missing a local installation of
 //  ›   @shipengine/integration-platform-sdk. Run `npm install` to resolve
-export async function validateApp(pathToApp: string): Promise<App> {
+export async function validateApp(pathToApp: string): Promise<CarrierApp | OrderApp> {
   try {
     const app = await loadApp(pathToApp);
-    return app;
+    if(app.type === AppType.Carrier) {
+      return app as CarrierApp;
+    }
+    else {
+      return app as OrderApp
+    }
   } catch (error) {
     const errors: string[] = error.message
       .split(/\r?\n/)

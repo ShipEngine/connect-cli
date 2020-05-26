@@ -1,8 +1,6 @@
 import ShipengineAPIClient from "./shipengine-api-client";
-import { IConfig } from '@oclif/config';
 import netrc from "netrc";
 import { cli } from 'cli-ux';
-
 
 export default class APIClient extends ShipengineAPIClient {
   /**

@@ -1,15 +1,14 @@
 import BaseCommand from "../../base-command";
-// import { flags } from "@oclif/command";
 import {
   validateApp,
   validateTestSuite,
   InvalidAppError,
 } from "../../shipengine-core/validate-app";
 import chalk from "chalk";
-import { App } from "@shipengine/integration-platform-loader";
 import { flags } from "@oclif/command";
 import { testSuites } from "../../shipengine-core/validate-app"
-let app: App;
+
+let app: unknown;
 
 export default class Test extends BaseCommand {
   static description = "test your app";
