@@ -8,8 +8,6 @@ import chalk from "chalk";
 import { flags } from "@oclif/command";
 import { testSuites } from "../../shipengine-core/validate-app"
 
-let app: unknown;
-
 export default class Test extends BaseCommand {
   static description = "test your app";
 
