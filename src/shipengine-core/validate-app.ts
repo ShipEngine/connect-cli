@@ -2,12 +2,13 @@ import { loadApp } from "@shipengine/integration-platform-loader";
 import Mocha from "mocha";
 import * as path from "path";
 import readdir from "recursive-readdir";
-import { CarrierApp, OrderApp, AppType } from '@shipengine/integration-platform-sdk';
+import { isCarrierApp } from './utils/is-functions';
+import { App } from './utils/types';
 
 export const testSuites = ["create-shipment", "rate-shipment", "schedule-pickup"];
 
 function addMochaFile(mocha: Mocha, file: string) {
-  if(!mocha.files.includes(file)) {
+  if (!mocha.files.includes(file)) {
     mocha.addFile(file);
   }
 }
@@ -42,15 +43,10 @@ function isError(error: string): boolean {
 // Make sure there is a local installation of the SDK
 //  ›   Error: Looks like you're missing a local installation of
 //  ›   @shipengine/integration-platform-sdk. Run `npm install` to resolve
-export async function validateApp(pathToApp: string): Promise<CarrierApp | OrderApp> {
+export async function validateApp(pathToApp: string): Promise<App> {
   try {
-    const app = await loadApp(pathToApp);
-    if(app.type === AppType.Carrier) {
-      return app as CarrierApp;
-    }
-    else {
-      return app as OrderApp
-    }
+    const app = await loadApp(pathToApp) as App;
+    return app;
   } catch (error) {
     const errors: string[] = error.message
       .split(/\r?\n/)
@@ -79,16 +75,11 @@ export async function validateTestSuite(app: App, argv: string[]): Promise<void>
   const carrierAppMethods = ["createShipment", "cancelShipments", "rateShipment", "track", "createManifest", "schedulePickup", "cancelPickup"];
   const appMethods: string[] = [];
 
-  if (app.type === "carrier") {
+  if (isCarrierApp(app)) {
     for (let carrierMethod of carrierAppMethods) {
-      if (Reflect.get(app.carrier, carrierMethod)) {
+      if (Reflect.get(app, carrierMethod)) {
         appMethods.push(carrierMethod);
       }
-    }
-  }
-  else if (app.type === "connection") {
-    if (Reflect.get(app.connection, "connect")) {
-      appMethods.push("connect");
     }
   }
 

@@ -16,7 +16,7 @@ export default class Test extends BaseCommand {
   static examples = ["$ shipengine apps:test"];
 
   static flags = {
-    help: flags.help({char: "h"}),
+    help: flags.help({ char: "h" }),
     debug: flags.boolean({
       char: "d",
       description: "Provides additional logs to test output"
@@ -42,9 +42,11 @@ export default class Test extends BaseCommand {
 
     const { argv, flags } = this.parse(Test);
 
-    if(flags.debug) {
+    if (flags.debug) {
       process.env["TEST_DEBUG"] = "true";
     }
+
+    let app;
 
     try {
       app = await validateApp(pathToApp);
@@ -74,10 +76,12 @@ export default class Test extends BaseCommand {
 
     // Run test suite
 
-    try {
-      await validateTestSuite(app, argv);
-    } catch (error) {
-      throw error;
+    if (app) {
+      try {
+        await validateTestSuite(app, argv);
+      } catch (error) {
+        throw error;
+      }
     }
   }
 }
