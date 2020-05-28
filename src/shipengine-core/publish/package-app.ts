@@ -15,11 +15,13 @@ export async function packageApp(): Promise<string> {
   // take dependencies and move them to bundledDependencies
   pjson.bundledDependencies = [];
 
-  for (let dependency of Object.keys(pjson.dependencies)) {
-    pjson.bundledDependencies.push(dependency);
+  if(pjson.dependencies) {
+    for (let dependency of Object.keys(pjson.dependencies)) {
+      pjson.bundledDependencies.push(dependency);
+    }
+  
+    await fs.promises.writeFile(packagePath, JSON.stringify(pjson, undefined, 2));
   }
-
-  await fs.promises.writeFile(packagePath, JSON.stringify(pjson, undefined, 2));
 
   const { stdout } = await asyncExec("npm pack");
 
