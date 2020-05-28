@@ -30,7 +30,6 @@ export async function deployApp(packageTarballlName: string, apiClient: APIClien
   let form = new FormData();
   
   form.append("deployment", fs.createReadStream(tarPath));
-  form.append("id", app.id );
   form.append("name", app.manifest.name );
   form.append("type", app.type);
   form.append("version", app.manifest.version);
