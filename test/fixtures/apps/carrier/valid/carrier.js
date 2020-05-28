@@ -46,7 +46,9 @@ module.exports = {
       description: "Take your package to the specified carrier location.",
     },
   ],
+  connectionForm: "connectionForm.js",
 
+  connect() {},
   createShipment() {},
   cancelShipments() {},
   rateShipment() {},
