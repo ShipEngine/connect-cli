@@ -18,7 +18,7 @@ export default class APIClient extends ShipengineAPIClient {
     let seNetRC = myNetrc["shipengine.com"] as { apiKey?: string };
 
     if (!seNetRC || !seNetRC.apiKey) {
-      const apiKey = await cli.prompt("Please enter your ShipEngine API Key?");
+      const apiKey = await cli.prompt("Please enter your ShipEngine API Key.");
 
       this.apiKey = apiKey;
       Object.assign(myNetrc["shipengine.com"] = {}, { apiKey })

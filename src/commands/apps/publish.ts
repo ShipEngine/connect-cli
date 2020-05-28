@@ -5,6 +5,7 @@ import cli from "cli-ux";
 import logSymbols from "log-symbols";
 import { flags } from '@oclif/command';
 
+// TODO: come up with a convention for turning off spinners if the user desires
 export default class Publish extends BaseCommand {
   static description = "publish your app";
 
@@ -12,6 +13,7 @@ export default class Publish extends BaseCommand {
 
   static flags = {
     help: flags.help({ char: "h", description: "show help for the apps:publish command" })
+    // TODO: implement a quiet command?
   }
 
   // hide the command from help
@@ -30,7 +32,7 @@ export default class Publish extends BaseCommand {
 
     // TODO: Run test harness here once it's done.
 
-    cli.action.start("Packing App");
+    cli.action.start("Packaging App");
     let tarballName;
     try {
       tarballName = await packageApp();
@@ -56,7 +58,6 @@ export default class Publish extends BaseCommand {
     }
 
     cli.action.stop(`${logSymbols.success}\n`);
-
     this.log(`Deployment ID: ${deploymentID}\n`);
 
     // Show command for tracking the status of the user's deployment.
