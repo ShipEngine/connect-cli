@@ -9,8 +9,8 @@ export default class ShipengineAPIClient {
   private _apiKey: string;
   private _axios: AxiosInstance;
 
-  public async deployApp(form: FormData, appID: string): Promise<string> {
-    const response =  await this._axios.post(`/deploy/${appID}`, form, {
+  public async deployApp(form: FormData, appName: string): Promise<string> {
+    const response =  await this._axios.post(`apps/${appName}/deploy`, form, {
       headers: form.getHeaders()
     })
 
@@ -30,7 +30,7 @@ export default class ShipengineAPIClient {
     this._apiKey = "";
 
     this._axios = axios.create({
-      baseURL: "http://localhost:3000",
+      baseURL: "http://localhost:3000/api",
       // TODO: should we impose a more reasonable data limit?
       maxContentLength: Infinity
     });
