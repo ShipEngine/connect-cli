@@ -1,5 +1,6 @@
 import axios, { AxiosInstance } from "axios";
 import FormData from "form-data";
+import { DeploymentStatusObj } from '../shipengine-core/utils/types';
 
 
 /**
@@ -10,11 +11,18 @@ export default class ShipengineAPIClient {
   private _axios: AxiosInstance;
 
   public async deployApp(form: FormData, appName: string): Promise<string> {
-    const response =  await this._axios.post(`apps/${appName}/deploy`, form, {
+    const response =  await this._axios.post(`/apps/${appName}/deploys`, form, {
       headers: form.getHeaders()
     })
 
     return response.data.deployId;
+  }
+
+
+  public async getDeploymentStatus(appName: string, deploymentID: string): Promise<DeploymentStatusObj> {
+    let response = await this._axios.get(`/apps/${appName}/deploys/${deploymentID}`);
+
+    return response.data as DeploymentStatusObj;
   }
 
   protected get apiKey(): string {
@@ -26,6 +34,8 @@ export default class ShipengineAPIClient {
     this._axios.defaults.headers.common["api-key"] = apiKey;
   }
 
+  
+
   constructor() {
     this._apiKey = "";
 
@@ -34,5 +44,11 @@ export default class ShipengineAPIClient {
       // TODO: should we impose a more reasonable data limit?
       maxContentLength: Infinity
     });
+
+    // TODO: do we want to expose any call data via a debug flag?
+    // this._axios.interceptors.request.use((request) => {
+    //   console.log("Starting request", request);
+    //   return request;
+    // });
   }
 }

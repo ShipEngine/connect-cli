@@ -6,15 +6,27 @@ import logSymbols from "log-symbols";
 import { flags } from '@oclif/command';
 import fs from "fs";
 import path from "path";
+import { checkDeploymentStatus } from '../../shipengine-core/publish/check-deployment-status';
+import { DeploymentStatus } from '../../shipengine-core/utils/types';
 
-// TODO: come up with a convention for turning off spinners if the user desires
+/**
+ * This command is meant to be used from the root of an integration platform app. 
+ * It is response for:
+ *  - Checking that the user is logged in.
+ *  - bundling package.json dependencies
+ *  - packaging the app into a tarball
+ *  - sending that tarball to the integration platform for deployment
+ *  - If desired, the user can set the --watch flag to poll the integration platfor for the status of the deployment
+ */
 export default class Publish extends BaseCommand {
   static description = "publish your app";
-
+  
   static examples = ["$ shipengine apps:publish"];
-
+  
   static flags = {
-    help: flags.help({ char: "h", description: "show help for the apps:publish command" })
+    help: flags.help({ char: "h", description: "show help for the apps:publish command" }),
+    watch: flags.boolean({ char: "w", description: "check the status of the deployment until complete" })
+    // TODO: come up with a convention for turning off spinners if the user desires
     // TODO: implement a quiet command?
   }
 
@@ -23,8 +35,7 @@ export default class Publish extends BaseCommand {
 
   async run() {
 
-    // This is needed to register the "-h" flag
-    this.parse(Publish);
+    const { flags } = this.parse(Publish);
 
     // Check that user is logged in
     const apiClient = this.client;
@@ -33,7 +44,6 @@ export default class Publish extends BaseCommand {
     }
 
     // TODO: Run test harness here once it's done.
-
 
     // Make a backup copy of the package.json file since we are going to add the bundledDependencies attribute
     const pJsonBackup = await fs.promises.readFile(path.join(process.cwd(), "package.json"));
@@ -55,24 +65,37 @@ export default class Publish extends BaseCommand {
 
     cli.action.stop(`${logSymbols.success}`);
 
-    cli.action.start("Deploying App");
+    cli.action.start("Publishing App");
 
     let deploymentID;
+    let appName;
     try {
-      deploymentID = await deployApp(tarballName, apiClient);
-    } 
+      [deploymentID, appName] = await deployApp(tarballName, apiClient);
+    }
     catch (error) {
       let err = error as Error;
       const errorMessage = `There was an error deploying your app to the integration platform: ${err.message}`;
       this.error(errorMessage);
-    } 
+    }
     finally {
       // Delete the package tarball
       await fs.promises.unlink(tarballName);
     }
     cli.action.stop(`${logSymbols.success}`);
 
+    if (flags.watch) {
+      cli.action.start("Checking on the App publish status");
+      let status = await checkDeploymentStatus(appName, deploymentID, apiClient);
 
-    // TODO: set watch flag to poll the deployment status
+      if (status === DeploymentStatus.Error) {
+        cli.action.stop(`${logSymbols.error} Your app encountered an error`);
+      }
+      else if (status === DeploymentStatus.Terminated) {
+        cli.action.stop(`${logSymbols.error} Your app was terminated`);
+      }
+      else {
+        cli.action.stop(`${logSymbols.success} Your app was published successfully`);
+      }
+    }
   }
 }

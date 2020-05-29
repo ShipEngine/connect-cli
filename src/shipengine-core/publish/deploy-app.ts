@@ -5,7 +5,10 @@ import * as fs from "fs";
 import FormData from "form-data";
 import APIClient from '../../api-client';
 
-export async function deployApp(packageTarballlName: string, apiClient: APIClient) {
+/**
+ * Takes an npm package tarball and uploads it via a multipart/form-data to the integration platform.
+ */
+export async function deployApp(packageTarballlName: string, apiClient: APIClient): Promise<[string, string]> {
 
   // load app to retrieve the carrier id.
   const app = await loadApp(process.cwd());
@@ -23,5 +26,5 @@ export async function deployApp(packageTarballlName: string, apiClient: APIClien
 
   const deploymentID = await apiClient.deployApp(form, app.manifest.name);
 
-  return deploymentID;
+  return [deploymentID, app.manifest.name];
 }
