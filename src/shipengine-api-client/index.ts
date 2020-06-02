@@ -11,7 +11,7 @@ export default class ShipengineAPIClient {
   private _axios: AxiosInstance;
 
   public async deployApp(form: FormData, appName: string): Promise<string> {
-    const response =  await this._axios.post(`/apps/${appName}/deploys`, form, {
+    const response = await this._axios.post(`/apps/${appName}/deploys`, form, {
       headers: form.getHeaders()
     })
 
@@ -25,6 +25,28 @@ export default class ShipengineAPIClient {
     return response.data as DeploymentStatusObj;
   }
 
+  public async validateAPIKey(apiKey: string): Promise<void> {
+    try {
+      // Endpoint will either return a 200 for sucess or 401 for an unauthorized
+      await axios({
+        method: "get",
+        url: "http://localhost:3000/diagnostics/whoami",
+        headers: {
+          "api-key": apiKey
+        }
+      });
+    }
+    catch(error) {
+            
+      if(error.response && error.response.data.statusCode === 401) {
+        error.message = "Invalid API Key";
+      }
+      const err = error as Error;
+
+      throw err;
+    }
+  }
+
   protected get apiKey(): string {
     return this._apiKey;
   }
@@ -34,14 +56,11 @@ export default class ShipengineAPIClient {
     this._axios.defaults.headers.common["api-key"] = apiKey;
   }
 
-  
-
   constructor() {
     this._apiKey = "";
 
     this._axios = axios.create({
       baseURL: "http://localhost:3000/api",
-      // TODO: should we impose a more reasonable data limit?
       maxContentLength: Infinity
     });
 

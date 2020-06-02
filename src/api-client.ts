@@ -1,6 +1,6 @@
 import ShipengineAPIClient from "./shipengine-api-client";
 import netrc from "netrc";
-import { cli } from 'cli-ux';
+import cli from "cli-ux";
 
 export default class APIClient extends ShipengineAPIClient {
   /**
@@ -13,22 +13,30 @@ export default class APIClient extends ShipengineAPIClient {
     return this.apiKey !== "";
   }
 
-  async login(): Promise<void> {
+  async login(): Promise<boolean> {
     const myNetrc = netrc();
     let seNetRC = myNetrc["shipengine.com"] as { apiKey?: string };
 
     if (!seNetRC || !seNetRC.apiKey) {
       const apiKey = await cli.prompt("Please enter your ShipEngine API Key.");
 
-      this.apiKey = apiKey;
-      Object.assign(myNetrc["shipengine.com"] = {}, { apiKey })
+      try {
+        await this.validateAPIKey(apiKey);
+        this.apiKey = apiKey;
+        Object.assign(myNetrc["shipengine.com"] = {}, { apiKey })
 
-      netrc.save(myNetrc);
-
-      // TODO: Call the /whoami endpoint to verify valid API Key
+        netrc.save(myNetrc);
+        return true;
+      }
+      catch (error) {
+        const err = error as Error;
+        console.error("Error validating your API Key, please try again:", err.message);
+        return false;
+      }
     }
     else {
       this.apiKey = seNetRC.apiKey;
+      return true;
     }
   }
 

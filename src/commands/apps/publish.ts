@@ -37,10 +37,14 @@ export default class Publish extends BaseCommand {
 
     const { flags } = this.parse(Publish);
 
-    // Check that user is logged in
+    // Check that user is logged in, make them enter a valid api key to continue with their app publish.
     const apiClient = this.client;
+
     if (!apiClient.isLoggedIn) {
-      await apiClient.login();
+      let success = false;
+      while(!success) {
+         success = await apiClient.login();
+      }
     }
 
     // TODO: Run test harness here once it's done.
