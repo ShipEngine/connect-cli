@@ -1,39 +1,16 @@
 import Test from "./test";
 import { App } from "../../utils/types";
 import { TransactionPOJO } from "@shipengine/integration-platform-sdk";
-import { v4 } from "uuid";
 
-interface Config {
-  sessionMock?: object;
-}
 export default abstract class Suite {
   app: App;
   protected transactionWithMockSession: TransactionPOJO;
   abstract title: string;
   _testCache: Test[];
 
-  constructor(app: App) {
+  constructor(app: App, transactionWithMockSession: TransactionPOJO) {
     this.app = app;
-
-    let shipengineConfig: Config;
-
-    try {
-      shipengineConfig = require(`${process.cwd()}/shipengine.config.js`);
-    } catch {
-      shipengineConfig = {};
-    }
-
-    const sessionMock = shipengineConfig.sessionMock
-      ? shipengineConfig.sessionMock
-      : {};
-
-    this.transactionWithMockSession = {
-      id: v4(),
-      isRetry: false,
-      useSandbox: false,
-      session: sessionMock,
-    };
-
+    this.transactionWithMockSession = transactionWithMockSession;
     this._testCache = this.tests();
   }
 
