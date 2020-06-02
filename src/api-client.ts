@@ -1,6 +1,5 @@
 import ShipengineAPIClient from "./shipengine-api-client";
-import netrc from "netrc";
-import cli from "cli-ux";
+import { getAPIKey, promptUserForAPIKey, setAPIKey } from './shipengine-core/netrc';
 
 export default class APIClient extends ShipengineAPIClient {
   /**
@@ -14,18 +13,17 @@ export default class APIClient extends ShipengineAPIClient {
   }
 
   async login(): Promise<boolean> {
-    const myNetrc = netrc();
-    let seNetRC = myNetrc["shipengine.com"] as { apiKey?: string };
 
-    if (!seNetRC || !seNetRC.apiKey) {
-      const apiKey = await cli.prompt("Please enter your ShipEngine API Key.");
+    const apiKey = getAPIKey();
+    
+    if (!apiKey) {
+
+      let apiKey = await promptUserForAPIKey();
 
       try {
         await this.validateAPIKey(apiKey);
         this.apiKey = apiKey;
-        Object.assign(myNetrc["shipengine.com"] = {}, { apiKey })
-
-        netrc.save(myNetrc);
+        setAPIKey(apiKey);
         return true;
       }
       catch (error) {
@@ -35,7 +33,7 @@ export default class APIClient extends ShipengineAPIClient {
       }
     }
     else {
-      this.apiKey = seNetRC.apiKey;
+      this.apiKey = apiKey;
       return true;
     }
   }
