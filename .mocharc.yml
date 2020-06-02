@@ -7,7 +7,7 @@ require:
 
 bail: true
 recusive: true
-timeout: 10000
+timeout: 15000
 spec:
   # Test fixtures
   - test/fixtures/**/*.js
