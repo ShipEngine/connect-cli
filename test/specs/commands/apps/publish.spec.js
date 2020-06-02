@@ -24,8 +24,8 @@ describe("apps:publish", () => {
       expect(ctx.stdout).to.contain("publish your app");
     });
 
-    // TODO: Come up with a decent way to mock the `getAPIKey()` function or 
-    // working with the .netrc file in an E2E test such as this.
+  // TODO: Come up with a decent way to mock the `getAPIKey()` function or 
+  // working with the .netrc file in an E2E test such as this.
   // test
   //   .nock("http://localhost:3000", (api) => {
   //     api.post(uri => uri.includes("deploy")).reply(200, { deployId: "12345" });
