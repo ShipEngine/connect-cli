@@ -17,7 +17,7 @@ export async function checkDeploymentStatus(appName: string, deploymentID: strin
   while ((status === DeploymentStatus.Queued) || (status === DeploymentStatus.Building) || (status === DeploymentStatus.Deploying)) {
     const statusObj = await apiClient.getDeploymentStatus(appName, deploymentID);
     status = statusObj.status;
-    await sleep(2000);
+    await sleep(5000);
   }
 
   return status;
