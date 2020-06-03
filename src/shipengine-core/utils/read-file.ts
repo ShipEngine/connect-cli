@@ -11,29 +11,35 @@ import { error as sdkError } from "@shipengine/integration-platform-sdk/lib/inte
 /**
  * Returns the contents of the specified UTF-8 text file
  */
-async function readTextFile(filePath: string): Promise<string> {
+async function readTextFile(absoluteFilePath: string): Promise<string> {
   try {
     // tslint:disable-next-line: ban
-    return fs.readFile(filePath, "utf8");
+    return fs.readFile(absoluteFilePath, "utf8");
   } catch (error) {
-    throw sdkError(ErrorCode.Filesystem, `Unable to read ${filePath}.`, {
-      error,
-    });
+    throw sdkError(
+      ErrorCode.Filesystem,
+      `Unable to read ${absoluteFilePath}.`,
+      {
+        error,
+      },
+    );
   }
 }
 
 /**
  * Returns the parsed contents of the specified YAML file
  */
-async function readYamlFile<T>(filePath: string): Promise<T> {
-  let yaml = await readTextFile(filePath);
+async function readYamlFile<T>(absoluteFilePath: string): Promise<T> {
+  let yaml = await readTextFile(absoluteFilePath);
 
   try {
-    return jsYaml.safeLoad(yaml, { filename: path.basename(filePath) }) as T;
+    return jsYaml.safeLoad(yaml, {
+      filename: path.basename(absoluteFilePath),
+    }) as T;
   } catch (error) {
     throw sdkError(
       ErrorCode.Syntax,
-      `Unable to parse ${path.basename(filePath)}.`,
+      `Unable to parse ${path.basename(absoluteFilePath)}.`,
       { error },
     );
   }
@@ -42,15 +48,15 @@ async function readYamlFile<T>(filePath: string): Promise<T> {
 /**
  * Returns the parsed contents of the specified JSON file
  */
-async function readJsonFile<T>(filePath: string): Promise<T> {
-  let json = await readTextFile(filePath);
+async function readJsonFile<T>(absoluteFilePath: string): Promise<T> {
+  let json = await readTextFile(absoluteFilePath);
 
   try {
     return json5.parse(json) as T;
   } catch (error) {
     throw sdkError(
       ErrorCode.Syntax,
-      `Unable to parse ${path.basename(filePath)}.`,
+      `Unable to parse ${path.basename(absoluteFilePath)}.`,
       { error },
     );
   }
@@ -59,9 +65,9 @@ async function readJsonFile<T>(filePath: string): Promise<T> {
 /**
  * Returns the default export of the specified JavaScript module
  */
-async function importJavaScriptModule<T>(filePath: string): Promise<T> {
+async function importJavaScriptModule<T>(absoluteFilePath: string): Promise<T> {
   try {
-    let exports = (await import(filePath)) as EcmaScriptModule;
+    let exports = (await import(absoluteFilePath)) as EcmaScriptModule;
     if ("default" in exports) {
       // This appears to be an ECMAScript module, so return its default export
       return exports.default as T;
@@ -72,7 +78,7 @@ async function importJavaScriptModule<T>(filePath: string): Promise<T> {
   } catch (error) {
     throw sdkError(
       ErrorCode.Filesystem,
-      `Unable to import ${path.basename(filePath)}.`,
+      `Unable to import ${path.basename(absoluteFilePath)}.`,
       { error },
     );
   }
@@ -81,19 +87,23 @@ async function importJavaScriptModule<T>(filePath: string): Promise<T> {
 /**
  * Reads a file based on its file extension
  */
-export async function readFile<T>(filePath: string): Promise<T> {
-  switch (path.extname(filePath)) {
+export async function readFile<T>(absoluteFilePath: string): Promise<T> {
+  if (!(path.resolve(absoluteFilePath) === path.normalize(absoluteFilePath))) {
+    throw sdkError(ErrorCode.Filesystem, "Path must be absolute.");
+  }
+
+  switch (path.extname(absoluteFilePath)) {
     case ".yml":
     case ".yaml":
-      return readYamlFile(filePath);
+      return readYamlFile(absoluteFilePath);
 
     case ".json":
-      return readJsonFile(filePath);
+      return readJsonFile(absoluteFilePath);
 
     case ".js":
-      return importJavaScriptModule(filePath);
+      return importJavaScriptModule(absoluteFilePath);
 
     default:
-      return (readTextFile(filePath) as unknown) as T;
+      return (readTextFile(absoluteFilePath) as unknown) as T;
   }
 }
