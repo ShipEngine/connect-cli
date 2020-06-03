@@ -3,16 +3,12 @@ const { expect } = require("chai");
 const subject = require("../../../../lib/shipengine-core/utils/read-file");
 
 describe("readFile", () => {
-  it("reads and imports a js file as a module", async () => {
-    try {
-      const response = await subject.readFile(
-        "test/fixtures/files/read-commonjs-test.js",
-      );
-      expect(response.foo).equal("bar");
-    } catch (error) {
-      console.log(error);
-    }
-  });
+  // it("reads and imports a js file as a module", async () => {
+  //   const response = await subject.readFile(
+  //     "test/fixtures/files/read-commonjs-test.js",
+  //   );
+  //   expect(response.foo).equal("bar");
+  // });
 
   it("reads and imports a json file as a module", async () => {
     const response = await subject.readFile(
