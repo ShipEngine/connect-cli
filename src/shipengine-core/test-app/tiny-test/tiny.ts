@@ -76,7 +76,7 @@ export default function Tiny(
         suites = filterTests(options.grep, suites);
       }
 
-      return await Runner(suites, options);
+      return await new Runner(suites, options).run();
     },
   };
 }
