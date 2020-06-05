@@ -4,7 +4,7 @@ import { Runner, RunnerResults } from "./runner";
 import { v4 } from "uuid";
 import { readFile } from "../../utils/read-file";
 import { TransactionPOJO } from "@shipengine/integration-platform-sdk";
-import { log, logFail, logPass, logStep } from "../../utils/log-helpers";
+import { logFail, logPass, logStep } from "../../utils/log-helpers";
 
 function filterTests(grep: string, suites: Suite[]): Suite[] {
   let tempSuites = suites.filter((suite) => suite.title === grep);
@@ -82,10 +82,15 @@ export default function Tiny(
         console.log(connectionFormDataProps);
       }
 
-      await app.connect(transaction, connectionFormDataProps);
-      logPass("connect successfully set the session");
-      // eslint-disable-next-line no-console
-      if (options.debug) console.log(transaction);
+      try {
+        await app.connect(transaction, connectionFormDataProps);
+        logPass("connect successfully set the session");
+        // eslint-disable-next-line no-console
+        if (options.debug) console.log(transaction);
+      } catch (error) {
+        logFail(error.message);
+        return { failed: 1, passed: 0, skipped: 0 };
+      }
 
       let suites = suiteModules.map(
         (suiteModule) => new suiteModule(app, transaction),
