@@ -81,10 +81,10 @@ export class Runner {
         this.results.failed++;
         // This extra check is needed when test are running concurrently
         if (this.options.failFast && this.results.failed > 1) return;
-        logFail(test.toString());
+        logFail(test.negatedToString());
       } catch (error) {
         this.results.passed++;
-        logPass(test.toString());
+        logPass(test.negatedToString());
       }
     } else {
       try {
