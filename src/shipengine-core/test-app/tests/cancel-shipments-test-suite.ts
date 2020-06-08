@@ -14,7 +14,7 @@ export class CancelShipmentsTestSuite extends Suite {
 
   tests() {
     const carrierApp = this.app as CarrierApp;
-    [
+    return [
       this.test("handles an unknown cancellationID", async () => {
         const shipmentCancellationPOJOs: ShipmentCancellationPOJO[] = [
           {
