@@ -14,40 +14,33 @@ export class CancelShipmentsTestSuite extends Suite {
 
   tests() {
     const carrierApp = this.app as CarrierApp;
+    [
+      this.test("handles an unknown cancellationID", async () => {
+        const shipmentCancellationPOJOs: ShipmentCancellationPOJO[] = [
+          {
+            cancellationID: v4(),
+          },
+        ];
 
-    return this.testProps().map((testProp) => {
-      return this.test(testProp.title, async () => {
         if (this.debug) {
           log("input:");
-          logObject(testProp.props[0]);
-          logObject(testProp.props[1]);
+          logObject(this.transaction);
+          logObject(shipmentCancellationPOJOs);
         }
         let result, errorResult;
         try {
           carrierApp.cancelShipments &&
-            (result = await carrierApp.cancelShipments(...testProp.props));
+            (result = await carrierApp.cancelShipments(
+              this.transaction,
+              shipmentCancellationPOJOs,
+            ));
         } catch (error) {
           errorResult = error;
         } finally {
           expect(errorResult).to.be.undefined;
           expect(result).to.be.ok;
         }
-      });
-    });
-  }
-
-  private testProps(): TestProp<CancelShipmentsProps>[] {
-    const shipmentCancellationPOJOs: ShipmentCancellationPOJO[] = [
-      {
-        cancellationID: v4(),
-      },
-    ];
-
-    return [
-      {
-        title: "cancels shipments",
-        props: [this.transaction, shipmentCancellationPOJOs],
-      },
+      }),
     ];
   }
 }
