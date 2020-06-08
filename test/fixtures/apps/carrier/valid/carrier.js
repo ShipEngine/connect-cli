@@ -1,6 +1,7 @@
 "use strict";
 
 module.exports = {
+  id: "2a20b066-71c3-11ea-bc55-0242ac130002",
   name: "My Carrier",
   description: "My Carrier description goes here",
   websiteURL: "https://www.my-carrier.com",
@@ -47,12 +48,77 @@ module.exports = {
   ],
   connectionForm: "connectionForm.js",
 
+<<<<<<< HEAD
   connect() {},
   createShipment() {},
-  cancelShipments() {},
-  rateShipment() {},
-  trackShipment() {},
-  createManifest() {},
-  schedulePickup() {},
+=======
+  connectionForm: {
+    dataSchema: {
+      title: "Carrier One Registration",
+      description: "Login with your Carrier One account information.",
+      type: "object",
+      required: ["userName", "password"],
+      properties: {
+        userName: {
+          type: "string",
+          title: "User Name",
+        },
+        password: {
+          type: "string",
+          title: "Password",
+          minLength: 3,
+        },
+      },
+    },
+    uiSchema: {
+      userName: {
+        "ui:autofocus": true,
+        "ui:emptyValue": "Email Address",
+      },
+      password: {
+        "ui:widget": "text",
+        "ui:help": "Password for carrier account",
+      },
+    },
+  },
+
+  settingsForm: {
+    dataSchema: {
+      title: "Carrier One Settings",
+      description: "Update your Carrier One account information.",
+      type: "object",
+      required: ["userName", "password"],
+      properties: {
+        userName: {
+          type: "string",
+          title: "User Name",
+        },
+        password: {
+          type: "string",
+          title: "Password",
+          minLength: 3,
+        },
+      },
+    },
+    uiSchema: {
+      userName: {
+        "ui:autofocus": true,
+        "ui:emptyValue": "Email Address",
+      },
+      password: {
+        "ui:widget": "text",
+        "ui:help": "Password for carrier account",
+      },
+    },
+  },
+
   cancelPickups() {},
+>>>>>>> master
+  cancelShipments() {},
+  connect() {},
+  createManifest() {},
+  createShipment() {},
+  rateShipment() {},
+  schedulePickup() {},
+  trackShipment() {},
 };
