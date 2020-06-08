@@ -27,6 +27,7 @@ export class CancelShipmentsTestSuite extends Suite {
           logObject(this.transaction);
           logObject(shipmentCancellationPOJOs);
         }
+
         let result, errorResult;
         try {
           carrierApp.cancelShipments &&
