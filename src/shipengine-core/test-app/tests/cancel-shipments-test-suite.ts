@@ -1,4 +1,4 @@
-import { Suite, TestProp, expect } from "../tiny-test";
+import { Suite, expect } from "../tiny-test";
 import { v4 } from "uuid";
 import { log, logObject } from "../../utils/log-helpers";
 import {
