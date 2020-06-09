@@ -30,14 +30,14 @@ export default class ShipengineAPIClient {
       // Endpoint will either return a 200 for sucess or 401 for an unauthorized
       await axios({
         method: "get",
-        url: "http://localhost:3000/diagnostics/whoami",
+        url: "https://dip-webapi-dev.kubedev.sslocal.com/diagnostics/whoami",
         headers: {
           "api-key": apiKey
         }
       });
     }
     catch(error) {
-            
+
       if(error.response && error.response.data.statusCode === 401) {
         error.message = "Invalid API Key";
       }
@@ -60,7 +60,7 @@ export default class ShipengineAPIClient {
     this._apiKey = "";
 
     this._axios = axios.create({
-      baseURL: "http://localhost:3000/api",
+      baseURL: "https://dip-webapi-dev.kubedev.sslocal.com/api",
       maxContentLength: Infinity
     });
 
