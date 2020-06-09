@@ -1,4 +1,3 @@
-// import { CarrierApp } from "@shipengine/integration-platform-sdk";
 import { App } from "./utils/types";
 import {
   CancelPickupsTestSuite,
@@ -9,10 +8,10 @@ import {
   // GetSalesOrdersByDateTestSuite,
   // GetSellerTestSuite,
   RateShipmentTestSuite,
-  // SchedulePickupTestSuite,
+  SchedulePickupTestSuite,
+  TrackShipmentTestSuite,
   // ShipmentCancelledTestSuite,
   // ShipmentCreatedTestSuite,
-  // TrackShipmentTestSuite,
 } from "./test-app/tests";
 import { Tiny } from "./test-app/tiny-test";
 import { logResults } from "./utils/log-helpers";
@@ -30,8 +29,8 @@ function registerTestSuiteModules(app: App): RegisteredTestSuiteModules {
     createManifest: CreateManifestTestSuite,
     createShipment: CreateShipmentTestSuite,
     rateShipment: RateShipmentTestSuite,
-    // schedulePickup: SchedulePickupTestSuite,
-    // trackShipment: TrackShipmentTestSuite,
+    schedulePickup: SchedulePickupTestSuite,
+    trackShipment: TrackShipmentTestSuite,
   };
 
   const orderAppMethods = {
