@@ -1,12 +1,12 @@
 import BaseCommand from "../../base-command";
 import { flags } from "@oclif/command";
-import testApp from "../../shipengine-core/test-app";
+import testApp from "../../core/test-app";
 import {
   logFail,
   logPass,
   logStep,
-} from "../../shipengine-core/utils/log-helpers";
-import loadAndValidateApp from "../../shipengine-core/load-and-validate-app";
+} from "../../core/utils/log-helpers";
+import loadAndValidateApp from "../../core/load-and-validate-app";
 
 export default class Test extends BaseCommand {
   static description = "test your app";

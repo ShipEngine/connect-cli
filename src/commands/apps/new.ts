@@ -34,7 +34,7 @@ export default class New extends BaseCommand {
     const { flags, args } = this.parse(New);
     const env = createEnv();
     env.register(
-      require.resolve("../../shipengine-core/generators/apps-new"),
+      require.resolve("../../core/generators/apps-new"),
       "apps:new",
     );
 
