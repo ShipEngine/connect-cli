@@ -1,6 +1,6 @@
 import { loadApp } from "@shipengine/integration-platform-loader";
 import { ValidationErrorItem } from "joi";
-import { App } from "./types";
+import { SdkApp } from "./types";
 
 class InvalidAppError extends Error {
   errors: string[];
@@ -17,9 +17,9 @@ class InvalidAppError extends Error {
 
 export default async function loadAndValidateApp(
   pathToApp: string,
-): Promise<App> {
+): Promise<SdkApp> {
   try {
-    const app = (await loadApp(pathToApp)) as App;
+    const app = (await loadApp(pathToApp)) as SdkApp;
     return app;
   } catch (error) {
     let errors = [];

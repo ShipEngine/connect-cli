@@ -1,20 +1,28 @@
-// public async validateAPIKey(apiKey: string): Promise<void> {
-//     try {
-//       // Endpoint will either return a 200 for sucess or 401 for an unauthorized
-//       await axios({
-//         method: "get",
-//         url:
-//           "https://dip-webapi-dev.kubedev.sslocal.com/api/diagnostics/whoami",
-//         headers: {
-//           "api-key": apiKey,
-//         },
-//       });
-//     } catch (error) {
-//       if (error.response && error.response.data.statusCode === 401) {
-//         error.message = "Invalid API Key";
-//       }
-//       const err = error as Error;
+import ShipengineAPIClient from "..";
+import { User } from "../../types";
 
-//       throw err;
-//     }
-//   }
+export default class Users {
+  private client: ShipengineAPIClient;
+
+  constructor(apiClient: ShipengineAPIClient) {
+    this.client = apiClient;
+  }
+
+  /**
+   * Gets the current user for the given API key.
+   * @returns {Promise} Promise object that resolves to a User object.
+   */
+  async getCurrent(): Promise<User> {
+    try {
+      const response = await this.client.call({
+        endpoint: "diagnostics/whoami",
+        method: "GET",
+        apiKey: this.client.apiKey,
+      });
+
+      return Promise.resolve(response);
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  }
+}

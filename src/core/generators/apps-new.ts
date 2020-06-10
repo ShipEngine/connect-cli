@@ -5,7 +5,7 @@ import _ from "lodash";
 import { v4 as uuidv4 } from "uuid";
 import capitalization from "@shipengine/capitalization";
 import { AppType } from "@shipengine/integration-platform-sdk";
-import { AppTypes } from "../types";
+import { SdkAppTypes } from "../types";
 
 const fixpack = require("@oclif/fixpack");
 const sortPjson = require("sort-pjson");
@@ -17,7 +17,7 @@ type DefinitionTypes = "pojo" | "json" | "yaml";
 class AppsNew extends Generator {
   args!: { [k: string]: string };
 
-  type: AppTypes;
+  type: SdkAppTypes;
 
   path: string;
 
@@ -28,7 +28,7 @@ class AppsNew extends Generator {
   answers!: {
     name: string;
     scope: string;
-    type: AppTypes;
+    type: SdkAppTypes;
     description: string;
     version: string;
     github: { repo: string; user: string };
@@ -307,7 +307,7 @@ class AppsNew extends Generator {
     this.fs.write(this.destinationPath(".gitignore"), this._gitignore());
 
     switch (this.type) {
-      case "carrier":
+      case AppType.Carrier:
         if (!fs.existsSync("src")) {
           this.fs.copyTpl(
             this.templatePath(`carrier/index.${this._definitionExt}`),

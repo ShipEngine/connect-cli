@@ -1,5 +1,5 @@
 import Suite from "./suite";
-import { App } from "../../types";
+import { SdkApp } from "../../types";
 import { Runner, RunnerResults } from "./runner";
 import { v4 } from "uuid";
 import { readFile } from "../../utils/read-file";
@@ -56,7 +56,7 @@ interface TinyOptions {
 }
 
 export default function Tiny(
-  app: App,
+  app: SdkApp,
   suiteModules: any[],
   { grep, failFast = false, concurrency = 1, debug = false }: TinyOptions,
 ) {
@@ -110,7 +110,10 @@ export default function Tiny(
         ? staticConfig.negateTests
         : [];
 
-      return await new Runner(suites, { ...options, negateTests }).run();
+      return await new Runner(suites, {
+        ...options,
+        negateTests,
+      }).run();
     },
   };
 }

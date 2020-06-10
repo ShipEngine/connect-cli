@@ -1,53 +1,83 @@
-// export default class Apps {
-//   private client: ApiClient;
+import ShipengineAPIClient from "..";
+import { PlatformApp } from "../../types";
 
-//   constructor(apiClient: ApiClient) {
-//     this.client = apiClient;
-//   }
+export default class Apps {
+  private client: ShipengineAPIClient;
 
-//   /**
-//    * Fetch the admin for the current API token.
-//    * @param params The session params.
-//    * @returns {Promise} Promise object that resolves to an Admin object.
-//    */
-//   async create(): Promise<Admin> {
-//     try {
-//       const response = await this.client.call({
-//         endpoint: "admins/me",
-//         method: "GET",
-//         token: this.client.apiToken,
-//       });
+  constructor(apiClient: ShipengineAPIClient) {
+    this.client = apiClient;
+  }
 
-//       return Promise.resolve(response.admin);
-//     } catch (errorData) {
-//       return Promise.reject(errorData.errors);
-//     }
-//   }
+  // /**
+  //  * Creates a new App.
+  //  * @returns {Promise} Promise object that resolves to an Array of PlatformApp objects.
+  //  */
+  // async create(body: {}): Promise<PlatformApp> {
+  //   try {
+  //     const response = await this.client.call({
+  //       endpoint: "apps",
+  //       method: "POST",
+  //       body: body,
+  //       apiKey: this.client.apiKey,
+  //     });
 
-//   /**
-//    * Create a new session token for the given admin.
-//    * @param params The session params.
-//    * @param {string} params.email The email of the admin.
-//    * @param {string} params.password The password for the admin.
-//    * @returns {Promise} Promise object that resolves to an Admin object.
-//    */
-//   async listAll({
-//     email,
-//     password,
-//   }: {
-//     email: string;
-//     password: string;
-//   }): Promise<Admin> {
-//     try {
-//       const response = await this.client.call({
-//         endpoint: "sessions",
-//         method: "POST",
-//         body: { email, password },
-//       });
+  //     return Promise.resolve(response);
+  //   } catch (error) {
+  //     return Promise.reject(error);
+  //   }
+  // }
 
-//       return Promise.resolve(response.admin);
-//     } catch (errorData) {
-//       return Promise.reject(errorData.errors);
-//     }
-//   }
-// }
+  /**
+   * Gets all Apps that belong to the given API key.
+   * @returns {Promise} Promise object that resolves to an Array of PlatformApp objects.
+   */
+  async getAll(): Promise<PlatformApp[]> {
+    try {
+      const response = await this.client.call({
+        endpoint: "apps",
+        method: "GET",
+        apiKey: this.client.apiKey,
+      });
+
+      return Promise.resolve(response);
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  }
+
+  /**
+   * Get an App by its ID.
+   * @returns {Promise} Promise object that resolves to a PlatformApp object.
+   */
+  async getById(id: string): Promise<PlatformApp> {
+    try {
+      const response = await this.client.call({
+        endpoint: `apps/${id}`,
+        method: "GET",
+        apiKey: this.client.apiKey,
+      });
+
+      return Promise.resolve(response);
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  }
+
+  /**
+   * Get an App by its name.
+   * @returns {Promise} Promise object that resolves to a PlatformApp object.
+   */
+  async getByName(name: string): Promise<PlatformApp> {
+    try {
+      const response = await this.client.call({
+        endpoint: `apps?name=${encodeURI(name)}`,
+        method: "GET",
+        apiKey: this.client.apiKey,
+      });
+
+      return Promise.resolve(response);
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  }
+}

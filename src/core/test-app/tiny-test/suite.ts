@@ -1,15 +1,15 @@
 import Test from "./test";
-import { App } from "../../types";
+import { SdkApp } from "../../types";
 import { TransactionPOJO } from "@shipengine/integration-platform-sdk";
 
 export default abstract class Suite {
-  protected app: App;
+  protected app: SdkApp;
   protected transaction: TransactionPOJO;
   protected debug: boolean;
   abstract title: string;
   _testCache: Test[];
 
-  constructor(app: App, transaction: TransactionPOJO, debug = false) {
+  constructor(app: SdkApp, transaction: TransactionPOJO, debug = false) {
     this.app = app;
     this.transaction = transaction;
     this.debug = debug;

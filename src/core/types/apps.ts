@@ -4,6 +4,11 @@ import {
   AppType,
 } from "@shipengine/integration-platform-sdk";
 
-export type App = CarrierApp | OrderApp;
+export type SdkApp = CarrierApp | OrderApp;
 
-export type AppTypes = AppType.Carrier | AppType.Order;
+export type SdkAppTypes = AppType.Carrier | AppType.Order;
+
+export interface PlatformApp {
+  name: string;
+  type: "carrier";
+}

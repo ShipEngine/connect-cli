@@ -1,4 +1,4 @@
-import { App } from "./types";
+import { SdkApp } from "./types";
 import {
   CancelPickupsTestSuite,
   CancelShipmentsTestSuite,
@@ -22,7 +22,7 @@ type RegisteredTestSuiteModules = object[];
 // https://stackoverflow.com/questions/57086672/element-implicitly-has-an-any-type-because-expression-of-type-string-cant-b
 const _getKeyValue_ = (key: string) => (obj: Record<string, any>) => obj[key];
 
-function registerTestSuiteModules(app: App): RegisteredTestSuiteModules {
+function registerTestSuiteModules(app: SdkApp): RegisteredTestSuiteModules {
   const carrierAppMethods = {
     cancelPickups: CancelPickupsTestSuite,
     cancelShipments: CancelShipmentsTestSuite,
@@ -55,7 +55,7 @@ function registerTestSuiteModules(app: App): RegisteredTestSuiteModules {
 }
 
 export default async function testApp(
-  app: App,
+  app: SdkApp,
   {
     grep,
     failFast,
