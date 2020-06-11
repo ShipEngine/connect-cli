@@ -17,21 +17,21 @@ export default class Login extends BaseCommand {
 
     try {
       const currentUser = await this.currentUser();
-      this.log(`\nYou are currently logged in as: ${currentUser.email}`);
+      this.log(`\nyou are currently logged in as: ${currentUser.email}`);
 
       const wishToContinue = await cli.prompt(
-        "\nDo you with to login as someone else? (y,n)",
+        "\ndo you with to login as someone else? (y,n)",
       );
 
       if (wishToContinue != "n" && wishToContinue != "y") {
         this.error(
-          `'${wishToContinue}' is not a valid option. Please enter 'y' or 'n'`,
+          `'${wishToContinue}' is not a valid option, please enter 'y' or 'n'`,
           { exit: 1 },
         );
         return;
       }
       if (wishToContinue === "n") {
-        this.log(`\nYou will remained logged in as: ${currentUser.email}`);
+        this.log(`\nyou will remained logged in as: ${currentUser.email}`);
         return;
       }
     } catch {
@@ -40,7 +40,7 @@ export default class Login extends BaseCommand {
     }
 
     const apiKey = await cli.prompt(
-      "Please enter your ShipEngine engine API Key",
+      "\nplease enter your shipengine engine API key",
       {
         type: "mask",
       },
@@ -59,13 +59,13 @@ export default class Login extends BaseCommand {
       await this.currentUser();
     } catch {
       ApiKeyStore.clear();
-      return this.error("The given API Key is not valid.", {
+      return this.error("the given API key is not valid", {
         exit: 1,
       });
     } finally {
       cli.action.stop();
     }
 
-    this.log("\nYou have successfully logged in.");
+    this.log("\nyou have successfully logged in");
   }
 }

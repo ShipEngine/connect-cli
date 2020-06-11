@@ -19,7 +19,7 @@ describe("login", () => {
     .stdout()
     .command(["login"])
     .it("runs login when given a valid API KEY", (ctx) => {
-      expect(ctx.stdout).to.contain("\nYou have successfully logged in.\n");
+      expect(ctx.stdout).to.contain("\nyou have successfully logged in\n");
     });
 
   test
@@ -58,6 +58,6 @@ describe("re-login", async () => {
     .stdout()
     .command(["login"])
     .it("does not login with the new key when given 'n'", (ctx) => {
-      expect(ctx.stdout).to.include("You are currently logged in as");
+      expect(ctx.stdout).to.include("you are currently logged in as");
     });
 });

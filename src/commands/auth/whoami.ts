@@ -15,9 +15,9 @@ export default class Whoami extends BaseCommand {
 
     try {
       const currentUser = await this.currentUser();
-      this.log(`\nYou are currently logged in as: ${currentUser.email}`);
+      this.log(`\nyou are currently logged in as: ${currentUser.email}`);
     } catch {
-      return this.error("\nYou are not currently logged in.", {
+      return this.error("\nyou are not currently logged in", {
         exit: 1,
       });
     }

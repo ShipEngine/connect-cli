@@ -18,19 +18,18 @@ describe("whoami when autheticated", () => {
     .stdout()
     .command(["whoami"])
     .it("runs whoami", (ctx) => {
-      expect(ctx.stdout).to.include("You are currently logged in as");
+      expect(ctx.stdout).to.include("you are currently logged in as");
     });
 });
 
-// describe("whoami when unautheticated", () => {
-//   beforeEach(() => {
-//     ApiKeyStore.clear();
-//   });
+describe("whoami when unautheticated", () => {
+  beforeEach(() => {
+    ApiKeyStore.clear();
+  });
 
-//   test
-//     .stdout()
-//     .command(["whoami"])
-//     .it("runs whoami", (ctx) => {
-//       expect(ctx.stdout).to.contain("\nYou are not currently logged in.");
-//     });
-// });
+  test
+    .stdout()
+    .command(["whoami"])
+    .exit(1)
+    .it("exits with status 1 when the user is not logged in");
+});
