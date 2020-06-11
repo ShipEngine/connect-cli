@@ -24,7 +24,6 @@ export default class Apps {
         endpoint: "apps",
         method: "POST",
         body: { name, type },
-        apiKey: this.client.apiKey,
       });
 
       return Promise.resolve(response);
@@ -42,7 +41,6 @@ export default class Apps {
       const response = await this.client.call({
         endpoint: "apps",
         method: "GET",
-        apiKey: this.client.apiKey,
       });
 
       return Promise.resolve(response);
@@ -60,7 +58,6 @@ export default class Apps {
       const response = await this.client.call({
         endpoint: `apps/${id}`,
         method: "GET",
-        apiKey: this.client.apiKey,
       });
 
       return Promise.resolve(response);
@@ -78,7 +75,6 @@ export default class Apps {
       const response = await this.client.call({
         endpoint: `apps?name=${encodeURI(name)}`,
         method: "GET",
-        apiKey: this.client.apiKey,
       });
 
       if (response[0]) {

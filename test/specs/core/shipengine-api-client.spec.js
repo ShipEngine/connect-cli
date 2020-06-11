@@ -213,7 +213,7 @@ describe("ShipengineApiClient", () => {
   });
 
   describe("diagnostics", () => {
-    const client = new ShipengineApiClient();
+    const client = new ShipengineApiClient("api key");
 
     describe("heartBeat", () => {
       it("returns a pulse", async () => {

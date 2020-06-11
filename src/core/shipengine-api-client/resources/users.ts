@@ -17,7 +17,6 @@ export default class Users {
       const response = await this.client.call({
         endpoint: "diagnostics/whoami",
         method: "GET",
-        apiKey: this.client.apiKey,
       });
 
       return Promise.resolve(response);

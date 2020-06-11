@@ -8,7 +8,6 @@ export interface ApiClientParams {
   endpoint: string;
   method: Method;
   body?: object;
-  apiKey?: string;
 }
 
 /**
@@ -20,10 +19,10 @@ export default class ShipengineAPIClient {
   deploys: Deploys;
   diagnostics: Diagnostics;
   users: Users;
-  apiKey?: string;
+  apiKey: string;
   private _apiAuthority = "https://dip-webapi-dev.kubedev.sslocal.com/api";
 
-  constructor(apiKey?: string) {
+  constructor(apiKey: string) {
     this.apiKey = apiKey;
 
     this.apps = new Apps(this);
@@ -32,22 +31,17 @@ export default class ShipengineAPIClient {
     this.users = new Users(this);
   }
 
-  async call({
-    endpoint,
-    method,
-    body = {},
-    apiKey,
-  }: ApiClientParams): Promise<any> {
+  async call({ endpoint, method, body = {} }: ApiClientParams): Promise<any> {
     const request: AxiosRequestConfig = {
       headers: {
         "content-type": "application/json",
+        "api-key": this.apiKey,
       },
       method: method as Method,
       url: `${this._apiAuthority}/${endpoint}`,
     };
 
     if (body) request.data = body;
-    if (apiKey) request.headers["api-key"] = apiKey;
 
     try {
       const response = await axios(request);
