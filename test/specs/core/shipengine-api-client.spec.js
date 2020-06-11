@@ -1,11 +1,9 @@
 "use strict";
 
 const { expect } = require("chai");
-const nock = require("nock");
 const ShipengineApiClient = require("../../../lib/core/shipengine-api-client")
   .default;
-
-const mockDevWebApi = nock("https://dip-webapi-dev.kubedev.sslocal.com");
+const apiMock = require("../api-mock");
 
 describe("ShipengineApiClient", () => {
   describe("apps", () => {
@@ -16,7 +14,7 @@ describe("ShipengineApiClient", () => {
           name: "test app",
           type: "carrier",
         };
-        mockDevWebApi.post("/api/apps").reply(200, apiResponse);
+        apiMock.post("/api/apps").reply(200, apiResponse);
 
         const client = new ShipengineApiClient("valid key");
         let response, errorResponse;
@@ -44,7 +42,7 @@ describe("ShipengineApiClient", () => {
           ],
           status: 401,
         };
-        mockDevWebApi.post("/api/apps").reply(401, apiResponse);
+        apiMock.post("/api/apps").reply(401, apiResponse);
 
         const client = new ShipengineApiClient("invalid");
         let response, errorResponse;
@@ -71,7 +69,7 @@ describe("ShipengineApiClient", () => {
             type: "carrier",
           },
         ];
-        mockDevWebApi.get("/api/apps").reply(200, apiResponse);
+        apiMock.get("/api/apps").reply(200, apiResponse);
 
         const client = new ShipengineApiClient("valid key");
         let response, errorResponse;
@@ -96,7 +94,7 @@ describe("ShipengineApiClient", () => {
           ],
           status: 401,
         };
-        mockDevWebApi.get("/api/apps").reply(401, apiResponse);
+        apiMock.get("/api/apps").reply(401, apiResponse);
 
         const client = new ShipengineApiClient("invalid");
         let response, errorResponse;
@@ -118,7 +116,7 @@ describe("ShipengineApiClient", () => {
           name: "test app",
           type: "carrier",
         };
-        mockDevWebApi
+        apiMock
           .get("/api/apps/a9a84a1c-55ce-49f3-8cd7-f088e93ccada")
           .reply(200, apiResponse);
 
@@ -147,7 +145,7 @@ describe("ShipengineApiClient", () => {
           ],
           status: 401,
         };
-        mockDevWebApi.get("/api/apps/test-id").reply(401, apiResponse);
+        apiMock.get("/api/apps/test-id").reply(401, apiResponse);
 
         const client = new ShipengineApiClient("invalid");
         let response, errorResponse;
@@ -171,7 +169,7 @@ describe("ShipengineApiClient", () => {
             type: "carrier",
           },
         ];
-        mockDevWebApi.get("/api/apps?name=test-app").reply(200, apiResponse);
+        apiMock.get("/api/apps?name=test-app").reply(200, apiResponse);
 
         const client = new ShipengineApiClient("valid key");
         let response, errorResponse;
@@ -196,7 +194,7 @@ describe("ShipengineApiClient", () => {
           ],
           status: 401,
         };
-        mockDevWebApi.get("/api/apps?name=test-app").reply(401, apiResponse);
+        apiMock.get("/api/apps?name=test-app").reply(401, apiResponse);
 
         const client = new ShipengineApiClient("invalid");
         let response, errorResponse;
@@ -217,7 +215,7 @@ describe("ShipengineApiClient", () => {
 
     describe("heartBeat", () => {
       it("returns a pulse", async () => {
-        mockDevWebApi.get("/api/diagnostics/heartbeat").reply(200, {
+        apiMock.get("/api/diagnostics/heartbeat").reply(200, {
           pulse: "yes",
         });
 
@@ -240,7 +238,7 @@ describe("ShipengineApiClient", () => {
     describe("getCurrent", () => {
       it("returns a user", async () => {
         const apiResponse = { name: "test", email: "test@test.user.com" };
-        mockDevWebApi.get("/api/diagnostics/whoami").reply(200, apiResponse);
+        apiMock.get("/api/diagnostics/whoami").reply(200, apiResponse);
         const client = new ShipengineApiClient("valid key");
         let response, errorResponse;
         try {
@@ -264,7 +262,7 @@ describe("ShipengineApiClient", () => {
           ],
           status: 401,
         };
-        mockDevWebApi.get("/api/diagnostics/whoami").reply(401, apiResponse);
+        apiMock.get("/api/diagnostics/whoami").reply(401, apiResponse);
         const client = new ShipengineApiClient("invalid");
         let response, errorResponse;
         try {
