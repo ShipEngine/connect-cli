@@ -8,24 +8,30 @@ export default class Apps {
     this.client = apiClient;
   }
 
-  // /**
-  //  * Creates a new App.
-  //  * @returns {Promise} Promise object that resolves to an Array of PlatformApp objects.
-  //  */
-  // async create(body: {}): Promise<PlatformApp> {
-  //   try {
-  //     const response = await this.client.call({
-  //       endpoint: "apps",
-  //       method: "POST",
-  //       body: body,
-  //       apiKey: this.client.apiKey,
-  //     });
+  /**
+   * Creates a new App.
+   * @returns {Promise} Promise object that resolves to a PlatformApp object.
+   */
+  async create({
+    name,
+    type,
+  }: {
+    name: string;
+    type: "carrier";
+  }): Promise<PlatformApp> {
+    try {
+      const response = await this.client.call({
+        endpoint: "apps",
+        method: "POST",
+        body: { name, type },
+        apiKey: this.client.apiKey,
+      });
 
-  //     return Promise.resolve(response);
-  //   } catch (error) {
-  //     return Promise.reject(error);
-  //   }
-  // }
+      return Promise.resolve(response);
+    } catch (error) {
+      return Promise.reject(error.response.data);
+    }
+  }
 
   /**
    * Gets all Apps that belong to the given API key.
@@ -75,9 +81,13 @@ export default class Apps {
         apiKey: this.client.apiKey,
       });
 
-      return Promise.resolve(response);
+      if (response[0]) {
+        return Promise.resolve(response[0]);
+      } else {
+        return Promise.reject({ status: 404 });
+      }
     } catch (error) {
-      return Promise.reject(error);
+      return Promise.reject(error.response.data);
     }
   }
 }
