@@ -22,7 +22,7 @@ export default class Users {
 
       return Promise.resolve(response);
     } catch (error) {
-      return Promise.reject(error);
+      return Promise.reject(error.response.data);
     }
   }
 }

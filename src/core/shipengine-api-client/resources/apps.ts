@@ -41,7 +41,7 @@ export default class Apps {
 
       return Promise.resolve(response);
     } catch (error) {
-      return Promise.reject(error);
+      return Promise.reject(error.response.data);
     }
   }
 
@@ -59,7 +59,7 @@ export default class Apps {
 
       return Promise.resolve(response);
     } catch (error) {
-      return Promise.reject(error);
+      return Promise.reject(error.response.data);
     }
   }
 
