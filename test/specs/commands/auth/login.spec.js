@@ -3,7 +3,6 @@
 const { expect, test } = require("@oclif/test");
 const cli = require("cli-ux").default;
 const ApiKeyStore = require("../../../../lib/core/api-key-store");
-const apiMock = require("../../api-mock");
 
 describe("login", () => {
   beforeEach(() => {
