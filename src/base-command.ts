@@ -1,18 +1,18 @@
 import { Command as Base } from "@oclif/command";
-
+import ShipengineAPIClient from "./core/shipengine-api-client";
 // import APIClient from "./api-client";
 
 const pjson = require("../package.json");
 
 export default abstract class BaseCommand extends Base {
   base = `${pjson.name}@${pjson.version}`;
-  // private _client!: APIClient;
+  private _client!: ShipengineAPIClient;
 
-  // get client(): APIClient {
-  //   if (this._client) return this._client;
+  get client(): ShipengineAPIClient {
+    if (this._client) return this._client;
+    this._client = new ShipengineAPIClient();
+    return this._client;
+  }
 
-  //   // Potentiallly use this.config to add more metadata to API Client as features are developed
-  //   this._client = new APIClient();
-  //   return this._client;
-  // }
+  
 }
