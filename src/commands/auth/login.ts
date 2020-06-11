@@ -15,32 +15,29 @@ export default class Login extends BaseCommand {
   async run() {
     this.parse(Login);
 
-    // try {
-    //   const currentUser = await this.client.users.getCurrent();
-    //   this.log(`\nYou are currently logged in as: ${currentUser.email}`);
+    try {
+      const currentUser = await this.currentUser();
+      this.log(`\nYou are currently logged in as: ${currentUser.email}`);
 
-    //   // const wishToContinue = await cli.prompt(
-    //   //   "\nDo you with to login as someone else? (y,n)",
-    //   // );
+      const wishToContinue = await cli.prompt(
+        "\nDo you with to login as someone else? (y,n)",
+      );
 
-    //   // if (wishToContinue != "n" && wishToContinue != "y") {
-    //   //   this.error(
-    //   //     `'${wishToContinue}' is not a valid option. Please enter 'y' or 'n'`,
-    //   //     { exit: 1 },
-    //   //   );
-    //   //   return;
-    //   // }
-    //   // if (wishToContinue === "n") {
-    //   //   this.log(
-    //   //     `\nYou will remained logged in with the API Key: ${obfuscateApiKey(
-    //   //       currentCredential,
-    //   //     )}`,
-    //   //   );
-    //   //   return;
-    //   // }
-    // } catch {
-    //   // No account currently logged in
-    // }
+      if (wishToContinue != "n" && wishToContinue != "y") {
+        this.error(
+          `'${wishToContinue}' is not a valid option. Please enter 'y' or 'n'`,
+          { exit: 1 },
+        );
+        return;
+      }
+      if (wishToContinue === "n") {
+        this.log(`\nYou will remained logged in as: ${currentUser.email}`);
+        return;
+      }
+    } catch {
+      // No account currently logged in
+      ApiKeyStore.clear();
+    }
 
     const apiKey = await cli.prompt(
       "\nPlease enter your ShipEngine engine API Key",
@@ -56,18 +53,18 @@ export default class Login extends BaseCommand {
       this.error(error, { exit: 1 });
     }
 
-    // try {
-    //   // Would rather use a /ping or /status endpoint here
-    //   await new ShipEngine(apiKey).listCarriers();
-    //   cli.action.start("verifying account");
-    // } catch {
-    //   clearCredential();
-    //   return this.error("The given API Key is not valid.", {
-    //     exit: 1,
-    //   });
-    // } finally {
-    //   cli.action.stop();
-    // }
+    try {
+      // Would rather use a /ping or /status endpoint here
+      await this.currentUser();
+      cli.action.start("verifying account");
+    } catch {
+      ApiKeyStore.clear();
+      return this.error("The given API Key is not valid.", {
+        exit: 1,
+      });
+    } finally {
+      cli.action.stop();
+    }
 
     this.log("\nYou have successfully logged in.");
   }
