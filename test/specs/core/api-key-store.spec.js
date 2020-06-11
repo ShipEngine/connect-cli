@@ -4,75 +4,49 @@ const { expect } = require("chai");
 const ApiKeyStore = require("../../../lib/core/api-key-store");
 
 describe("ApiKeyStore", () => {
-  describe(".set", async () => {
-    it("sets the given ApiKey", async () => {
+  describe(".set", () => {
+    it("sets the given ApiKey", () => {
       const apiKey = "test";
-      let setResponse, getResponse, errorResponse;
-      try {
-        setResponse = await ApiKeyStore.set(apiKey);
-        getResponse = await ApiKeyStore.get();
-      } catch (error) {
-        errorResponse = error;
-      }
+      const setResponse = ApiKeyStore.set(apiKey);
+      const getResponse = ApiKeyStore.get();
 
-      expect(errorResponse).to.be.undefined;
       expect(setResponse).to.eql(apiKey);
       expect(getResponse).to.eql(apiKey);
     });
   });
 
-  describe(".get", async () => {
-    it("gets the ApiKey", async () => {
+  describe(".get", () => {
+    it("gets the ApiKey", () => {
       const apiKey = "test";
-      let setResponse, getResponse, errorResponse;
-      try {
-        setResponse = await ApiKeyStore.set(apiKey);
-        getResponse = await ApiKeyStore.get();
-      } catch (error) {
-        errorResponse = error;
-      }
+      const setResponse = ApiKeyStore.set(apiKey);
+      const getResponse = ApiKeyStore.get();
 
-      expect(errorResponse).to.be.undefined;
       expect(setResponse).to.eql(apiKey);
       expect(getResponse).to.eql(apiKey);
     });
 
-    it("returns an error when the ApiKey is not present", async () => {
-      let errorResponse;
-      try {
-        await ApiKeyStore.clear();
-        await ApiKeyStore.get();
-      } catch (error) {
-        errorResponse = error;
-      }
+    it("returns an null when the ApiKey is not present", () => {
+      ApiKeyStore.clear();
+      const getResponse = ApiKeyStore.get();
 
-      expect(errorResponse).to.eql({ message: "key not found" });
+      expect(getResponse).to.eql(null);
     });
   });
 
-  describe(".clear", async () => {
-    it("clears the ApiKey", async () => {
+  describe(".clear", () => {
+    it("clears the ApiKey", () => {
       const apiKey = "test";
-      let setResponse, getResponse, clearResponse, errorResponse;
-      try {
-        setResponse = await ApiKeyStore.set(apiKey);
-        getResponse = await ApiKeyStore.get();
-        clearResponse = await ApiKeyStore.clear();
-      } catch (error) {
-        errorResponse = error;
-      }
+      const setResponse = ApiKeyStore.set(apiKey);
+      let getResponse = ApiKeyStore.get();
+      const clearResponse = ApiKeyStore.clear();
 
-      expect(errorResponse).to.be.undefined;
       expect(setResponse).to.eql(apiKey);
       expect(getResponse).to.eql(apiKey);
-      expect(clearResponse).to.eql("ok");
+      expect(clearResponse).to.eql(true);
 
-      try {
-        await ApiKeyStore.get();
-      } catch (error) {
-        errorResponse = error;
-      }
-      expect(errorResponse).to.eql({ message: "key not found" });
+      getResponse = ApiKeyStore.get();
+
+      expect(getResponse).to.eql(null);
     });
   });
 });

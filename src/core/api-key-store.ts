@@ -9,33 +9,33 @@ function key(): string {
   return "shipengine.com";
 }
 
-export async function get(): Promise<string> {
+export function get(): string | null {
   const myNetrc = netrc();
   let seNetRC = myNetrc[key()] as { apiKey?: string };
 
   if (!seNetRC || !seNetRC.apiKey) {
-    return Promise.reject({ message: "key not found" });
+    return null;
   }
 
-  return Promise.resolve(seNetRC.apiKey);
+  return seNetRC.apiKey;
 }
 
-export async function set(apiKey: string): Promise<string> {
+export function set(apiKey: string): string {
   const myNetrc = netrc();
 
   Object.assign((myNetrc[key()] = {}), { apiKey });
 
   netrc.save(myNetrc);
 
-  return Promise.resolve(apiKey);
+  return apiKey;
 }
 
-export async function clear(): Promise<string> {
+export function clear(): boolean {
   const myNetrc = netrc();
 
   Object.assign((myNetrc[key()] = {}), {});
 
   netrc.save(myNetrc);
 
-  return Promise.resolve("ok");
+  return true;
 }
