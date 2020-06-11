@@ -1,3 +1,25 @@
+// import * as ApiKeyStore from "../../core/api-key-store";
+import BaseCommand from "../../base-command";
+// import cli from "cli-ux";
+import { flags } from "@oclif/command";
+
+export default class Publish extends BaseCommand {
+  static description = "publish your app";
+
+  static examples = ["$ shipengine apps:publish"];
+
+  static flags = {
+    help: flags.help({ char: "h" }),
+  };
+
+  async run() {
+    // When the -h flag is present the following line haults execution
+    this.parse(Publish);
+
+    this.log("publish");
+  }
+}
+
 // import BaseCommand from "../../base-command";
 // import { packageApp } from "../../core/publish/package-app";
 // import { deployApp } from "../../core/publish/deploy-app";

@@ -13,6 +13,7 @@ export default class Login extends BaseCommand {
   };
 
   async run() {
+    // When the -h flag is present the following line haults execution
     this.parse(Login);
 
     try {
@@ -40,7 +41,7 @@ export default class Login extends BaseCommand {
     }
 
     const apiKey = await cli.prompt(
-      "\nplease enter your shipengine engine API key",
+      "please enter your shipengine engine API key",
       {
         type: "mask",
       },
