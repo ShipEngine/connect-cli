@@ -17,3 +17,10 @@ export type DeploymentStatusObj = {
   createdAt: string;
   updatedAt: string;
 };
+
+export interface NewDeployment {
+  id: string;
+  package: {
+    name: string;
+  };
+}

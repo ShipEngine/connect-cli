@@ -1,6 +1,6 @@
 import axios, { Method, AxiosRequestConfig } from "axios";
 import Apps from "./resources/apps";
-import Deploys from "./resources/deploys";
+import Deploys from "./resources/deployments";
 import Diagnostics from "./resources/diagnostics";
 import Users from "./resources/users";
 

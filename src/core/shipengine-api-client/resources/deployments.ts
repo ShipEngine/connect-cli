@@ -1,6 +1,7 @@
 import ShipengineAPIClient from "..";
-// import { string } from "joi";
-// import { Pulse } from "../../types";
+import * as fs from "fs";
+import FormData from "form-data";
+import { NewDeployment } from "../../types";
 
 export default class Deploys {
   private client: ShipengineAPIClient;
@@ -9,26 +10,28 @@ export default class Deploys {
     this.client = apiClient;
   }
 
-  // async create(form: FormData, appName: string): Promise<string> {
-  //   const response = await this._axios.post(`/apps/${appName}/deploys`, form, {
-  //     headers: form.getHeaders(),
-  //   });
+  async create({
+    appId,
+    pathToTarball,
+  }: {
+    appId: string;
+    pathToTarball: string;
+  }): Promise<NewDeployment> {
+    const form = new FormData();
+    form.append("deployment", fs.createReadStream(pathToTarball));
 
-  //   return response.data.deployId;
+    try {
+      const response = await this.client.call({
+        endpoint: `/apps/${appId}/deploys`,
+        method: "POST",
+        body: form,
+      });
 
-  //   try {
-  //     const response = await this.client.call({
-  //       endpoint: `/apps/${appName}/deploys`,
-  //       method: "POST",
-  //       body: { name, type },
-  //       apiKey: this.client.apiKey,
-  //     });
-
-  //     return Promise.resolve(response);
-  //   } catch (error) {
-  //     return Promise.reject(error.response.data);
-  //   }
-  // }
+      return Promise.resolve(response);
+    } catch (error) {
+      return Promise.reject(error.response.data);
+    }
+  }
 
   // /**
   //  * Gets the current user for the given API key.

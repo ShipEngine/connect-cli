@@ -6,7 +6,10 @@ export default class AppsIndex extends BaseCommand {
   static description = "list your apps";
 
   static flags = {
-    help: flags.help({ char: "h" }),
+    help: flags.help({
+      char: "h",
+      description: "show help for the apps commands",
+    }),
   };
 
   // hide the command from help
@@ -25,11 +28,11 @@ export default class AppsIndex extends BaseCommand {
 
     try {
       const apps = this.client.apps.getAll();
-      (await apps).forEach((app) => {
+      (await (await apps).items).forEach((app) => {
         this.log(app.name);
       });
-    } catch {
-      this.error("still didnt work");
+    } catch (error) {
+      this.error(error);
     }
   }
 }

@@ -62,13 +62,19 @@ describe("ShipengineApiClient", () => {
 
     describe("getAll", () => {
       it("returns an array of apps", async () => {
-        const apiResponse = [
-          {
-            id: "a9a84a1c-55ce-49f3-8cd7-f088e93ccada",
-            name: "test app",
-            type: "carrier",
-          },
-        ];
+        const apiResponse = {
+          items: [
+            {
+              id: "a9a84a1c-55ce-49f3-8cd7-f088e93ccada",
+              name: "test-app",
+              type: "carrier",
+            },
+          ],
+          itemsPerPage: 100000,
+          totalPages: 1,
+          pageNumber: 0,
+        };
+
         apiMock.get("/api/apps").reply(200, apiResponse);
 
         const client = new ShipengineApiClient("valid key");
@@ -162,13 +168,19 @@ describe("ShipengineApiClient", () => {
 
     describe("getByName", () => {
       it("returns an app", async () => {
-        const apiResponse = [
-          {
-            id: "a9a84a1c-55ce-49f3-8cd7-f088e93ccada",
-            name: "test-app",
-            type: "carrier",
-          },
-        ];
+        const apiResponse = {
+          items: [
+            {
+              id: "a9a84a1c-55ce-49f3-8cd7-f088e93ccada",
+              name: "test-app",
+              type: "carrier",
+            },
+          ],
+          itemsPerPage: 100000,
+          totalPages: 1,
+          pageNumber: 0,
+        };
+
         apiMock.get("/api/apps?name=test-app").reply(200, apiResponse);
 
         const client = new ShipengineApiClient("valid key");
@@ -180,7 +192,7 @@ describe("ShipengineApiClient", () => {
         }
 
         expect(errorResponse).to.be.undefined;
-        expect(response).to.eql(apiResponse[0]);
+        expect(response).to.eql(apiResponse.items[0]);
       });
 
       it("returns an error when given an invalid API key", async () => {

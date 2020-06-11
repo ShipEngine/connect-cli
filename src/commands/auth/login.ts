@@ -9,7 +9,10 @@ export default class Login extends BaseCommand {
   static aliases = ["login"];
 
   static flags = {
-    help: flags.help({ char: "h" }),
+    help: flags.help({
+      char: "h",
+      description: "show help for the auth:login command",
+    }),
   };
 
   async run() {

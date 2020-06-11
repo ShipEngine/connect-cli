@@ -9,7 +9,10 @@ export default class Logout extends BaseCommand {
   static aliases = ["logout"];
 
   static flags = {
-    help: flags.help({ char: "h" }),
+    help: flags.help({
+      char: "h",
+      description: "show help for the auth:logout command",
+    }),
   };
 
   async run() {

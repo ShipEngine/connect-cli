@@ -7,7 +7,10 @@ export default class Whoami extends BaseCommand {
   static aliases = ["whoami"];
 
   static flags = {
-    help: flags.help({ char: "h" }),
+    help: flags.help({
+      char: "h",
+      description: "show help for the auth:whoami command",
+    }),
   };
 
   async run() {

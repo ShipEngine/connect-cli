@@ -1,5 +1,5 @@
 import ShipengineAPIClient from "..";
-import { PlatformApp } from "../../types";
+import { PlatformApp, PaginatedItems } from "../../types";
 
 export default class Apps {
   private client: ShipengineAPIClient;
@@ -36,7 +36,7 @@ export default class Apps {
    * Gets all Apps that belong to the given API key.
    * @returns {Promise} Promise object that resolves to an Array of PlatformApp objects.
    */
-  async getAll(): Promise<PlatformApp[]> {
+  async getAll(): Promise<PaginatedItems<PlatformApp>> {
     try {
       const response = await this.client.call({
         endpoint: "apps",
@@ -77,8 +77,8 @@ export default class Apps {
         method: "GET",
       });
 
-      if (response[0]) {
-        return Promise.resolve(response[0]);
+      if (response.items[0]) {
+        return Promise.resolve(response.items[0]);
       } else {
         return Promise.reject({ status: 404 });
       }
