@@ -40,7 +40,7 @@ export default class Login extends BaseCommand {
     }
 
     const apiKey = await cli.prompt(
-      "\nPlease enter your ShipEngine engine API Key",
+      "Please enter your ShipEngine engine API Key",
       {
         type: "mask",
       },
@@ -54,9 +54,9 @@ export default class Login extends BaseCommand {
     }
 
     try {
+      cli.action.start("verifying account");
       // Would rather use a /ping or /status endpoint here
       await this.currentUser();
-      cli.action.start("verifying account");
     } catch {
       ApiKeyStore.clear();
       return this.error("The given API Key is not valid.", {
