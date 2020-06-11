@@ -22,9 +22,13 @@ export default class Deploys {
 
     try {
       const response = await this.client.call({
-        endpoint: `/apps/${appId}/deploys`,
+        endpoint: `apps/${appId}/deploys`,
         method: "POST",
         body: form,
+        headers: {
+          "content-type": `multipart/form-data; boundary=${form.getBoundary()}`,
+        },
+        isFileUpload: true,
       });
 
       return Promise.resolve(response);

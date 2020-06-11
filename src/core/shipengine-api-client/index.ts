@@ -8,6 +8,8 @@ export interface ApiClientParams {
   endpoint: string;
   method: Method;
   body?: object;
+  headers?: object;
+  isFileUpload?: boolean;
 }
 
 /**
@@ -31,14 +33,28 @@ export default class ShipengineAPIClient {
     this.users = new Users(this);
   }
 
-  async call({ endpoint, method, body = {} }: ApiClientParams): Promise<any> {
+  async call({
+    endpoint,
+    method,
+    body = {},
+    headers = {},
+    isFileUpload = false,
+  }: ApiClientParams): Promise<any> {
+    const defaultHeaders = {
+      "content-type": "application/json",
+      "api-key": this.apiKey,
+    };
+
+    const mergedHeaders = {
+      ...defaultHeaders,
+      ...headers,
+    };
+
     const request: AxiosRequestConfig = {
-      headers: {
-        "content-type": "application/json",
-        "api-key": this.apiKey,
-      },
+      headers: mergedHeaders,
       method: method as Method,
       url: `${this._apiAuthority}/${endpoint}`,
+      ...(isFileUpload && { maxContentLength: Infinity }),
     };
 
     if (body) request.data = body;

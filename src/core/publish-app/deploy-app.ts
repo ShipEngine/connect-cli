@@ -26,6 +26,8 @@ export async function deployApp(
     });
   }
 
+  console.log(pathToTarball);
+  
   const deployment = await client.deploys.create({
     appId: deployedApp.id,
     pathToTarball: pathToTarball,

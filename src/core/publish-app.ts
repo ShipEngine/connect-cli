@@ -60,7 +60,7 @@ export default async function publishApp(
   try {
     await deployApp(tarballName, client);
   } catch (error) {
-    const errorMessage = `There was an error deploying your app to the integration platform: ${error.message}`;
+    const errorMessage = `There was an error deploying your app to the integration platform: ${error}`;
     throw new AppFailedToDeployError(errorMessage);
   } finally {
     // Delete the package tarball
