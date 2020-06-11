@@ -1,15 +1,25 @@
 import BaseCommand from "../../base-command";
-// import { flags } from "@heroku-cli/command";
+import { flags } from "@oclif/command";
 
 export default class Whoami extends BaseCommand {
   static description = "display the current logged in user";
 
   static aliases = ["whoami"];
 
-  // hide the command from help
-  static hidden = true;
+  static flags = {
+    help: flags.help({ char: "h" }),
+  };
 
   async run() {
-    this.log("i know who you are");
+    this.parse(Whoami);
+
+    try {
+      const currentUser = await this.currentUser();
+      this.log(`\nYou are currently logged in as: ${currentUser.email}`);
+    } catch {
+      return this.error("\nYou are not currently logged in.", {
+        exit: 1,
+      });
+    }
   }
 }
