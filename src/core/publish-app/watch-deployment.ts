@@ -3,18 +3,21 @@ import { Deployment, DeploymentStatus, PlatformApp } from "../types";
 import { promisify } from "util";
 import * as readline from "readline";
 import { green } from "chalk";
+import cli from "cli-ux";
 
 const sleep = promisify(setTimeout);
 
 function writeDeploymentInfo(deployment: Deployment, count: number) {
+  cli.action.stop();
+
   if (count > 0) {
     readline.moveCursor(process.stdout, 0, -1);
   }
   readline.clearScreenDown(process.stdout);
-  console.log(
-    `watching app... { name: ${green(deployment.package.name)}, status: ${green(
+  cli.action.start(
+    `watching app { name: ${green(deployment.package.name)}, status: ${green(
       deployment.status,
-    )}}`,
+    )} }`,
   );
 }
 

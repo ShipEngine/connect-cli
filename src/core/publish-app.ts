@@ -7,6 +7,7 @@ import { Deployment, DeploymentStatus } from "./types";
 import { loadApp } from "@shipengine/integration-platform-loader";
 import { packageApp } from "./publish-app/package-app";
 import { watchDeployment } from "./publish-app/watch-deployment";
+import { green, red } from "chalk";
 
 class AppFailedToPackageError extends Error {
   code: string;
@@ -92,18 +93,21 @@ export default async function publishApp(
   cli.action.stop(`${logSymbols.success}`);
 
   if (watch) {
-    // cli.action.start("watching the app status");
-    await watchDeployment(newDeployment, platformApp, client);
+    const status = await watchDeployment(newDeployment, platformApp, client);
 
-    // if (status === DeploymentStatus.Error) {
-    //   // cli.action.stop(`${logSymbols.error} your app encountered an error`);
-    // } else if (status === DeploymentStatus.Terminated) {
-    //   // cli.action.stop(`${logSymbols.error} your app was terminated`);
-    // } else {
-    //   cli.action.stop(
-    //     `${logSymbols.success} your app was published successfully`,
-    //   );
-    // }
+    if (status === DeploymentStatus.Error) {
+      console.log(
+        red(
+          `your app encountered an error ${logSymbols.error} `,
+        ),
+      );
+    } else if (status === DeploymentStatus.Terminated) {
+      console.log(red(`your app was terminated `));
+    } else {
+      console.log(
+        green(`your app was published successfully ${logSymbols.success} `),
+      );
+    }
   }
 
   return newDeployment;
