@@ -1,3 +1,4 @@
+/* eslint-disable brace-style */
 "use strict";
 
 const { expect } = require("chai");

@@ -5,6 +5,7 @@ import logSymbols from "log-symbols";
 import path from "path";
 import { deployApp } from "./publish-app/deploy-app";
 import { packageApp } from "./publish-app/package-app";
+import { NewDeployment } from "./types";
 
 class AppFailedToPackageError extends Error {
   code: string;
@@ -31,7 +32,7 @@ class AppFailedToDeployError extends Error {
 export default async function publishApp(
   pathToApp: string,
   client: ShipengineApiClinet,
-) {
+): Promise<NewDeployment> {
   // Make a backup copy of the package.json file since we are going to add the bundledDependencies attribute
   const pJsonBackup = await fs.promises.readFile(
     path.join(pathToApp, "package.json"),
@@ -57,8 +58,10 @@ export default async function publishApp(
   cli.action.stop(`${logSymbols.success}`);
   cli.action.start("Publishing App");
 
+  let newDeployment;
+
   try {
-    await deployApp(tarballName, client);
+    newDeployment = await deployApp(tarballName, client);
   } catch (error) {
     const errorMessage = `There was an error deploying your app to the integration platform: ${error}`;
     throw new AppFailedToDeployError(errorMessage);
@@ -68,4 +71,6 @@ export default async function publishApp(
   }
 
   cli.action.stop(`${logSymbols.success}`);
+
+  return newDeployment;
 }

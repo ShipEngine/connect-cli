@@ -11,7 +11,6 @@ export default abstract class BaseCommand extends Base {
 
   get client(): ShipengineAPIClient {
     // if (this._client) return this._client;
-
     const apiKey = ApiKeyStore.get();
 
     if (!apiKey) {

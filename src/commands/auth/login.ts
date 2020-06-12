@@ -24,10 +24,10 @@ export default class Login extends BaseCommand {
       this.log(`\nyou are currently logged in as: ${currentUser.email}`);
 
       const wishToContinue = await cli.prompt(
-        "\ndo you with to login as someone else? (y,n)",
+        "\nwould you like to login as someone else? (y,n)",
       );
 
-      if (wishToContinue != "n" && wishToContinue != "y") {
+      if (wishToContinue !== "n" && wishToContinue !== "y") {
         this.error(
           `'${wishToContinue}' is not a valid option, please enter 'y' or 'n'`,
           { exit: 1 },
