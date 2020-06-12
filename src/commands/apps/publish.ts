@@ -1,5 +1,6 @@
 import BaseCommand from "../../base-command";
 import Login from "../auth/login";
+import Test from "./test";
 import publishApp from "../../core/publish-app";
 import { flags } from "@oclif/command";
 
@@ -31,6 +32,8 @@ export default class Publish extends BaseCommand {
       this.log("you need to login before you can publish your app");
       await Login.run([]);
     }
+
+    await Test.run(["-f"]);
 
     try {
       const pathToApp = process.cwd();
