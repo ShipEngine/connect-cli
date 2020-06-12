@@ -1,7 +1,7 @@
 import * as fs from "fs";
 import FormData from "form-data";
 import ShipengineAPIClient from "..";
-import { NewDeployment, Deployment } from "../../types";
+import { NewDeployment, Deployment, NetworkErrorCollection } from "../../types";
 
 export default class Deploys {
   private client: ShipengineAPIClient;
@@ -37,7 +37,7 @@ export default class Deploys {
 
       return Promise.resolve(response);
     } catch (error) {
-      return Promise.reject(error.response.data);
+      return Promise.reject(error.response.data as NetworkErrorCollection);
     }
   }
 
@@ -54,7 +54,7 @@ export default class Deploys {
 
       return Promise.resolve(response);
     } catch (error) {
-      return Promise.reject(error.response.data);
+      return Promise.reject(error.response.data as NetworkErrorCollection);
     }
   }
 
@@ -77,7 +77,7 @@ export default class Deploys {
 
       return Promise.resolve(response);
     } catch (error) {
-      return Promise.reject(error.response.data);
+      return Promise.reject(error.response.data as NetworkErrorCollection);
     }
   }
 }

@@ -1,5 +1,9 @@
 import ShipengineAPIClient from "..";
-import { PlatformApp, PaginatedItems } from "../../types";
+import {
+  PlatformApp,
+  PaginatedItems,
+  NetworkErrorCollection,
+} from "../../types";
 
 export default class Apps {
   private client: ShipengineAPIClient;
@@ -28,7 +32,7 @@ export default class Apps {
 
       return Promise.resolve(response);
     } catch (error) {
-      return Promise.reject(error.response.data);
+      return Promise.reject(error.response.data as NetworkErrorCollection);
     }
   }
 
@@ -74,7 +78,7 @@ export default class Apps {
 
       return Promise.resolve(response);
     } catch (error) {
-      return Promise.reject(error.response.data);
+      return Promise.reject(error.response.data as NetworkErrorCollection);
     }
   }
 
@@ -91,7 +95,7 @@ export default class Apps {
 
       return Promise.resolve(response);
     } catch (error) {
-      return Promise.reject(error.response.data);
+      return Promise.reject(error.response.data as NetworkErrorCollection);
     }
   }
 
@@ -112,7 +116,7 @@ export default class Apps {
         return Promise.reject({ statusCode: 404 });
       }
     } catch (error) {
-      return Promise.reject(error.response.data);
+      return Promise.reject(error.response.data as NetworkErrorCollection);
     }
   }
 }
