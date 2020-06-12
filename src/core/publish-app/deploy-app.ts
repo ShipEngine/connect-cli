@@ -1,7 +1,7 @@
 import * as path from "path";
 import ShipengineApiClinet from "../shipengine-api-client";
 import { loadApp } from "@shipengine/integration-platform-loader";
-import { NewDeployment } from "../types";
+import { Deployment } from "../types";
 
 /**
  * Takes an npm package tarball and uploads it via a multipart/form-data to the integration platform.
@@ -9,7 +9,7 @@ import { NewDeployment } from "../types";
 export async function deployApp(
   tarballName: string,
   client: ShipengineApiClinet,
-): Promise<NewDeployment> {
+): Promise<Deployment> {
   // load app to retrieve the carrier id.
   const app = await loadApp(process.cwd());
 
@@ -21,7 +21,7 @@ export async function deployApp(
     type: "carrier",
   });
 
-  const deployment = await client.deploys.create({
+  const deployment = await client.deployments.create({
     appId: platformApp.id,
     pathToTarball: pathToTarball,
   });
