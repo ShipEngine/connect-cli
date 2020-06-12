@@ -58,15 +58,26 @@ export default class Deploys {
     }
   }
 
-  // /**
-  //  * Gets the current user for the given API key.
-  //  * @returns {Promise} Promise object that resolves to a User object.
-  //  */
-  // async getById(deployId: string, appId: string): Promise<Deployment> {
-  //   let response = await this._axios.get(
-  //     `/apps/${appName}/deploys/${deploymentID}`,
-  //   );
+  /**
+   * Gets the deploy for the given appId and deployID
+   * @returns {Promise} Promise object that resolves to a Deployment object.
+   */
+  async getById({
+    appId,
+    deployId,
+  }: {
+    deployId: string;
+    appId: string;
+  }): Promise<Deployment> {
+    try {
+      const response = await this.client.call({
+        endpoint: `apps/${appId}/deploys/${deployId}`,
+        method: "GET",
+      });
 
-  //   return response.data as DeploymentStatusObj;
-  // }
+      return Promise.resolve(response);
+    } catch (error) {
+      return Promise.reject(error.response.data);
+    }
+  }
 }
