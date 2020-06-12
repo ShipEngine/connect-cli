@@ -16,20 +16,13 @@ export async function deployApp(
   // Find the tarball
   const pathToTarball = path.join(process.cwd(), tarballName);
 
-  let deployedApp;
-  try {
-    deployedApp = await client.apps.getByName(app.manifest.name);
-  } catch {
-    deployedApp = await client.apps.create({
-      name: app.manifest.name,
-      type: "carrier",
-    });
-  }
+  const platformApp = await client.apps.findOrCreateByName({
+    name: app.manifest.name,
+    type: "carrier",
+  });
 
-  console.log(pathToTarball);
-  
   const deployment = await client.deploys.create({
-    appId: deployedApp.id,
+    appId: platformApp.id,
     pathToTarball: pathToTarball,
   });
 

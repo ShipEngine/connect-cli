@@ -61,6 +61,97 @@ describe("ShipengineApiClient", () => {
       });
     });
 
+    describe("findOrCreateByName", () => {
+      it("finds an app when one already exists", async () => {
+        const apiResponse = {
+          items: [
+            {
+              id: "a9a84a1c-55ce-49f3-8cd7-f088e93ccada",
+              name: "test-app",
+              type: "carrier",
+            },
+          ],
+          itemsPerPage: 100000,
+          totalPages: 1,
+          pageNumber: 0,
+        };
+
+        apiMock.get("/api/apps?name=test-app").reply(200, apiResponse);
+
+        const client = new ShipengineApiClient("valid key");
+        let response, errorResponse;
+        try {
+          response = await client.apps.findOrCreateByName({
+            name: "test-app",
+            type: "carrier",
+          });
+        } catch (error) {
+          errorResponse = error;
+        }
+
+        expect(errorResponse).to.be.undefined;
+        expect(response).to.eql(apiResponse.items[0]);
+      });
+
+      it("creates an app when one does not already exists", async () => {
+        const apiResponseOne = {
+          items: [],
+          itemsPerPage: 100000,
+          totalPages: 1,
+          pageNumber: 0,
+        };
+        apiMock.get("/api/apps?name=test-app").reply(200, apiResponseOne);
+        const apiResponseTwo = {
+          id: "a9a84a1c-55ce-49f3-8cd7-f088e93ccada",
+          name: "test app",
+          type: "carrier",
+        };
+        apiMock.post("/api/apps").reply(200, apiResponseTwo);
+
+        const client = new ShipengineApiClient("valid key");
+        let response, errorResponse;
+        try {
+          response = await client.apps.findOrCreateByName({
+            name: "test-app",
+            type: "carrier",
+          });
+        } catch (error) {
+          errorResponse = error;
+        }
+
+        expect(errorResponse).to.be.undefined;
+        expect(response).to.eql(apiResponseTwo);
+      });
+
+      it("returns an error when given an invalid API key", async () => {
+        const apiResponse = {
+          statusCode: 401,
+          name: "unauthorized",
+          errors: [
+            {
+              message: "invalid auth",
+            },
+          ],
+          status: 401,
+        };
+        apiMock.get("/api/apps?name=test-app").reply(401, apiResponse);
+
+        const client = new ShipengineApiClient("invalid");
+        let response, errorResponse;
+        try {
+          response = await client.apps.findOrCreateByName({
+            name: "test-app",
+            type: "carrier",
+          });
+        } catch (error) {
+          errorResponse = error;
+        }
+
+        expect(response).to.be.undefined;
+        expect(errorResponse).to.be.eql(apiResponse);
+      });
+    });
+
     describe("getAll", () => {
       it("returns an array of apps", async () => {
         const apiResponse = {

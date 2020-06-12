@@ -33,27 +33,32 @@ export default class Apps {
   }
 
   /**
-   * Creates a new App.
+   * Finds or creates a new app by name
    * @returns {Promise} Promise object that resolves to a PlatformApp object.
    */
-  async findOrCreate({
+  async findOrCreateByName({
     name,
     type,
   }: {
     name: string;
     type: "carrier";
   }): Promise<PlatformApp> {
-    try {
-      const response = await this.client.call({
-        endpoint: "apps",
-        method: "POST",
-        body: { name, type },
-      });
+    let deployedApp;
 
-      return Promise.resolve(response);
+    try {
+      deployedApp = await this.getByName(name);
     } catch (error) {
-      return Promise.reject(error.response.data);
+      if (error.statusCode === 401) {
+        return Promise.reject(error);
+      }
+
+      deployedApp = await this.create({
+        name: name,
+        type: type,
+      });
     }
+
+    return Promise.resolve(deployedApp);
   }
 
   /**
@@ -104,7 +109,7 @@ export default class Apps {
       if (response.items[0]) {
         return Promise.resolve(response.items[0]);
       } else {
-        return Promise.reject({ status: 404 });
+        return Promise.reject({ statusCode: 404 });
       }
     } catch (error) {
       return Promise.reject(error.response.data);

@@ -25,7 +25,6 @@ export default class Publish extends BaseCommand {
     // When the -h flag is present the following line haults execution
     // const { flags } = this.parse(Publish);
     this.parse(Publish);
-    const pathToApp = process.cwd();
 
     try {
       await this.currentUser();
@@ -35,6 +34,7 @@ export default class Publish extends BaseCommand {
     }
 
     try {
+      const pathToApp = process.cwd();
       await publishApp(pathToApp, this.client);
     } catch (error) {
       switch (error.code) {
