@@ -1,8 +1,23 @@
 import ShipengineApiClinet from "../shipengine-api-client";
 import { Deployment, DeploymentStatus, PlatformApp } from "../types";
 import { promisify } from "util";
+import * as readline from "readline";
 
 const sleep = promisify(setTimeout);
+
+function filterDeploymentInfo(deployment: Deployment): object {
+  return {
+    name: deployment.package.name,
+    status: deployment.status,
+  };
+}
+
+function writeDeploymentInfo(deployment: Deployment) {
+  readline.clearLine(process.stdout, 0);
+  readline.cursorTo(process.stdout, 0, 0);
+  // process.stdout.write(deployment.status);
+  console.log(filterDeploymentInfo(deployment));
+}
 
 /**
  * Poll for the status of a deployment. It will keep deploying at the desired interval until one of the following status is returned:
@@ -26,7 +41,7 @@ export async function watchDeployment(
       deployId: deployment.deployId,
       appId: app.id,
     });
-    console.log(updatedDeployment);
+    writeDeploymentInfo(updatedDeployment);
     status = updatedDeployment.status;
     await sleep(5000);
   }
