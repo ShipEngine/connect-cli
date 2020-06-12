@@ -15,9 +15,9 @@ function writeDeploymentInfo(deployment: Deployment, count: number) {
   }
   readline.clearScreenDown(process.stdout);
   cli.action.start(
-    `watching app { name: ${green(deployment.package.name)}, status: ${green(
+    `watching app name: ${green(deployment.package.name)}, status: ${green(
       deployment.status,
-    )} }`,
+    )}`,
   );
 }
 
