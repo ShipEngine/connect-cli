@@ -16,7 +16,6 @@ import {
 import { Tiny } from "./test-app/tiny-test";
 import { logResults } from "./utils/log-helpers";
 import { RunnerResults } from "./test-app/tiny-test/runner";
-import { result } from "lodash";
 
 type RegisteredTestSuiteModules = object[];
 
