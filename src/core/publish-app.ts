@@ -92,18 +92,18 @@ export default async function publishApp(
   cli.action.stop(`${logSymbols.success}`);
 
   if (watch) {
-    cli.action.start("watching the app status");
-    const status = await watchDeployment(newDeployment, platformApp, client);
+    // cli.action.start("watching the app status");
+    await watchDeployment(newDeployment, platformApp, client);
 
-    if (status === DeploymentStatus.Error) {
-      cli.action.stop(`${logSymbols.error} your app encountered an error`);
-    } else if (status === DeploymentStatus.Terminated) {
-      cli.action.stop(`${logSymbols.error} your app was terminated`);
-    } else {
-      cli.action.stop(
-        `${logSymbols.success} your app was published successfully`,
-      );
-    }
+    // if (status === DeploymentStatus.Error) {
+    //   // cli.action.stop(`${logSymbols.error} your app encountered an error`);
+    // } else if (status === DeploymentStatus.Terminated) {
+    //   // cli.action.stop(`${logSymbols.error} your app was terminated`);
+    // } else {
+    //   cli.action.stop(
+    //     `${logSymbols.success} your app was published successfully`,
+    //   );
+    // }
   }
 
   return newDeployment;

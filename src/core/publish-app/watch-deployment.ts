@@ -2,21 +2,20 @@ import ShipengineApiClinet from "../shipengine-api-client";
 import { Deployment, DeploymentStatus, PlatformApp } from "../types";
 import { promisify } from "util";
 import * as readline from "readline";
+import { green } from "chalk";
 
 const sleep = promisify(setTimeout);
 
-function filterDeploymentInfo(deployment: Deployment): object {
-  return {
-    name: deployment.package.name,
-    status: deployment.status,
-  };
-}
-
-function writeDeploymentInfo(deployment: Deployment) {
-  readline.clearLine(process.stdout, 0);
-  readline.cursorTo(process.stdout, 0, 0);
-  // process.stdout.write(deployment.status);
-  console.log(filterDeploymentInfo(deployment));
+function writeDeploymentInfo(deployment: Deployment, count: number) {
+  if (count > 0) {
+    readline.moveCursor(process.stdout, 0, -1);
+  }
+  readline.clearScreenDown(process.stdout);
+  console.log(
+    `watching app... { name: ${green(deployment.package.name)}, status: ${green(
+      deployment.status,
+    )}}`,
+  );
 }
 
 /**
@@ -31,6 +30,7 @@ export async function watchDeployment(
   client: ShipengineApiClinet,
 ): Promise<DeploymentStatus> {
   let status = DeploymentStatus.Queued;
+  let count = 0;
 
   while (
     status === DeploymentStatus.Queued ||
@@ -41,7 +41,8 @@ export async function watchDeployment(
       deployId: deployment.deployId,
       appId: app.id,
     });
-    writeDeploymentInfo(updatedDeployment);
+    writeDeploymentInfo(updatedDeployment, count);
+    count++;
     status = updatedDeployment.status;
     await sleep(5000);
   }
