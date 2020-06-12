@@ -33,6 +33,30 @@ export default class Apps {
   }
 
   /**
+   * Creates a new App.
+   * @returns {Promise} Promise object that resolves to a PlatformApp object.
+   */
+  async findOrCreate({
+    name,
+    type,
+  }: {
+    name: string;
+    type: "carrier";
+  }): Promise<PlatformApp> {
+    try {
+      const response = await this.client.call({
+        endpoint: "apps",
+        method: "POST",
+        body: { name, type },
+      });
+
+      return Promise.resolve(response);
+    } catch (error) {
+      return Promise.reject(error.response.data);
+    }
+  }
+
+  /**
    * Gets all Apps that belong to the given API key.
    * @returns {Promise} Promise object that resolves to an Array of PlatformApp objects.
    */

@@ -4,6 +4,7 @@ const { expect } = require("chai");
 const ShipengineApiClient = require("../../../lib/core/shipengine-api-client")
   .default;
 const apiMock = require("../api-mock");
+const path = require("path");
 
 describe("ShipengineApiClient", () => {
   describe("apps", () => {
@@ -212,6 +213,62 @@ describe("ShipengineApiClient", () => {
         let response, errorResponse;
         try {
           response = await client.apps.getByName("test-app");
+        } catch (error) {
+          errorResponse = error;
+        }
+
+        expect(response).to.be.undefined;
+        expect(errorResponse).to.be.eql(apiResponse);
+      });
+    });
+  });
+
+  describe("deployments", () => {
+    describe("create", () => {
+      it("creates a deployment", async () => {
+        const apiResponse = {
+          id: "a9a84a1c-55ce-49f3-8cd7-f088e93ccada",
+          package: {
+            name: "test app",
+          },
+        };
+        apiMock.post("/api/apps/test/deploys").reply(200, apiResponse);
+
+        const client = new ShipengineApiClient("valid key");
+        let response, errorResponse;
+        try {
+          response = await client.deploys.create({
+            appId: "test",
+            pathToTarball: path.join(process.cwd(), "test/fixtures/test.tgz"),
+          });
+        } catch (error) {
+          errorResponse = error;
+        }
+
+        expect(errorResponse).to.be.undefined;
+        expect(response).to.eql(apiResponse);
+      });
+
+      it("returns an error when given an invalid API key", async () => {
+        const apiResponse = {
+          statusCode: 401,
+          name: "unauthorized",
+          errors: [
+            {
+              message: "invalid auth",
+            },
+          ],
+          status: 401,
+        };
+        apiMock.post("/api/apps/test/deploys").reply(401, apiResponse);
+
+        const client = new ShipengineApiClient("invalid");
+        let response, errorResponse;
+        try {
+          response = await client.deploys.create({
+            appId: "test",
+            pathToTarball: path.join(process.cwd(), "test/fixtures/test.tgz"),
+          });
         } catch (error) {
           errorResponse = error;
         }

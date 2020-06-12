@@ -1,6 +1,6 @@
-import ShipengineAPIClient from "..";
 import * as fs from "fs";
 import FormData from "form-data";
+import ShipengineAPIClient from "..";
 import { NewDeployment } from "../../types";
 
 export default class Deploys {
