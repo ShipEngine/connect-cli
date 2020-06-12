@@ -80,4 +80,27 @@ export default class Deploys {
       return Promise.reject(error.response.data as NetworkErrorCollection);
     }
   }
+
+  /**
+   * Gets the logs for a deployment for the given appId and deployID
+   * @returns {Promise} Promise object that resolves to a Deployment object.
+   */
+  async getLogsById({
+    appId,
+    deployId,
+  }: {
+    deployId: string;
+    appId: string;
+  }): Promise<string> {
+    try {
+      const response = await this.client.call({
+        endpoint: `apps/${appId}/deploys/${deployId}/logs`,
+        method: "GET",
+      });
+
+      return Promise.resolve(response);
+    } catch (error) {
+      return Promise.reject(error.response.data as NetworkErrorCollection);
+    }
+  }
 }

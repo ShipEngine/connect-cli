@@ -487,6 +487,58 @@ describe("ShipengineApiClient", () => {
         expect(errorResponse).to.be.eql(apiResponse);
       });
     });
+
+    describe("getLogsById", () => {
+      it("returns an array of deployments for the given app ID", async () => {
+        const apiResponse = "test";
+        apiMock.get("/api/apps/test/deploys/1/logs").reply(200, apiResponse);
+
+        const client = new ShipengineApiClient("valid key");
+        let response, errorResponse;
+
+        try {
+          response = await client.deploys.getLogsById({
+            appId: "test",
+            deployId: "1",
+          });
+        } catch (error) {
+          errorResponse = error;
+        }
+
+        expect(errorResponse).to.be.undefined;
+        expect(response).to.eql(apiResponse);
+      });
+
+      it("returns an error when given an invalid API key", async () => {
+        const apiResponse = {
+          statusCode: 401,
+          name: "unauthorized",
+          errors: [
+            {
+              message: "invalid auth",
+            },
+          ],
+          status: 401,
+        };
+
+        apiMock.get("/api/apps/test/deploys/1/logs").reply(401, apiResponse);
+
+        const client = new ShipengineApiClient("invalid");
+        let response, errorResponse;
+
+        try {
+          response = await client.deploys.getLogsById({
+            appId: "test",
+            deployId: "1",
+          });
+        } catch (error) {
+          errorResponse = error;
+        }
+
+        expect(response).to.be.undefined;
+        expect(errorResponse).to.be.eql(apiResponse);
+      });
+    });
   });
 
   describe("diagnostics", () => {
