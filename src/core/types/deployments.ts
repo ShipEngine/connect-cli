@@ -7,7 +7,7 @@ export enum DeploymentStatus {
   Error = "error",
 }
 
-export type DeploymentStatusObj = {
+export type Deployment = {
   package: {
     name: string;
     download: string;

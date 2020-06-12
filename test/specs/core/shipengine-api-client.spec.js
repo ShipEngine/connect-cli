@@ -368,6 +368,66 @@ describe("ShipengineApiClient", () => {
         expect(errorResponse).to.be.eql(apiResponse);
       });
     });
+
+    describe("getAllForAppId", () => {
+      it("returns an array of deployments for the given app ID", async () => {
+        const apiResponse = {
+          items: [
+            {
+              deployId: "1",
+              package: {
+                name: "test-1.0.0.tgz",
+                version: null,
+              },
+              createdAt: "2020-06-11T22:48:46.555Z",
+              updatedAt: "2020-06-11T22:50:54.109Z",
+              status: "error",
+              definitionErrors: null,
+            },
+          ],
+          itemsPerPage: 100000,
+          totalPages: 1,
+          pageNumber: 0,
+        };
+        apiMock.get("/api/apps/test/deploys").reply(200, apiResponse);
+
+        const client = new ShipengineApiClient("valid key");
+        let response, errorResponse;
+        try {
+          response = await client.deploys.getAllForAppId("test");
+        } catch (error) {
+          errorResponse = error;
+        }
+
+        expect(errorResponse).to.be.undefined;
+        expect(response).to.eql(apiResponse);
+      });
+
+      it("returns an error when given an invalid API key", async () => {
+        const apiResponse = {
+          statusCode: 401,
+          name: "unauthorized",
+          errors: [
+            {
+              message: "invalid auth",
+            },
+          ],
+          status: 401,
+        };
+        apiMock.get("/api/apps/test/deploys").reply(401, apiResponse);
+
+        const client = new ShipengineApiClient("invalid");
+        let response, errorResponse;
+        try {
+          response = await client.deploys.getAllForAppId("test");
+        } catch (error) {
+          errorResponse = error;
+        }
+
+        expect(response).to.be.undefined;
+        expect(errorResponse).to.be.eql(apiResponse);
+      });
+    });
   });
 
   describe("diagnostics", () => {
