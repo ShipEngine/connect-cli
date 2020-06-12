@@ -20,6 +20,11 @@ export default class Publish extends BaseCommand {
       char: "w",
       description: "check the status of the deployment until complete",
     }),
+    "skip-tests": flags.boolean({
+      char: "s",
+      description: "skip running the test before publishing",
+      default: false,
+    }),
   };
 
   async run() {
@@ -33,11 +38,13 @@ export default class Publish extends BaseCommand {
       await Login.run([]);
     }
 
-    await Test.run(["-f"]);
+    if (!flags["skip-tests"]) await Test.run(["-f"]);
 
     try {
       const pathToApp = process.cwd();
-      await publishApp(pathToApp, this.client, { watch: flags.watch });
+      await publishApp(pathToApp, this.client, {
+        watch: flags.watch,
+      });
     } catch (error) {
       switch (error.code) {
         case "APP_FAILED_TO_PACKAGE":
