@@ -18,6 +18,8 @@ export class CancelShipmentsTestSuite extends Suite {
 
   tests() {
     const carrierApp = this.app as CarrierApp;
+    // Integrations team provided feedback that testing all the permuations
+    // for cancel shipment isnt really helpful. We are just testing the first permutation here.
     const testProp = this.testProps()[0];
 
     return [
