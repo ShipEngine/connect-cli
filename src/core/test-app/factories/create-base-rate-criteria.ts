@@ -69,8 +69,8 @@ export function createRateCriteriaPOJOs(packageWeights: number[], packageUnits: 
 function countryAndTimePermutations(originCountries: Country[], destinationCountries: Country[], baseRateCriteria: RateCriteriaWithMetdata, rateCriteriaOpts: RateOpts, deliveryService?: DeliveryService): void {
 
   let countryCombos: Array<[string, string]> = [];
-  for (let dCountry of destinationCountries) {
-    for (let oCountry of originCountries) {
+  for (let oCountry of originCountries) {
+    for (let dCountry of destinationCountries) {
 
       const hasCountryCombo = countryCombos.some((combo) => {
         return combo[0] === oCountry && combo[1] === dCountry;
