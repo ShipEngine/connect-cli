@@ -1,5 +1,5 @@
 import { WeightUnit, DeliveryService, FulfillmentService, RateCriteriaPOJO, PackageRateCriteriaPOJO, CarrierApp, AddressWithContactInfoPOJO, DeliveryServiceIdentifierPOJO, DeliveryServiceClass, Country } from '@shipengine/integration-platform-sdk';
-import { buildAddressWithContactInfo } from './address';
+import { buildAddressWithContactInfo, getSupportedCountryCodes } from './address';
 import { TimeStamps } from '../../types';
 import { initializeTimeStamps } from '../../utils/time-stamps';
 
@@ -22,6 +22,7 @@ type RateCriteriaWithMetdata = Array<[RateCriteriaPOJO, { timeStamps: TimeStamps
  */
 export function createRateCriteriaPOJOs(packageWeights: number[], packageUnits: WeightUnit[], app: CarrierApp, deliveryService?: DeliveryService, fulfillmentService?: FulfillmentService): RateCriteriaWithMetdata {
   const baseRateCriteria: RateCriteriaWithMetdata = [];
+
   for (let packageUnit of packageUnits) {
     for (let packageWeight of packageWeights) {
       // TODO: add "packaging" and delivery confirmation to the package rate criteria pojo
@@ -46,15 +47,22 @@ export function createRateCriteriaPOJOs(packageWeights: number[], packageUnits: 
         rateCriteriaOpts.fulfillmentServices = [fulfillmentService];
       }
 
+      const supportedCountryCodes = getSupportedCountryCodes();
       if (deliveryService) {
         rateCriteriaOpts.deliveryServices.push({ id: deliveryService.id });
 
-        // Handle combinations of packages within the
-        countryAndTimePermutations(deliveryService.originCountries.slice(), deliveryService.originCountries.slice(), baseRateCriteria, rateCriteriaOpts, deliveryService);
+        // Filter out countries we don't currently support addresses for
+        const dsOriginCountries = deliveryService.originCountries.filter((code) => supportedCountryCodes.has(code));
+        const dsDestinationCountries = deliveryService.destinationCountries.filter((code) => supportedCountryCodes.has(code));
+        countryAndTimePermutations(dsOriginCountries, dsDestinationCountries, baseRateCriteria, rateCriteriaOpts, deliveryService);
       }
       //If a delivery service isn't specified then get loop through all destination and origin countries
       else {
-        countryAndTimePermutations(app.originCountries.slice(), app.destinationCountries.slice(), baseRateCriteria, rateCriteriaOpts);
+        // Filter out countries we don't currently support addresses for
+        const appOriginCountries = app.originCountries.filter((code) => supportedCountryCodes.has(code));
+        const appDestinationCountries = app.destinationCountries.filter((code) => supportedCountryCodes.has(code));
+
+        countryAndTimePermutations(appOriginCountries, appDestinationCountries, baseRateCriteria, rateCriteriaOpts);
       }
     }
   }
