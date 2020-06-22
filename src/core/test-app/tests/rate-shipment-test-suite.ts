@@ -12,9 +12,6 @@ import { getTimeTitle } from '../../utils/time-stamps';
 
 type RateShipmentProps = [TransactionPOJO, RateCriteriaPOJO];
 
-// TODO: How to validate "correctness" of tests where individual or ALL delivery/fulfillment services are specified? Is this a business logic
-// that is out of the scope of the test-harness?
-
 export class RateShipmentTestSuite extends Suite {
   title = "rateShipment";
 
@@ -58,14 +55,7 @@ export class RateShipmentTestSuite extends Suite {
       WeightUnit.Pounds,
     ];
 
-    /**
-     * The test harness needs
-     */
-
-    // Check and test for fulfillment services to use within that deliveryService
-
-    // Check and test for return shipments
-    // Test across various datetimes for shipment dates
+    // TODO: Check and test for return shipments
 
     // This set of rateCriteria will satisfy the condition of no delivery service or fulfillment service being specified.
     let ratePOJOs = createRateCriteriaPOJOs(packageWeights, packageUnits, carrierApp);
@@ -89,9 +79,7 @@ export class RateShipmentTestSuite extends Suite {
       const title = composeTitle(ratePOJO, metadata.timeStamps, carrierApp);
 
       if (titles.has(title)) {
-        // throw new Error("duplicate title");
-        // TODO: skip duplicate titles for now, come back and clean up and add other title attributes like labelFormats and labelSizes
-        continue;
+        throw new Error("duplicate title");
       }
 
       titles.add(title);
