@@ -4,10 +4,18 @@ const { expect } = require("chai");
 const path = require("path");
 const { loadStaticConfig } = require("../../../../../lib/core/test-app/tiny-test/load-static-config");
 
+let originalCwd;
 describe("The shipengine.config.js project file", () => {
 
+  before(() => {
+    originalCwd = process.cwd();
+  });
+
+  afterEach(() => {
+    process.chdir(originalCwd);
+  });
+
   describe("when properly configured", () => {
-    const originalCwd = process.cwd();
 
     before(async () => {
       const fixturePath = path.join(process.cwd(), "test", "fixtures", "apps", "carrier", "shipengine-config", "valid-config");
@@ -23,14 +31,9 @@ describe("The shipengine.config.js project file", () => {
         expect(error).to.be.undefined;
       }
     });
-
-    after(async () => {
-      process.chdir(originalCwd);
-    });
   });
 
   describe("When an invalid property is present", () => {
-    const originalCwd = process.cwd();
 
     before(async () => {
       const fixturePath = path.join(process.cwd(), "test", "fixtures", "apps", "carrier", "shipengine-config", "invalid-top-level-config");
@@ -47,14 +50,9 @@ describe("The shipengine.config.js project file", () => {
       }
     });
 
-    after(async () => {
-      process.chdir(originalCwd);
-    });
   });
 
   describe("When a method value is the wrong type", () => {
-    const originalCwd = process.cwd();
-
     before(async () => {
       const fixturePath = path.join(process.cwd(), "test", "fixtures", "apps", "carrier", "shipengine-config", "invalid-method-prop-config");
       process.chdir(fixturePath);
@@ -68,10 +66,6 @@ describe("The shipengine.config.js project file", () => {
       catch (error) {
         expect(error).to.not.be.undefined;
       }
-    });
-
-    after(async () => {
-      process.chdir(originalCwd);
     });
   });
 });
