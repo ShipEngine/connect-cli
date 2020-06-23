@@ -13,9 +13,6 @@ export default class Info extends BaseCommand {
     }),
   };
 
-  // hide the command from help
-  static hidden = true;
-
   async run() {
     // When the -h flag is present the following line haults execution
     this.parse(Info);
