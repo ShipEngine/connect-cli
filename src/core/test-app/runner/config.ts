@@ -7,9 +7,11 @@ import {
 } from "@shipengine/integration-platform-sdk";
 
 export interface TestOptions {
+  connectArgs?: object;
   debug?: boolean;
   expectedErrorMessage?: string;
   retries?: number;
+  session?: object;
   skip?: boolean;
   timeout?: number;
 }
@@ -51,8 +53,7 @@ export interface TestsConfig {
 }
 
 export default interface Config {
-  concurrency?: number;
-  connect_args?: object;
+  connectArgs?: object;
   debug?: boolean;
   failFast?: boolean;
   retries?: number;

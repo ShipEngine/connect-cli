@@ -48,7 +48,10 @@ export default async function testApp(
           logFail(errorMessage);
         });
 
-        testResultsReducer("INCREMENT_FAILED");
+        for (let i = 0; i < errorsCount; i++) {
+          testResultsReducer("INCREMENT_FAILED");
+        }
+
         logResults(testResults);
         return testResults;
       default:
@@ -70,12 +73,15 @@ export default async function testApp(
 
   const options = {
     defaults: {
+      connectArgs: {},
       debug: false,
       failFast: false,
       retries: 1,
+      session: {},
       timeout: 2000,
     },
     staticRootConfig: {
+      connectArgs: staticConfig.connectArgs,
       debug: staticConfig.debug,
       failFast: staticConfig.failFast,
       retries: staticConfig.retries,
@@ -102,7 +108,6 @@ export default async function testApp(
   const suites = registeredTestSuiteModules.map(
     (suite: any) =>
       new suite({
-        connectArgs: staticConfig.connect_args,
         app,
         staticConfigTests: staticConfig.tests,
         options: options,
