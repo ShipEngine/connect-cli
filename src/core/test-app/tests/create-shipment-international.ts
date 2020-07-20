@@ -4,21 +4,20 @@ import {
   Country,
   DeliveryConfirmation,
   DeliveryService,
-  DocumentFormat,
-  DocumentSize,
+  NewLabelPOJO,
   NewPackagePOJO,
   NewShipmentPOJO,
   WeightPOJO,
   WeightUnit,
 } from "@shipengine/integration-platform-sdk";
 import Suite from "../runner/suite";
-import reduceDefaultsWithConfig from "../utils/reduce-defaults-with-config";
 import findDeliveryConfirmationByName from "../utils/find-delivery-confirmation-by-name";
 import findDeliveryServiceByName from "../utils/find-delivery-service-by-name";
 import findInternationalDeliveryService from "../utils/find-international-delivery-service";
 import objectToTestTitle from "../utils/object-to-test-title";
+import reduceDefaultsWithConfig from "../utils/reduce-defaults-with-config";
+import useInternationalShipmentAddresses from "../utils/use-international-shipment-addresses";
 import { CreateShipmentInternationalOptions } from "../runner/config";
-import { buildAddressWithContactInfo } from "../factories/address";
 import { initializeTimeStamps } from "../../utils/time-stamps";
 
 interface TestArgs {
@@ -33,8 +32,7 @@ type DomesticDeliveryService = Array<{
 }>;
 
 interface CreateShipmentInternationalCustomizableParameters {
-  labelFormat: DocumentFormat;
-  labelSize: DocumentSize;
+  label: NewLabelPOJO;
   shipDateTime: Date | string;
   shipFrom: AddressWithContactInfoPOJO | undefined;
   shipTo: AddressWithContactInfoPOJO | undefined;
@@ -94,22 +92,21 @@ export class CreateShipmentInternational extends Suite {
     // If we cant resolve a delivery serivice above then we dont have enough info to setup this test
     if (!this.deliveryService) return undefined;
 
-    // this.setOriginCountry(config);
-    const originCountry = "US";
-    const destinationCountry = "MX";
-
+    let [shipFrom, shipTo] = useInternationalShipmentAddresses(
+      this.app as CarrierApp,
+    );
     // We need to know if the config defines 'shipFrom' so we can set the 'shipDateTime' with the correct timezone
-    const shipFrom = config.shipFrom
-      ? config.shipFrom
-      : buildAddressWithContactInfo(`${originCountry}-from`);
+    shipFrom = config.shipFrom ? config.shipFrom : shipFrom;
     const { tomorrow } = initializeTimeStamps(shipFrom!.timeZone);
 
     const defaults: CreateShipmentInternationalCustomizableParameters = {
-      labelFormat: this.deliveryService.labelFormats[0],
-      labelSize: this.deliveryService.labelSizes[0],
       shipDateTime: tomorrow, // It would prob be a better DX to give the user an enum of relative values "tomorrow", "nextWeek" etc.
       shipFrom: shipFrom,
-      shipTo: buildAddressWithContactInfo(`${destinationCountry}-to`),
+      shipTo: shipTo,
+      label: {
+        size: this.deliveryService.labelSizes[0],
+        format: this.deliveryService.labelFormats[0],
+      },
       weight: {
         value: 50.0,
         unit: WeightUnit.Pounds,
@@ -124,10 +121,7 @@ export class CreateShipmentInternational extends Suite {
       packaging: {
         id: this.deliveryService.packaging[0].id,
       },
-      label: {
-        size: testParams.labelSize,
-        format: testParams.labelFormat,
-      },
+      label: testParams.label,
       weight: testParams.weight,
     };
 

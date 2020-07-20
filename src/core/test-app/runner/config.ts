@@ -10,6 +10,7 @@ import {
   AddressPOJO,
   ContactInfoPOJO,
   Address,
+  NewLabelPOJO,
 } from "@shipengine/integration-platform-sdk";
 
 export interface TestOptions {
@@ -54,13 +55,13 @@ export type PickupPackageConfig = {
   dimensions?: DimensionsPOJO;
   weight?: WeightPOJO;
   metadata?: object;
-}
+};
 
 export type PickupShipmentConfig = {
   deliveryServiceName: string;
   metadata?: object;
-  packages: PickupPackageConfig | PickupPackageConfig[]
-}
+  packages: PickupPackageConfig | PickupPackageConfig[];
+};
 
 export interface SchedulePickupOptions extends TestOptions {
   pickupServiceName: string;
@@ -79,8 +80,7 @@ export interface SchedulePickupOptions extends TestOptions {
 export interface CreateShipmentInternationalOptions extends TestOptions {
   deliveryConfirmationName?: string;
   deliveryServiceName?: string;
-  labelFormat: DocumentFormat;
-  labelSize: DocumentSize;
+  label: NewLabelPOJO;
   shipDateTime?: DateTimeZonePOJO | Date | string;
   shipFrom?: AddressWithContactInfoPOJO;
   shipTo?: Address;
@@ -92,7 +92,9 @@ export interface TestsConfig {
   cancelPickups?: (TestOptions & TestOptions) | [TestOptions];
   cancelShipments?: TestOptions | [TestOptions];
   createManifest?: TestOptions | [TestOptions];
-  createShipment_domestic?: CreateShipmentDomesticOptions | [CreateShipmentDomesticOptions];
+  createShipment_domestic?:
+    | CreateShipmentDomesticOptions
+    | [CreateShipmentDomesticOptions];
   createShipment_international?:
     | CreateShipmentInternationalOptions
     | [CreateShipmentInternationalOptions];
