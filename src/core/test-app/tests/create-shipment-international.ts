@@ -36,38 +36,39 @@ export class CreateShipmentInternational extends Suite {
 
   private setDeliveryService(config: CreateShipmentInternationalOptions): void {
     if (config.deliveryServiceName) {
+      // We do not want to handle the exception here if this raises. It indicates issues w/ the config provided.
       this.deliveryService = findDeliveryServiceByName(
         config.deliveryServiceName,
         this.app as CarrierApp,
       );
     } else {
-      // If a delivery service isnt given via the config lets try and resolve one
-      this.deliveryService = findInternationalDeliveryService(
-        this.app as CarrierApp,
-      );
+      try {
+        this.deliveryService = findInternationalDeliveryService(
+          this.app as CarrierApp,
+        );
+      } catch {
+        this.deliveryService = undefined;
+      }
     }
   }
 
   private setDeliveryConfirmation(
     config: CreateShipmentInternationalOptions,
   ): void {
-    const carrierApp = this.app as CarrierApp;
-
     if (config.deliveryConfirmationName) {
+      // We do not want to handle the exception here if this raises. It indicates issues w/ the config provided.
       this.deliveryConfirmation = findDeliveryConfirmationByName(
         config.deliveryConfirmationName,
-        carrierApp,
+        this.app as CarrierApp,
       );
-      return;
-    }
-
-    if (
+    } else if (
       this.deliveryService &&
       this.deliveryService.deliveryConfirmations.length !== 0 &&
       this.deliveryService.deliveryConfirmations[0]
     ) {
       this.deliveryConfirmation = this.deliveryService.deliveryConfirmations[0];
-      return;
+    } else {
+      this.deliveryConfirmation = undefined;
     }
   }
 
@@ -102,17 +103,7 @@ export class CreateShipmentInternational extends Suite {
       },
     };
 
-    // const testParams = deepMergeObjectsAndFilter(defaults, this.config);
-    const whiteListKeys = Object.keys(defaults);
-
-    // This code is filtering any keys in the config that are not white listed
-    // and merging the values with the defaults above
-    const testParams = Object.keys(config)
-      .filter((key) => whiteListKeys.includes(key))
-      .reduce((obj, key: string) => {
-        Reflect.set(obj, key, Reflect.get(config, key));
-        return obj;
-      }, defaults);
+    const testParams = deepMergeObjectsAndFilter(defaults, this.config);
 
     const packagePOJO: NewPackagePOJO = {
       packaging: {

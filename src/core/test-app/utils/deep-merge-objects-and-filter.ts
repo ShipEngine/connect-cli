@@ -1,3 +1,7 @@
+/**
+ * Returns a comma seperated string for a given object
+ * @param {object} obj - The object to be formatted.
+ */
 export default function deepMergeObjectsAndFilter(): object {
   // const defaults = {
   //   labelFormat: this.deliveryService.labelFormats[0],

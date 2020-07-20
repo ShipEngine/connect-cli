@@ -11,6 +11,10 @@ function formatTitleParameter(key: string, value: any) {
   }
 }
 
+/**
+ * Returns a comma seperated string for a given object
+ * @param {object} obj - The object to be formatted.
+ */
 export default function objectToTestTitle(obj: object): string {
   return Object.keys(obj)
     .map((key: string) => {
