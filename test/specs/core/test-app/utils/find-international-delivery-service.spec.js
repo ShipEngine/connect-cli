@@ -74,8 +74,11 @@ describe("findDeliveryServiceByName", () => {
     expect(subject.originCountries).to.eql(originCountries);
   });
 
-  it("returns undefined when an international delivery service does not exist", () => {
+  it("throws an error when an international delivery service does not exist", () => {
     const app = pojo.carrierApp();
-    expect(findInternationalDeliveryService(app)).to.be.undefined;
+    expect(() => findInternationalDeliveryService(app)).to.throw(
+      Error,
+      /international delivery service not found/,
+    );
   });
 });

@@ -8,7 +8,7 @@ import {
   DeliveryConfirmation,
 } from "@shipengine/integration-platform-sdk";
 import Suite from "../runner/suite";
-// import deepMergeObjectsAndFilter from "../utils/deep-merge-objects-and-filter";
+import deepMergeObjectsAndFilter from "../utils/deep-merge-objects-and-filter";
 import findDeliveryConfirmationByName from "../utils/find-delivery-confirmation-by-name";
 import findDeliveryServiceByName from "../utils/find-delivery-service-by-name";
 import findInternationalDeliveryService from "../utils/find-international-delivery-service";

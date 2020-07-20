@@ -3,6 +3,11 @@ import {
   CarrierApp,
 } from "@shipengine/integration-platform-sdk";
 
+/**
+ * Finds a DeliveryService by its name or raises if one is not found.
+ * @param {string} name - The name of the DeliveryService.
+ * @param {CarrierApp} app - The app that containing the DeliveryService.
+ */
 export default function findDeliveryServiceByName(
   name: string,
   app: CarrierApp,

@@ -3,6 +3,11 @@ import {
   CarrierApp,
 } from "@shipengine/integration-platform-sdk";
 
+/**
+ * Finds a DeliveryConfirmation by its name or raises if one is not found.
+ * @param {string} name - The name of the DeliveryConfirmation.
+ * @param {CarrierApp} app - The app that containing the DeliveryConfirmation.
+ */
 export default function findDeliveryConfirmationByName(
   name: string,
   app: CarrierApp,

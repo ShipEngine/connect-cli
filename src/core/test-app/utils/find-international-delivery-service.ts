@@ -3,9 +3,13 @@ import {
   CarrierApp,
 } from "@shipengine/integration-platform-sdk";
 
+/**
+ * Finds an international DeliveryService for a given application.
+ * @param {CarrierApp} app - The app that containing the DeliveryService.
+ */
 export default function findInternationalDeliveryService(
   app: CarrierApp,
-): DeliveryService | undefined {
+): DeliveryService {
   for (let deliveryService of app.deliveryServices) {
     if (
       deliveryService.serviceArea === "international" ||
@@ -21,4 +25,5 @@ export default function findInternationalDeliveryService(
       return deliveryService;
     }
   }
+  throw new Error('international delivery service not found');
 }
