@@ -69,7 +69,7 @@ export class CreateShipmentInternational extends Suite {
     }
   }
 
-  buildTestArg(
+  private buildTestArg(
     config: CreateShipmentInternationalOptions,
   ): TestArgs | undefined {
     this.setDeliveryService(config);
@@ -139,18 +139,12 @@ export class CreateShipmentInternational extends Suite {
     };
 
     const title = config.expectedErrorMessage
-      ? `it raises an error when creating a new international shipment with ${Object.keys(
+      ? `it raises an error when creating a new international shipment with ${this.titleParams(
           testParams,
-        )
-          .map(function (k: any) {
-            return `${k}: ${fancyLog(Reflect.get(testParams, k))}`;
-          })
-          .join(", ")}`
-      : `it creates a new international shipment with ${Object.keys(testParams)
-          .map(function (k: any) {
-            return `${k}: ${fancyLog(Reflect.get(testParams, k))}`;
-          })
-          .join(", ")}`;
+        )}`
+      : `it creates a new international shipment with ${this.titleParams(
+          testParams,
+        )}`;
 
     return {
       title: title,
@@ -159,7 +153,31 @@ export class CreateShipmentInternational extends Suite {
     };
   }
 
-  buildTestArgs(): Array<TestArgs | undefined> {
+  private titleParams(testParams: object): string {
+    return Object.keys(testParams)
+      .map((key: string) => {
+        return `${key}: ${this.formatTitleParameter(
+          key,
+          Reflect.get(testParams, key),
+        )}`;
+      })
+      .join(", ");
+  }
+
+  private formatTitleParameter(key: string, value: any) {
+    switch (key) {
+      case "weight":
+        return `${value.value}${value.unit} `;
+      case "shipTo":
+        return value.country;
+      case "shipFrom":
+        return value.country;
+      default:
+        return value;
+    }
+  }
+
+  private buildTestArgs(): Array<TestArgs | undefined> {
     if (Array.isArray(this.config)) {
       return this.config.map((config: CreateShipmentInternationalOptions) => {
         return this.buildTestArg(config);
@@ -193,27 +211,3 @@ export class CreateShipmentInternational extends Suite {
     });
   }
 }
-
-function fancyLog(val: any) {
-  if (typeof val === "object") {
-    if (val.unit && val.value) {
-      return `${val.value}${val.unit} `;
-    } else if (val.country) {
-      return `${val.country}`;
-    } else {
-      return val;
-    }
-  } else {
-    return val;
-  }
-}
-// function parseTitle(
-//   testParams: CreateShipmentDomesticOptions,
-//   key: any,
-// ): string {
-//   if (key === "shipFrom" || key === "shipTo") {
-//     const address = Reflect.get(testParams, key) as Address;
-//     return `${key}: ${address.country}`;
-//   }
-//   return `${key}: ${Reflect.get(testParams, key)}`;
-// }
