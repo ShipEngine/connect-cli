@@ -8,12 +8,14 @@ import {
   DeliveryConfirmation,
 } from "@shipengine/integration-platform-sdk";
 import Suite from "../runner/suite";
-import { buildAddressWithContactInfo } from "../factories/address";
-import { CreateShipmentInternationalOptions } from "../runner/config";
-import { initializeTimeStamps } from "../../utils/time-stamps";
+// import deepMergeObjectsAndFilter from "../utils/deep-merge-objects-and-filter";
+import findDeliveryConfirmationByName from "../utils/find-delivery-confirmation-by-name";
 import findDeliveryServiceByName from "../utils/find-delivery-service-by-name";
 import findInternationalDeliveryService from "../utils/find-international-delivery-service";
-import findDeliveryConfirmationByName from "../utils/find-delivery-confirmation-by-name";
+import objectToTestTitle from "../utils/object-to-test-title";
+import { CreateShipmentInternationalOptions } from "../runner/config";
+import { buildAddressWithContactInfo } from "../factories/address";
+import { initializeTimeStamps } from "../../utils/time-stamps";
 
 interface TestArgs {
   title: string;
@@ -100,6 +102,7 @@ export class CreateShipmentInternational extends Suite {
       },
     };
 
+    // const testParams = deepMergeObjectsAndFilter(defaults, this.config);
     const whiteListKeys = Object.keys(defaults);
 
     // This code is filtering any keys in the config that are not white listed
@@ -139,10 +142,10 @@ export class CreateShipmentInternational extends Suite {
     };
 
     const title = config.expectedErrorMessage
-      ? `it raises an error when creating a new international shipment with ${this.titleParams(
+      ? `it raises an error when creating a new international shipment with ${objectToTestTitle(
           testParams,
         )}`
-      : `it creates a new international shipment with ${this.titleParams(
+      : `it creates a new international shipment with ${objectToTestTitle(
           testParams,
         )}`;
 
@@ -151,30 +154,6 @@ export class CreateShipmentInternational extends Suite {
       methodArgs: newShipmentPOJO,
       config: config,
     };
-  }
-
-  private titleParams(testParams: object): string {
-    return Object.keys(testParams)
-      .map((key: string) => {
-        return `${key}: ${this.formatTitleParameter(
-          key,
-          Reflect.get(testParams, key),
-        )}`;
-      })
-      .join(", ");
-  }
-
-  private formatTitleParameter(key: string, value: any) {
-    switch (key) {
-      case "weight":
-        return `${value.value}${value.unit} `;
-      case "shipTo":
-        return value.country;
-      case "shipFrom":
-        return value.country;
-      default:
-        return value;
-    }
   }
 
   private buildTestArgs(): Array<TestArgs | undefined> {
