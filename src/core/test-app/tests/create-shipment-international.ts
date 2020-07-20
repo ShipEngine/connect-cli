@@ -11,6 +11,8 @@ import Suite from "../runner/suite";
 import { buildAddressWithContactInfo } from "../factories/address";
 import { CreateShipmentInternationalOptions } from "../runner/config";
 import { initializeTimeStamps } from "../../utils/time-stamps";
+import findDeliveryServiceByName from "../utils/find-delivery-service-by-name";
+import findDeliveryConfirmationByName from "../utils/find-delivery-confirmation-by-name";
 
 interface TestArgs {
   title: string;
@@ -33,14 +35,10 @@ export class CreateShipmentInternational extends Suite {
     const carrierApp = this.app as CarrierApp;
 
     if (config.deliveryServiceName) {
-      this.deliveryService = carrierApp.deliveryServices.find(
-        (deliveryService) =>
-          deliveryService.name === config.deliveryServiceName,
+      this.deliveryService = findDeliveryServiceByName(
+        config.deliveryServiceName,
+        carrierApp,
       );
-      if (!this.deliveryService)
-        throw new Error(
-          `shipengine.config.js deliveryServiceName: '${config.deliveryServiceName}' does not exist`,
-        );
       return;
     }
 
@@ -67,14 +65,10 @@ export class CreateShipmentInternational extends Suite {
     const carrierApp = this.app as CarrierApp;
 
     if (config.deliveryConfirmationName) {
-      this.deliveryConfirmation = carrierApp.deliveryConfirmations.find(
-        (deliveryConfirmation) =>
-          deliveryConfirmation.name === config.deliveryConfirmationName,
+      this.deliveryConfirmation = findDeliveryConfirmationByName(
+        config.deliveryConfirmationName,
+        carrierApp,
       );
-      if (!this.deliveryService)
-        throw new Error(
-          `shipengine.config.js deliveryConfirmationName: '${config.deliveryConfirmationName}' does not exist`,
-        );
       return;
     }
 
