@@ -8,8 +8,8 @@ import findInternationalDeliveryService from "./find-international-delivery-serv
  * @param {object} configObject - The config object. Key/values in this object receive precedence.
  */
 export default function useInternationalShipmentAddresses(app: CarrierApp) {
-  let toCountryCode: string | undefined;
-  let fromCountryCode: string | undefined;
+  let destinationCountryCode: string | undefined;
+  let originCountryCode: string | undefined;
   let deliveryService;
 
   try {
@@ -19,30 +19,28 @@ export default function useInternationalShipmentAddresses(app: CarrierApp) {
   }
 
   if (deliveryService.originCountries.length === 1) {
-    fromCountryCode = deliveryService.originCountries[0];
-    toCountryCode = deliveryService.destinationCountries.find(
-      (destinationCountry) => destinationCountry !== fromCountryCode,
+    console.log()
+    originCountryCode = deliveryService.originCountries[0];
+    destinationCountryCode = deliveryService.destinationCountries.find(
+      (destinationCountry) => destinationCountry !== originCountryCode,
     );
-    if (!toCountryCode)
+    if (!destinationCountryCode)
       throw new Error(
-        "useInternationalShipmentAddresses: can not resolve to country",
+        "useInternationalShipmentAddresses: can not resolve destination country",
       );
   } else if (deliveryService.destinationCountries.length === 1) {
-    toCountryCode = deliveryService.destinationCountries[0];
-    fromCountryCode = deliveryService.destinationCountries.find(
-      (destinationCountry) => destinationCountry !== toCountryCode,
+    destinationCountryCode = deliveryService.destinationCountries[0];
+    originCountryCode = deliveryService.destinationCountries.find(
+      (destinationCountry) => destinationCountry !== destinationCountryCode,
     );
-    if (!fromCountryCode)
+    if (!originCountryCode)
       throw new Error(
-        "useInternationalShipmentAddresses: can not resolve from country",
+        "useInternationalShipmentAddresses: can not resolve origin country",
       );
   }
-  //  else {
-
-  // }
 
   return [
-    buildAddressWithContactInfo(`${fromCountryCode}-from`),
-    buildAddressWithContactInfo(`${toCountryCode}-to`),
+    buildAddressWithContactInfo(`${originCountryCode}-from`),
+    buildAddressWithContactInfo(`${destinationCountryCode}-to`),
   ];
 }
