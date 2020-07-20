@@ -5,7 +5,7 @@ const reduceDefaultsWithConfig = require("../../../../../lib/core/test-app/utils
   .default;
 
 describe("reduceDefaultsWithConfig", () => {
-  it("returns merges the two objects and gives presedence to key/values in the configObject", () => {
+  it("returns a reduced object of the two objects and gives presedence to key/values in the configObject", () => {
     const defaultObject = {
       foo: "bar",
       baz: "bat",
@@ -18,6 +18,28 @@ describe("reduceDefaultsWithConfig", () => {
     expect(reduceDefaultsWithConfig(defaultObject, configObject)).to.eql({
       foo: "bar",
       baz: "test",
+    });
+  });
+
+  it("deeply merges the objects", () => {
+    const defaultObject = {
+      label: {
+        unit: "lb",
+        value: 1,
+      },
+    };
+
+    const configObject = {
+      label: {
+        value: 2,
+      },
+    };
+
+    expect(reduceDefaultsWithConfig(defaultObject, configObject)).to.eql({
+      label: {
+        unit: "lb",
+        value: 2,
+      },
     });
   });
 });
