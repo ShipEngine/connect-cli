@@ -1,14 +1,18 @@
 import {
+  AddressWithContactInfoPOJO,
   CarrierApp,
-  NewShipmentPOJO,
-  NewPackagePOJO,
-  WeightUnit,
-  DeliveryService,
   Country,
   DeliveryConfirmation,
+  DeliveryService,
+  DocumentFormat,
+  DocumentSize,
+  NewPackagePOJO,
+  NewShipmentPOJO,
+  WeightPOJO,
+  WeightUnit,
 } from "@shipengine/integration-platform-sdk";
 import Suite from "../runner/suite";
-import deepMergeObjectsAndFilter from "../utils/deep-merge-objects-and-filter";
+import reduceDefaultsWithConfig from "../utils/reduce-defaults-with-config";
 import findDeliveryConfirmationByName from "../utils/find-delivery-confirmation-by-name";
 import findDeliveryServiceByName from "../utils/find-delivery-service-by-name";
 import findInternationalDeliveryService from "../utils/find-international-delivery-service";
@@ -27,6 +31,15 @@ type DomesticDeliveryService = Array<{
   deliveryService: DeliveryService;
   domesticCountries: Country[];
 }>;
+
+interface CreateShipmentInternationalCustomizableParameters {
+  labelFormat: DocumentFormat;
+  labelSize: DocumentSize;
+  shipDateTime: Date | string;
+  shipFrom: AddressWithContactInfoPOJO | undefined;
+  shipTo: AddressWithContactInfoPOJO | undefined;
+  weight: WeightPOJO;
+}
 
 export class CreateShipmentInternational extends Suite {
   title = "createShipment_international";
@@ -91,7 +104,7 @@ export class CreateShipmentInternational extends Suite {
       : buildAddressWithContactInfo(`${originCountry}-from`);
     const { tomorrow } = initializeTimeStamps(shipFrom!.timeZone);
 
-    const defaults = {
+    const defaults: CreateShipmentInternationalCustomizableParameters = {
       labelFormat: this.deliveryService.labelFormats[0],
       labelSize: this.deliveryService.labelSizes[0],
       shipDateTime: tomorrow, // It would prob be a better DX to give the user an enum of relative values "tomorrow", "nextWeek" etc.
@@ -103,7 +116,9 @@ export class CreateShipmentInternational extends Suite {
       },
     };
 
-    const testParams = deepMergeObjectsAndFilter(defaults, this.config);
+    const testParams = reduceDefaultsWithConfig<
+      CreateShipmentInternationalCustomizableParameters
+    >(defaults, this.config);
 
     const packagePOJO: NewPackagePOJO = {
       packaging: {
