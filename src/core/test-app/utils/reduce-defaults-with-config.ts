@@ -1,7 +1,7 @@
 import merge from "deepmerge";
 
 /**
- * Returns a comma seperated string for a given object
+ * Deeply merges the configObject into the defaultObject. Whitelist keys specified in the defaultObject.
  * @param {object} defaultObject - The default object.
  * @param {object} configObject - The config object. Key/values in this object receive precedence.
  */
