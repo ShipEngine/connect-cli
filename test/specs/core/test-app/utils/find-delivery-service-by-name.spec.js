@@ -8,13 +8,13 @@ const findDeliveryServiceByName = require("../../../../../lib/core/test-app/util
 const app = pojo.carrierApp();
 
 describe("findDeliveryServiceByName", () => {
-  it("when a delivery service exist for the given name it returns the delivery service", () => {
+  it("returns a delivery service when a delivery service exist for the given name", () => {
     const name = "Dummy Delivery Service";
     const subject = findDeliveryServiceByName(name, app);
     expect(subject.name).to.equal(name);
   });
 
-  it("when a delivery service does not exist for the given name it throws an error", () => {
+  it("throws an error when a delivery service does not exist for the given name", () => {
     expect(() => findDeliveryServiceByName("invalid", app)).to.throw(
       Error,
       /shipengine.config.js deliveryServiceName:/,

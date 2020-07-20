@@ -9,13 +9,13 @@ const deliveryConfirmation = pojo.deliveryConfirmation();
 const app = pojo.carrierApp({ deliveryConfirmations: [deliveryConfirmation] });
 
 describe("findDeliveryConfirmationByName", () => {
-  it("when a delivery confirmation exist for the given name it returns the delivery confirmation", () => {
+  it("returns a delivery confirmation when a delivery confirmation exist for the given name", () => {
     const name = "Dummy Confirmation";
     const subject = findDeliveryConfirmationByName(name, app);
     expect(subject.name).to.be.equal(name);
   });
 
-  it("when a delivery confirmation does not exist for the given name it throws an error", () => {
+  it("throws an error when a delivery confirmation does not exist for the given name", () => {
     expect(() => findDeliveryConfirmationByName("invalid", app)).to.throw(
       Error,
       /shipengine.config.js deliveryConfirmationName:/,

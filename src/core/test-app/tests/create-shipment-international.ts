@@ -12,6 +12,7 @@ import { buildAddressWithContactInfo } from "../factories/address";
 import { CreateShipmentInternationalOptions } from "../runner/config";
 import { initializeTimeStamps } from "../../utils/time-stamps";
 import findDeliveryServiceByName from "../utils/find-delivery-service-by-name";
+import findInternationalDeliveryService from "../utils/find-international-delivery-service";
 import findDeliveryConfirmationByName from "../utils/find-delivery-confirmation-by-name";
 
 interface TestArgs {
@@ -32,30 +33,16 @@ export class CreateShipmentInternational extends Suite {
   private deliveryConfirmation?: DeliveryConfirmation;
 
   private setDeliveryService(config: CreateShipmentInternationalOptions): void {
-    const carrierApp = this.app as CarrierApp;
-
     if (config.deliveryServiceName) {
       this.deliveryService = findDeliveryServiceByName(
         config.deliveryServiceName,
-        carrierApp,
+        this.app as CarrierApp,
       );
-      return;
-    }
-
-    // If a delivery service isnt given via the config lets look for one
-    for (let deliveryService of carrierApp.deliveryServices) {
-      if (
-        // If there is more than 1 origin country this is international
-        deliveryService.originCountries.length > 1 ||
-        // If there is more than 1 destination country this is international
-        deliveryService.destinationCountries.length > 1 ||
-        // If there is only 1 origin & destination country but they are different this is international
-        deliveryService.originCountries[0] !==
-          deliveryService.destinationCountries[0]
-      ) {
-        this.deliveryService = deliveryService;
-        return;
-      }
+    } else {
+      // If a delivery service isnt given via the config lets try and resolve one
+      this.deliveryService = findInternationalDeliveryService(
+        this.app as CarrierApp,
+      );
     }
   }
 
