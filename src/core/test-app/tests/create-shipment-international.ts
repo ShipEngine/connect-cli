@@ -1,6 +1,7 @@
 import {
   CarrierApp,
   Country,
+  ShipmentConfirmation,
   DeliveryConfirmation,
   DeliveryService,
   NewPackagePOJO,
@@ -25,6 +26,7 @@ interface TestArgs {
   title: string;
   methodArgs: NewShipmentPOJO;
   config: any;
+  testParams: CreateShipmentInternationalTestParams;
 }
 
 type DomesticDeliveryService = Array<{
@@ -148,6 +150,7 @@ export class CreateShipmentInternational extends Suite {
       title: title,
       methodArgs: newShipmentPOJO,
       config: config,
+      testParams: testParams,
     };
   }
 

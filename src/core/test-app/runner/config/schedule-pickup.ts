@@ -1,10 +1,11 @@
 import {
-  DateTimeZonePOJO,
-  WeightPOJO,
-  TimeRangePOJO,
+  Address,
   AddressPOJO,
   ContactInfoPOJO,
-  Address,
+  DateTimeZonePOJO,
+  DimensionsPOJO,
+  TimeRangePOJO,
+  WeightPOJO,
 } from "@shipengine/integration-platform-sdk";
 import { BaseTestConfigOptions } from "./base-test-config-options";
 
