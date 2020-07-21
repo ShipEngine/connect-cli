@@ -17,7 +17,10 @@ import findInternationalDeliveryService from "../utils/find-international-delive
 import objectToTestTitle from "../utils/object-to-test-title";
 import reduceDefaultsWithConfig from "../utils/reduce-defaults-with-config";
 import useInternationalShipmentAddresses from "../utils/use-international-shipment-addresses";
-import { CreateShipmentInternationalOptions } from "../runner/config";
+import {
+  CreateShipmentInternationalConfigOptions,
+  CreateShipmentInternationalTestParams,
+} from "../runner/config/create-shipment-international";
 import { initializeTimeStamps } from "../../utils/time-stamps";
 
 interface TestArgs {
@@ -31,21 +34,15 @@ type DomesticDeliveryService = Array<{
   domesticCountries: Country[];
 }>;
 
-interface CreateShipmentInternationalCustomizableParameters {
-  label: NewLabelPOJO;
-  shipDateTime: Date | string;
-  shipFrom: AddressWithContactInfoPOJO | undefined;
-  shipTo: AddressWithContactInfoPOJO | undefined;
-  weight: WeightPOJO;
-}
-
 export class CreateShipmentInternational extends Suite {
   title = "createShipment_international";
 
   private deliveryService?: DeliveryService;
   private deliveryConfirmation?: DeliveryConfirmation;
 
-  private setDeliveryService(config: CreateShipmentInternationalOptions): void {
+  private setDeliveryService(
+    config: CreateShipmentInternationalConfigOptions,
+  ): void {
     if (config.deliveryServiceName) {
       // We do not want to handle the exception here if this raises. It indicates issues w/ the config provided.
       this.deliveryService = findDeliveryServiceByName(
@@ -64,7 +61,7 @@ export class CreateShipmentInternational extends Suite {
   }
 
   private setDeliveryConfirmation(
-    config: CreateShipmentInternationalOptions,
+    config: CreateShipmentInternationalConfigOptions,
   ): void {
     if (config.deliveryConfirmationName) {
       // We do not want to handle the exception here if this raises. It indicates issues w/ the config provided.
@@ -84,7 +81,7 @@ export class CreateShipmentInternational extends Suite {
   }
 
   private buildTestArg(
-    config: CreateShipmentInternationalOptions,
+    config: CreateShipmentInternationalConfigOptions,
   ): TestArgs | undefined {
     this.setDeliveryService(config);
     this.setDeliveryConfirmation(config);
@@ -99,7 +96,7 @@ export class CreateShipmentInternational extends Suite {
     shipFrom = config.shipFrom ? config.shipFrom : shipFrom;
     const { tomorrow } = initializeTimeStamps(shipFrom!.timeZone);
 
-    const defaults: CreateShipmentInternationalCustomizableParameters = {
+    const defaults: CreateShipmentInternationalTestParams = {
       shipDateTime: tomorrow, // It would prob be a better DX to give the user an enum of relative values "tomorrow", "nextWeek" etc.
       shipFrom: shipFrom,
       shipTo: shipTo,
@@ -114,7 +111,7 @@ export class CreateShipmentInternational extends Suite {
     };
 
     const testParams = reduceDefaultsWithConfig<
-      CreateShipmentInternationalCustomizableParameters
+      CreateShipmentInternationalTestParams
     >(defaults, this.config);
 
     const packagePOJO: NewPackagePOJO = {
@@ -158,11 +155,13 @@ export class CreateShipmentInternational extends Suite {
 
   private buildTestArgs(): Array<TestArgs | undefined> {
     if (Array.isArray(this.config)) {
-      return this.config.map((config: CreateShipmentInternationalOptions) => {
-        return this.buildTestArg(config);
-      });
+      return this.config.map(
+        (config: CreateShipmentInternationalConfigOptions) => {
+          return this.buildTestArg(config);
+        },
+      );
     } else {
-      const config = this.config as CreateShipmentInternationalOptions;
+      const config = this.config as CreateShipmentInternationalConfigOptions;
 
       return [this.buildTestArg(config)];
     }
