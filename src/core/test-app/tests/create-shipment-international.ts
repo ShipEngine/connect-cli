@@ -1,7 +1,6 @@
 import {
   CarrierApp,
   Country,
-  ShipmentConfirmation,
   DeliveryConfirmation,
   DeliveryService,
   NewPackagePOJO,
@@ -20,7 +19,6 @@ import {
   CreateShipmentInternationalTestParams,
 } from "../runner/config/create-shipment-international";
 import { initializeTimeStamps } from "../../utils/time-stamps";
-import { expect } from 'chai';
 
 interface TestArgs {
   title: string;
@@ -187,7 +185,7 @@ export class CreateShipmentInternational extends Suite {
           if (!carrierApp.createShipment)
             throw new Error("createShipment is not implemented");
 
-          const response = await carrierApp.createShipment(
+          await carrierApp.createShipment(
             transaction,
             testArg!.methodArgs,
           );
