@@ -19,7 +19,6 @@ export default function useInternationalShipmentAddresses(app: CarrierApp) {
   }
 
   if (deliveryService.originCountries.length === 1) {
-    console.log()
     originCountryCode = deliveryService.originCountries[0];
     destinationCountryCode = deliveryService.destinationCountries.find(
       (destinationCountry) => destinationCountry !== originCountryCode,
@@ -30,8 +29,8 @@ export default function useInternationalShipmentAddresses(app: CarrierApp) {
       );
   } else if (deliveryService.destinationCountries.length === 1) {
     destinationCountryCode = deliveryService.destinationCountries[0];
-    originCountryCode = deliveryService.destinationCountries.find(
-      (destinationCountry) => destinationCountry !== destinationCountryCode,
+    originCountryCode = deliveryService.originCountries.find(
+      (originCountry) => originCountry !== destinationCountryCode,
     );
     if (!originCountryCode)
       throw new Error(
