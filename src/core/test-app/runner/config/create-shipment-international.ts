@@ -13,7 +13,7 @@ export interface CreateShipmentInternationalTestParams {
   label: NewLabelPOJO;
   shipDateTime?: string | DateTimeZonePOJO | Date | undefined;
   shipFrom?: AddressWithContactInfoPOJO;
-  shipTo?: Address;
+  shipTo?: AddressWithContactInfoPOJO;
   weight: WeightPOJO;
 }
 

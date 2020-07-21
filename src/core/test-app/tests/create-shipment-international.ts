@@ -1,13 +1,10 @@
 import {
-  AddressWithContactInfoPOJO,
   CarrierApp,
   Country,
   DeliveryConfirmation,
   DeliveryService,
-  NewLabelPOJO,
   NewPackagePOJO,
   NewShipmentPOJO,
-  WeightPOJO,
   WeightUnit,
 } from "@shipengine/integration-platform-sdk";
 import Suite from "../runner/suite";
@@ -134,7 +131,7 @@ export class CreateShipmentInternational extends Suite {
       },
       shipFrom: testParams.shipFrom!,
       shipTo: testParams.shipTo!,
-      shipDateTime: testParams.shipDateTime,
+      shipDateTime: testParams.shipDateTime!,
       packages: [packagePOJO],
     };
 
