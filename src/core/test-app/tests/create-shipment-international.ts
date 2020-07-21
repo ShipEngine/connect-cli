@@ -19,6 +19,7 @@ import {
   CreateShipmentInternationalTestParams,
 } from "../runner/config/create-shipment-international";
 import { initializeTimeStamps } from "../../utils/time-stamps";
+import { expect } from 'chai';
 
 interface TestArgs {
   title: string;
@@ -179,8 +180,20 @@ export class CreateShipmentInternational extends Suite {
 
           const transaction = await this.transaction(testArg!.config);
 
-          carrierApp.createShipment &&
-            (await carrierApp.createShipment(transaction, testArg!.methodArgs));
+          // This should never actually throw because we handle this case up stream.
+          if (!carrierApp.createShipment)
+            throw new Error("createShipment is not implemented");
+
+          const response = await carrierApp.createShipment(
+            transaction,
+            testArg!.methodArgs,
+          );
+
+          // All fields of the shipment must match the corresponding fields of the input parameters (e.g. from address, to address, delivery service, packaging, weight, dimensions, etc.)
+
+          // If DeliveryServiceDefinition.fulfillmentService is set, then the shipment’s fulfillmentService must match it
+
+          // If DeliveryServiceDefinition.isTrackable is true, then the shipment must have a trackingNumber set
         },
       );
     });
