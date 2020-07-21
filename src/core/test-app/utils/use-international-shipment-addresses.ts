@@ -36,6 +36,15 @@ export default function useInternationalShipmentAddresses(app: CarrierApp) {
       throw new Error(
         "useInternationalShipmentAddresses: can not resolve origin country",
       );
+  } else {
+    originCountryCode = deliveryService.originCountries[0];
+    destinationCountryCode = deliveryService.destinationCountries.find(
+      (destinationCountry) => destinationCountry !== originCountryCode,
+    );
+    if (!destinationCountryCode)
+      throw new Error(
+        "useInternationalShipmentAddresses: can not resolve destination country",
+      );
   }
 
   return [
