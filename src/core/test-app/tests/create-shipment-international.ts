@@ -88,7 +88,7 @@ export class CreateShipmentInternational extends Suite {
     if (!this.deliveryService) return undefined;
 
     let [shipFrom, shipTo] = useInternationalShipmentAddresses(
-      this.app as CarrierApp,
+      this.deliveryService,
     );
     // We need to know if the config defines 'shipFrom' so we can set the 'shipDateTime' with the correct timezone
     shipFrom = config.shipFrom ? config.shipFrom : shipFrom;
@@ -185,10 +185,7 @@ export class CreateShipmentInternational extends Suite {
           if (!carrierApp.createShipment)
             throw new Error("createShipment is not implemented");
 
-          await carrierApp.createShipment(
-            transaction,
-            testArg!.methodArgs,
-          );
+          await carrierApp.createShipment(transaction, testArg!.methodArgs);
 
           // All fields of the shipment must match the corresponding fields of the input parameters (e.g. from address, to address, delivery service, packaging, weight, dimensions, etc.)
 
