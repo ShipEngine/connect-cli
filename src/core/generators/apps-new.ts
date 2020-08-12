@@ -260,12 +260,6 @@ class AppsNew extends Generator {
     }
 
     this.fs.copyTpl(
-      this.templatePath(".env.test"),
-      this.destinationPath(".env.test"),
-      this,
-    );
-
-    this.fs.copyTpl(
       this.templatePath("shipengine.config.js"),
       this.destinationPath("shipengine.config.js"),
       this,
