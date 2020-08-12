@@ -549,8 +549,6 @@ class AppsNew extends Generator {
     const devDependencies: string[] = [];
 
     devDependencies.push("@shipengine/integration-platform-sdk");
-    devDependencies.push("dotenv-flow@3.1.0");
-    devDependencies.push("cross-env");
 
     if (this.ts) {
       devDependencies.push("@types/node@^13.13.5");
