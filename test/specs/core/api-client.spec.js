@@ -564,7 +564,7 @@ describe("AppsApiClient @integration", () => {
         let errorResponse;
 
         try {
-          response = await validClient.user.getCurrent();
+          response = await validClient.users.getCurrent();
         } catch (error) {
           errorResponse = error;
         }
@@ -578,7 +578,52 @@ describe("AppsApiClient @integration", () => {
         let errorResponse;
 
         try {
-          response = await invalidClient.user.getCurrent();
+          response = await invalidClient.users.getCurrent();
+        } catch (error) {
+          errorResponse = error;
+        }
+
+        expect(response).to.be.undefined;
+        expect(errorResponse.code).equal("ERR_UNAUTHORIZED");
+        expect(errorResponse.message).equal("The given API key is not valid");
+      });
+    });
+  });
+
+  describe("sellers", () => {
+    describe("getSellersForAppId", () => {
+      it("returns an array of sellers", async () => {
+        const app = await validClient.apps.findOrCreateByName({
+          name: "test app",
+          type: "carrier",
+        });
+
+        const packageName = 'test.tgz';
+
+        await validClient.deployments.create({
+          appId: app.id,
+          pathToTarball: path.join(process.cwd(), `test/fixtures/${packageName}`),
+        });
+
+        let response;
+        let errorResponse;
+
+        try {
+          response = await validClient.sellers.getSellersForAppId(app.id);
+        } catch (error) {
+          errorResponse = error;
+        }
+
+        expect(errorResponse).to.be.undefined;
+        expect(response).to.be.an('array')
+      });
+
+      it("returns an ERR_UNAUTHORIZED when given an invalid API key", async () => {
+        let response;
+        let errorResponse;
+
+        try {
+          response = await invalidClient.sellers.getSellersForAppId();
         } catch (error) {
           errorResponse = error;
         }
