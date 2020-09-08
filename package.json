@@ -30,6 +30,7 @@
     "axios": "^0.20.0",
     "chai": "^4.2.0",
     "chalk": "^4.1.0",
+    "cli-table": "^0.3.1",
     "cli-ux": "^5.4.10",
     "cross-spawn": "^7.0.3",
     "escape-string-regexp": "^4.0.0",
