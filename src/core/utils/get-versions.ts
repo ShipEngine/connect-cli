@@ -7,7 +7,7 @@ interface PJson {
   dependencies: Record<string, string>;
 }
 
-export default function getVersions() {
+export default function getVersions(): Record<string, string> {
   // We have to use `require()` here instad of `import`
   // because the "package.json" file is outside of the "src" directory.
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-var-requires
