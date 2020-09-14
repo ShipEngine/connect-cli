@@ -7,10 +7,6 @@
     "email": "support@shipengine.com",
     "url": "https://connect.shipengine.com"
   },
-  "bin": {
-    "_connect": "./bin/run",
-    "sec": "./bin/run"
-  },
   "bugs": "https://github.com/ShipEngine/connect-cli/issues",
   "dependencies": {
     "@jsdevtools/ono": "^7.1.3",
@@ -106,7 +102,6 @@
     "node": ">=10.5.0"
   },
   "files": [
-    "/bin",
     "/lib",
     "/npm-shrinkwrap.json",
     "/oclif.manifest.json",
@@ -124,7 +119,7 @@
   "main": "lib/index.js",
   "oclif": {
     "commands": "./lib/commands",
-    "bin": "_connect",
+    "bin": "connect",
     "plugins": [
       "@oclif/plugin-help",
       "@oclif/plugin-not-found"
