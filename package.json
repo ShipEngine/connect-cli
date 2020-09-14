@@ -8,7 +8,7 @@
     "url": "https://connect.shipengine.com"
   },
   "bin": {
-    "connect-private": "./bin/run",
+    "_connect": "./bin/run",
     "sec": "./bin/run"
   },
   "bugs": "https://github.com/ShipEngine/connect-cli/issues",
@@ -124,7 +124,7 @@
   "main": "lib/index.js",
   "oclif": {
     "commands": "./lib/commands",
-    "bin": "connect-private",
+    "bin": "_connect",
     "plugins": [
       "@oclif/plugin-help",
       "@oclif/plugin-not-found"
