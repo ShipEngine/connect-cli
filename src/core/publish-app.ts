@@ -131,6 +131,8 @@ export default async function publishApp(
       );
       await createOrFindTestAccount(client, platformApp);
     }
+
+    return newDeployment;
   }
 
   await createOrFindTestAccount(client, platformApp);
