@@ -21,16 +21,24 @@ export default class Sellers {
     return response;
   }
 
-  // /**
-  //  * Gets the sellers for an application scoped to the given API key.
-  //  * @returns {Promise<Seller[]>} Promise that resolves to an Seller.
-  //  */
-  // async createSeller(appId: string): Promise<Seller[]> {
-  //   const response = await this.client.call<Seller[]>({
-  //     endpoint: `apps/${appId}/sellers`,
-  //     method: "GET",
-  //   });
+  /**
+   * Creates a seller for an application scoped to the given API key.
+   * @returns {Promise<Seller>} Promise that resolves to an Seller.
+   */
+  async createSeller(appId: string, email: string, password: string): Promise<Seller> {
+    const response = await this.client.call<Seller>({
+      endpoint: `apps/${appId}/sellers`,
+      method: "POST",
+      body: {
+        "email": email,
+        "password": password,
+        "firstName": "Test",
+        "lastName": "User",
+        "countryCode": "US",
+        "type": "shipstation"
+      }
+    });
 
-  //   return response;
-  // }
+    return response;
+  }
 }

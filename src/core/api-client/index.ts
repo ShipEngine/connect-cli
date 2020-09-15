@@ -104,6 +104,10 @@ export default class APIClient {
     } catch (error) {
       const err = error as AxiosError;
 
+      if (this.debug) {
+        console.log('Response:', err.response)
+      }
+
       switch (err.response?.status) {
         case 400:
           throw ono({ code: ApiClientErrors.BadRequest }, err.response.data.message || "The request was invalid");
