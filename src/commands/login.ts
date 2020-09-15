@@ -14,6 +14,10 @@ export default class Login extends BaseCommand {
       char: "h",
       description: "Show help for the login command",
     }),
+    debug: flags.help({
+      char: "d",
+      description: "Show network debugging information",
+    }),
   };
 
   async run(): Promise<void> {

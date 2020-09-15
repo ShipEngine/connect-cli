@@ -12,6 +12,10 @@ export default class Info extends BaseCommand {
       char: "h",
       description: "Show help for the logs command",
     }),
+    debug: flags.help({
+      char: "d",
+      description: "Show network debugging information",
+    }),
   };
 
   async run(): Promise<void> {

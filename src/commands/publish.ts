@@ -26,6 +26,10 @@ export default class Publish extends BaseCommand {
       description: "Skip running the test before publishing",
       default: false,
     }),
+    debug: flags.help({
+      char: "d",
+      description: "Show network debugging information",
+    }),
   };
 
   async run(): Promise<void> {

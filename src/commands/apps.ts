@@ -11,6 +11,10 @@ export default class Apps extends BaseCommand {
       char: "h",
       description: "Show help for the apps commands",
     }),
+    debug: flags.help({
+      char: "d",
+      description: "Show network debugging information",
+    }),
   };
 
   async run(): Promise<void> {
