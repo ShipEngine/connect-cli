@@ -38,7 +38,7 @@ export default class APIClient {
 
   diagnostics: Diagnostics;
 
-  // sellers: Sellers;
+  sellers: Sellers;
 
   users: Users;
 
@@ -54,6 +54,7 @@ export default class APIClient {
     this.apps = new Apps(this);
     this.deployments = new Deployments(this);
     this.diagnostics = new Diagnostics(this);
+    this.sellers = new Sellers(this);
     this.users = new Users(this);
     this.debug = debug;
   }
