@@ -9,7 +9,7 @@ import { watchDeployment } from "./publish-app/watch-deployment";
 import { green, red } from "chalk";
 import parseDeploymentErrors from './utils/parse-deployment-errors';
 import Table from 'cli-table';
-
+import { ConnectApp } from './types'
 
 class AppFailedToPackageError extends Error {
   code: string;
@@ -129,39 +129,32 @@ export default async function publishApp(
       console.log(
         green(`Your app was published successfully ${logSymbols.success} `),
       );
+      await createOrFindTestAccount(client, platformApp);
     }
-
-    return newDeployment;
   }
 
+  await createOrFindTestAccount(client, platformApp);
+
+  return newDeployment;
+}
+
+const createOrFindTestAccount = async (client: APIClient, platformApp: ConnectApp) => {
   const sellers = await client.sellers.getSellersForAppId(platformApp.id)
   const email = `${platformApp.id}@test.com`;
 
-  console.log(newDeployment);
-
-  if (sellers.some((seller) => seller.email === email)) {
-    const table = new Table();
-
-    table.push(
-      { 'Email': [email] },
-      { 'Password': [platformApp.id] },
-      { 'URL': ["test.com"] }
-    );
-  } else {
+  if (!sellers.some((seller) => seller.email === email)) {
     cli.action.start("Creating test account");
     await client.sellers.createSeller(platformApp.id, email, platformApp.id)
     cli.action.stop(`${logSymbols.success}`);
-
-    const table = new Table();
-
-    table.push(
-      { 'Email': [email] },
-      { 'Password': [platformApp.id] },
-      { 'URL': ["test.com"] }
-    );
-
-    console.log(table.toString());
   }
 
-  return newDeployment;
+  const table = new Table();
+
+  table.push(
+    { 'Email': [email] },
+    { 'Password': [platformApp.id] },
+    { 'Test URL': ["https://ss-devss127.sslocal.com/"] }
+  );
+  console.log("Test your app with the account below:");
+  console.log(table.toString());
 }
