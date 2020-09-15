@@ -8,6 +8,8 @@ import { loadApp } from "@shipengine/connect-loader";
 import { watchDeployment } from "./publish-app/watch-deployment";
 import { green, red } from "chalk";
 import parseDeploymentErrors from './utils/parse-deployment-errors';
+import Table from 'cli-table';
+
 
 class AppFailedToPackageError extends Error {
   code: string;
@@ -59,7 +61,7 @@ export default async function publishApp(
   { noWatch = false }: PublishAppOptions,
 ): Promise<Deployment> {
 
-  cli.action.start("publishing app");
+  cli.action.start("Publishing app");
 
   let newDeployment;
   let platformApp;
@@ -121,7 +123,6 @@ export default async function publishApp(
         })
       }
 
-
     } else if (deployment.status === DeploymentStatus.Terminated) {
       console.log(red("Your app was terminated "));
     } else {
@@ -129,6 +130,37 @@ export default async function publishApp(
         green(`Your app was published successfully ${logSymbols.success} `),
       );
     }
+
+    return newDeployment;
+  }
+
+  const sellers = await client.sellers.getSellersForAppId(platformApp.id)
+  const email = `${platformApp.id}@test.com`;
+
+  console.log(newDeployment);
+
+  if (sellers.some((seller) => seller.email === email)) {
+    const table = new Table();
+
+    table.push(
+      { 'Email': [email] },
+      { 'Password': [platformApp.id] },
+      { 'URL': ["test.com"] }
+    );
+  } else {
+    cli.action.start("Creating test account");
+    await client.sellers.createSeller(platformApp.id, email, platformApp.id)
+    cli.action.stop(`${logSymbols.success}`);
+
+    const table = new Table();
+
+    table.push(
+      { 'Email': [email] },
+      { 'Password': [platformApp.id] },
+      { 'URL': ["test.com"] }
+    );
+
+    console.log(table.toString());
   }
 
   return newDeployment;
