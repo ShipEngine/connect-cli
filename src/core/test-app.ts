@@ -21,6 +21,8 @@ import { SameDayPickup } from './test-app/tests/same-day-pickup';
 import { NextDayPickup } from './test-app/tests/next-day-pickup';
 import { CancelPickupsSameDay } from './test-app/tests/cancel-pickups-same-day';
 
+export const TestAppErrors = LoadAndValidateConfigError;
+
 interface TesOptions {
   debug?: boolean;
   failFast?: boolean;
