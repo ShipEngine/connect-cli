@@ -12,7 +12,7 @@ import {
 } from "./test-app/tests";
 import { SdkApp } from "./types";
 import { TestResults, useTestResults } from "./test-app/runner/test-results";
-import { loadAndValidateConfig } from "./test-app/runner/load-and-validate-config";
+import { loadAndValidateConfig, LoadAndValidateConfigError } from "./test-app/runner/load-and-validate-config";
 import { logFail, logPass, logStep } from "./utils/log-helpers";
 import { logResults } from "./utils/log-helpers";
 import { RateShipmentWithAllServices } from './test-app/tests/rate-shipment-with-all-services';
@@ -45,10 +45,12 @@ export default async function testApp(
     staticConfig = await loadAndValidateConfig(pathToApp);
   } catch (error) {
     switch (error.code) {
-      case "ERR_CONNECT_CONFIG_SCHEMA":
+      case LoadAndValidateConfigError.SchemaInvalid:
+      case LoadAndValidateConfigError.Filesystem:
+      case LoadAndValidateConfigError.Syntax:
         throw error;
-
       default:
+        // IF the file doesnt exist an error will be thrown and we want to swallow that here
         break;
     }
   }
