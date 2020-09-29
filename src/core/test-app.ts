@@ -23,7 +23,7 @@ import { CancelPickupsSameDay } from './test-app/tests/cancel-pickups-same-day';
 
 export const TestAppErrors = LoadAndValidateConfigError;
 
-interface TesOptions {
+interface TestOptions {
   debug?: boolean;
   failFast?: boolean;
   grep?: string;
@@ -33,7 +33,7 @@ interface TesOptions {
 
 export default async function testApp(
   pathToApp: string,
-  { debug, failFast, grep, retries, timeout }: TesOptions,
+  { debug, failFast, grep, retries, timeout }: TestOptions,
 ): Promise<TestResults> {
   const [testResults, testResultsReducer] = useTestResults();
 
