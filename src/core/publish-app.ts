@@ -10,7 +10,6 @@ import { green, red } from "chalk";
 import parseDeploymentErrors from './utils/parse-deployment-errors';
 import Table from 'cli-table';
 import { ConnectApp } from './types'
-import { info } from 'console';
 
 class AppFailedToPackageError extends Error {
   code: string;
