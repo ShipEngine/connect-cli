@@ -21,11 +21,13 @@
     "@shipengine/connect-local-dev-api": "^2.1.12",
     "@shipengine/connect-local-dev-ui": "^2.0.16",
     "@shipengine/connect-sdk": "^10.1.0",
+    "@types/colors": "^1.2.1",
     "axios": "^0.20.0",
     "chai": "^4.2.0",
     "chalk": "^4.1.0",
     "cli-table": "^0.3.1",
     "cli-ux": "^5.5.0",
+    "colors": "^1.4.0",
     "cross-spawn": "^7.0.3",
     "escape-string-regexp": "^4.0.0",
     "express": "^4.17.1",
@@ -126,7 +128,12 @@
     "plugins": [
       "@oclif/plugin-help",
       "@oclif/plugin-not-found"
-    ]
+    ],
+    "topics": {
+      "env": {
+        "description": "Manage environment variables for your app."
+      }
+    }
   },
   "repository": {
     "type": "git",

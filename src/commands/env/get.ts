@@ -1,9 +1,14 @@
 import {flags} from "@oclif/command";
 import Table from 'cli-table';
 import AppBaseCommand from "../../base-app-command";
+import {green} from "colors";
 
 export default class Get extends AppBaseCommand {
   static description = "Get environment variables for an app";
+
+  static strict = false;
+
+  static aliases = ['get'];
 
   static flags = {
     ...AppBaseCommand.flags,
@@ -15,10 +20,9 @@ export default class Get extends AppBaseCommand {
 
   static args = [
     {
-      name: "NAME",
-      description: "the environment variable name. e.g. FOO (note: name will always be UpperCased)",
+      name: "NAME-1 ... NAME-N",
+      description: "the environment variable name(s). e.g. FOO (note: name will always be UPPERCASED)",
       required: true,
-      parse: (input: string) => input.toUpperCase()
     }
   ]
 
@@ -28,9 +32,8 @@ export default class Get extends AppBaseCommand {
       this.error("Initialization failed - invalid state");
       return;
     }
-    const {args} = this.parse(Get);
 
-    const name = args.NAME;
+    const names = this.argv.map(a => a.toUpperCase());
 
     try {
       const configurationKeys = await this.client.configuration.list(this.platformApp.id);
@@ -39,14 +42,22 @@ export default class Get extends AppBaseCommand {
         this.log(`${this.platformApp.name} has no environment variables set`)
         return;
       }
-      const table = new Table({head: ['Name', "Value"]});
-      configurationKeys.filter(key => key.name === name).forEach(key => {
+
+      const table = new Table({
+        head: [
+          green('Name'),
+          green("Value")
+        ]
+      });
+
+      configurationKeys.filter(key => names.includes(key.name)).forEach(key => {
         table.push([key.name, key.value]);
       });
+
       if (table.length >= 1) {
         this.log(table.toString());
       } else {
-        this.warn(`${name} does not exist`);
+        this.warn(`none of ${names.join(",")} exist`);
       }
 
     } catch (error) {

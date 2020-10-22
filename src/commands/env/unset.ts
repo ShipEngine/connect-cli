@@ -4,6 +4,10 @@ import AppBaseCommand from "../../base-app-command";
 export default class UnSet extends AppBaseCommand {
   static description = "UnSet (delete) an environment variable from an app";
 
+  static strict = false;
+
+  static aliases = ['unset'];
+
   static flags = {
     ...AppBaseCommand.flags,
     help: flags.help({
@@ -14,10 +18,9 @@ export default class UnSet extends AppBaseCommand {
 
   static args = [
     {
-      name: "NAME",
-      description: "the environment variable name. e.g. FOO (note: name will always be UpperCased)",
+      name: "NAME-1 ... NAME-N",
+      description: "the environment variable name(s). e.g. FOO (note: name will always be UpperCased)",
       required: true,
-      parse: (input: string) => input.toUpperCase()
     }
   ]
 
@@ -28,19 +31,18 @@ export default class UnSet extends AppBaseCommand {
       return;
     }
 
-    const {args} = this.parse(UnSet);
-
-    const name = args.NAME;
+    const names = this.argv.map(a => a.toUpperCase());
 
     try {
       const configurationKeys = await this.client.configuration.list(this.platformApp.id);
-      if(configurationKeys.filter(key => key.name === name).length === 0){
+      if (configurationKeys.filter(key => names.includes(key.name)).length === 0) {
         this.warn(`${name} does not exist as an environment variable for this app.`);
-        return;
       }
 
-      await this.client.configuration.unset(this.platformApp.id, name);
-      this.log(`${name} has been removed as an environment variable.`)
+      for (const name of names) {
+        await this.client.configuration.unset(this.platformApp.id, name);
+        this.log(`${name} has been removed as an environment variable.`)
+      }
     } catch (error) {
       return this.error("Error unsetting the environment variable", {
         exit: 1,

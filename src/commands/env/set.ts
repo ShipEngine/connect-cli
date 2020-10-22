@@ -1,8 +1,13 @@
 import {flags} from "@oclif/command";
 import AppBaseCommand from "../../base-app-command";
+import {ConfigurationKey, EnvironmentType} from "../../core/types/configuration-key";
 
 export default class Set extends AppBaseCommand {
   static description = "Set an environment variable for an app";
+
+  static strict = false;
+
+  static aliases = ['set'];
 
   static flags = {
     ...AppBaseCommand.flags,
@@ -12,7 +17,7 @@ export default class Set extends AppBaseCommand {
     })
   };
 
-  static parseInput(input: string): { name: string, value: string } {
+  static parseInput(input: string): ConfigurationKey {
     const tokens = input.split("=");
     if (tokens.length !== 2) {
       throw new Error("Invalid format of NAME=value.");
@@ -22,17 +27,17 @@ export default class Set extends AppBaseCommand {
     }
     return {
       name: tokens[0].toUpperCase(),
-      value: tokens[1]
+      value: tokens[1],
+      environmentType: EnvironmentType.dev // change when introducing env-type to CLI
     };
   }
 
 
   static args = [
     {
-      name: "NAME=value",
-      description: "the environment variable name=value. e.g. FOO=bar (note: name will always be UpperCased)",
+      name: "NAME-1=value ... NAME-N=value",
+      description: "the environment variable(s) name=value. e.g. FOO=bar (note: name will always be UpperCased)",
       required: true,
-      parse: Set.parseInput
     }
   ]
 
@@ -43,17 +48,19 @@ export default class Set extends AppBaseCommand {
       return;
     }
 
-    const {args} = this.parse(Set);
+    const configurationKeys = this.argv.map(a => {
+      return Set.parseInput(a);
+    });
 
-    const nameValue = args["NAME=value"];
-
-    try {
-      const configurationKey = await this.client.configuration.set(this.platformApp.id, nameValue);
-      this.log(`${configurationKey.name}=${configurationKey.value} has been set.`);
-    } catch (error) {
-      return this.error("Error setting environment variable", {
-        exit: 1,
-      });
+    for (const key of configurationKeys) {
+      try {
+        const configurationKey = await this.client.configuration.set(this.platformApp.id, key);
+        this.log(`${configurationKey.name}=${configurationKey.value} has been set.`);
+      } catch (error) {
+        this.error("Error setting environment variable", {
+          exit: 1,
+        });
+      }
     }
   }
 }
