@@ -3,7 +3,7 @@ import AppBaseCommand from "../../base-app-command";
 import {ConfigurationKey, EnvironmentType} from "../../core/types/configuration-key";
 
 export default class Set extends AppBaseCommand {
-  static description = "Set an environment variable for an app";
+  static description = "Set a environment variables for an app";
 
   static strict = false;
 
@@ -36,7 +36,7 @@ export default class Set extends AppBaseCommand {
   static args = [
     {
       name: "NAME-1=value ... NAME-N=value",
-      description: "the environment variable(s) name=value. e.g. FOO=bar (note: name will always be UpperCased)",
+      description: "the environment variable(s) name=value. e.g. FOO=bar (note: name will always be UPPERCASED)",
       required: true,
     }
   ]
