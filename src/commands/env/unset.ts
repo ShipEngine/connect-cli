@@ -36,7 +36,7 @@ export default class UnSet extends AppBaseCommand {
     try {
       const configurationKeys = await this.client.configuration.list(this.platformApp.id);
       if (configurationKeys.filter(key => names.includes(key.name)).length === 0) {
-        this.warn(`${name} does not exist as an environment variable for this app.`);
+        this.warn(`none of ${names.join(",")} exist as an environment variable for this app.`);
       }
 
       for (const name of names) {
