@@ -3,7 +3,7 @@ import AppBaseCommand from "../../base-app-command";
 import {ConfigurationKey, EnvironmentType} from "../../core/types/configuration-key";
 
 export default class Set extends AppBaseCommand {
-  static description = "Set a environment variables for an app";
+  static description = "Set environment variables for an app";
 
   static strict = false;
 

@@ -2,7 +2,7 @@ import {flags} from "@oclif/command";
 import AppBaseCommand from "../../base-app-command";
 
 export default class UnSet extends AppBaseCommand {
-  static description = "UnSet (delete) an environment variable from an app";
+  static description = "Unset (delete) environment variables from an app";
 
   static strict = false;
 
