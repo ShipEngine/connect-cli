@@ -15,16 +15,18 @@ export default class Apps {
    * @returns {Promise<ConnectApp>} Promise object that resolves to a ConnectApp object.
    */
   async create({
+    id,
     name,
     type,
   }: {
+    id?: string;
     name: string;
     type: AppType;
   }): Promise<ConnectApp> {
     const response = await this.client.call<ConnectApp>({
       endpoint: "apps",
       method: "POST",
-      body: { name, type },
+      body: { id, name, type },
     });
 
     return response;
@@ -35,9 +37,11 @@ export default class Apps {
    * @returns {Promise<ConnectApp>} Promise object that resolves to a ConnectApp object.
    */
   async findOrCreateByName({
+    id,
     name,
     type,
   }: {
+    id?: string;
     name: string;
     type: AppType;
   }): Promise<ConnectApp> {
@@ -51,6 +55,7 @@ export default class Apps {
 
       if (code === ApiClientErrors.NotFound) {
         app = await this.create({
+          id,
           name: name,
           type: type,
         });

@@ -73,6 +73,7 @@ export default async function publishApp(
     const pathToTarball = path.join(process.cwd(), tarballName);
 
     platformApp = await client.apps.findOrCreateByName({
+      id: app.manifest.id as unknown as string, // TODO: Update SDK definition for AppManifest to make id a known potential field.
       name: app.manifest.name,
       type: app.type,
     });
