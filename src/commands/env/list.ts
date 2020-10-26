@@ -1,7 +1,7 @@
-import {flags} from "@oclif/command";
+import { flags } from "@oclif/command";
+import chalk from 'chalk';
 import Table from 'cli-table';
 import AppBaseCommand from "../../base-app-command";
-import {green} from "colors";
 
 export default class List extends AppBaseCommand {
   static description = "List environment variables for an app";
@@ -36,13 +36,13 @@ export default class List extends AppBaseCommand {
         return;
       }
 
-      const {flags} = this.parse(List);
+      const { flags } = this.parse(List);
       if (flags.format === "table") {
 
         const table = new Table({
           head: [
-            green('Name'),
-            green("Value")
+            chalk.green('Name'),
+            chalk.green("Value")
           ]
         });
         configurationKeys.forEach(key => {
