@@ -11,6 +11,13 @@ export default class List extends AppBaseCommand {
     help: flags.help({
       char: "h",
       description: "show help for the env command",
+    }),
+    format: flags.string({
+      char: "f",
+      description: "specify output format",
+      default: "table",
+      options: ["table", "dotenv"],
+      parse: (input) => input.toLowerCase(),
     })
   };
 
@@ -28,16 +35,26 @@ export default class List extends AppBaseCommand {
         this.log(`${this.platformApp.name} has no environment variables set`)
         return;
       }
-      const table = new Table({
-        head: [
-          green('Name'),
-          green("Value")
-        ]
-      });
-      configurationKeys.forEach(key => {
-        table.push([key.name, key.value]);
-      });
-      this.log(table.toString());
+
+      const {flags} = this.parse(List);
+      if (flags.format === "table") {
+
+        const table = new Table({
+          head: [
+            green('Name'),
+            green("Value")
+          ]
+        });
+        configurationKeys.forEach(key => {
+          table.push([key.name, key.value]);
+        });
+        this.log(table.toString());
+      } else if (flags.format === "dotenv") {
+
+        configurationKeys.forEach(key => {
+          this.log(`${key.name}=${key.value}`);
+        });
+      }
 
     } catch (error) {
       return this.error("Error retrieving environment variables", {
