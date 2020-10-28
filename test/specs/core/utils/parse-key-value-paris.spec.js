@@ -5,7 +5,6 @@ const {
 } = require("../../../../lib/core/utils/parse-key-value-pairs");
 
 const {expect} = require("chai");
-const cliTest = require("@oclif/test");
 
 describe("key-value-pair parser", () => {
   describe("tryParseTuple", () => {
