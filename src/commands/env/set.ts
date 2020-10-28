@@ -1,6 +1,7 @@
 import {flags} from "@oclif/command";
 import AppBaseCommand from "../../base-app-command";
 import {ConfigurationKey, EnvironmentType} from "../../core/types/configuration-key";
+import {parseKeyValuePairs} from "../../core/utils/parse-key-value-pairs";
 
 export default class Set extends AppBaseCommand {
   static description = "Set environment variables for an app";
@@ -17,22 +18,6 @@ export default class Set extends AppBaseCommand {
     })
   };
 
-  static parseInput(input: string): ConfigurationKey {
-    const tokens = input.split("=");
-    if (tokens.length !== 2) {
-      throw new Error("Invalid format of NAME=value.");
-    }
-    if (!(tokens[0] && tokens[1])) {
-      throw new Error("Invalid format of NAME=value. NAME and value must not be empty");
-    }
-    return {
-      name: tokens[0].toUpperCase(),
-      value: tokens[1],
-      environmentType: EnvironmentType.dev // change when introducing env-type to CLI
-    };
-  }
-
-
   static args = [
     {
       name: "NAME-1=value ... NAME-N=value",
@@ -48,8 +33,12 @@ export default class Set extends AppBaseCommand {
       return;
     }
 
-    const configurationKeys = this.argv.map(a => {
-      return Set.parseInput(a);
+    const configurationKeys: ConfigurationKey[] = parseKeyValuePairs(this.argv).map(kvp => {
+      return {
+        name: kvp.key.toUpperCase(),
+        value: kvp.value,
+        environmentType: EnvironmentType.dev
+      };
     });
 
     for (const key of configurationKeys) {
