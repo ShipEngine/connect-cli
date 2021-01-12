@@ -258,13 +258,6 @@ class AppsNew extends Generator {
       );
     }
 
-
-    this.fs.copyTpl(
-      this.templatePath("connect.config.js"),
-      this.destinationPath("connect.config.js"),
-      this,
-    );
-
     if (this.fs.exists(this.destinationPath("./package.json"))) {
       fixpack(
         this.destinationPath("./package.json"),
