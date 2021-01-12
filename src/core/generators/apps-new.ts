@@ -271,12 +271,6 @@ class AppsNew extends Generator {
     );
 
     this.fs.copyTpl(
-      this.templatePath("connect.config.js"),
-      this.destinationPath("connect.config.js"),
-      this,
-    );
-
-    this.fs.copyTpl(
       this.templatePath("README.md.ejs"),
       this.destinationPath("README.md"),
       this,
@@ -301,6 +295,13 @@ class AppsNew extends Generator {
 
     switch (this.type) {
       case AppType.Carrier:
+        // We only want the connect.config.js file to be part of the carrier apps.
+        this.fs.copyTpl(
+          this.templatePath("connect.config.js"),
+          this.destinationPath("connect.config.js"),
+          this,
+        );
+
         if (!fs.existsSync("src")) {
           this.fs.copyTpl(
             this.templatePath(`carrier/index.${this._definitionExt}`),
