@@ -30,7 +30,6 @@ import {
 } from "./test-app/tests";
 import { ShipmentCreated } from './test-app/tests/shipment-created';
 import { CarrierApp } from '@shipengine/connect-sdk/lib/internal';
-import { GetSalesOrdersByDate } from './test-app/tests/get-sales-orders-by-date';
 
 export const TestAppErrors = LoadAndValidateConfigError;
 
@@ -184,7 +183,6 @@ function registerTestSuiteModules(app: SdkApp): RegisteredTestSuiteModules {
 
   const orderAppMethods = {
     acknowledgeOrders: [AcknowledgeOrders],
-    getSalesOrdersByDate: [GetSalesOrdersByDate],
     shipmentCreated: [ShipmentCreated],
   };
   
