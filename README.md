@@ -13,10 +13,8 @@
 
 <p><br></p>
 
-> ### ⚠ WARNING: This is an internal package
-> Using this package directly is discouraged and unsupported. Instead, you should install
-> [**@shipengine/connect**](https://www.npmjs.com/package/@shipengine/connect) which uses this package under the hood.
-> See [our documentation](https://connect.shipengine.com/docs/cli) for more information.
+> ### ⚠ WARNING: This is an DEPRECATED package
+> Development has moved to [**@shipengine/connect**](https://www.npmjs.com/package/@shipengine/connect)
 
 <p><br></p>
 
